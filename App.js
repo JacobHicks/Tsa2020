@@ -1,6 +1,6 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import ProfileScreen from './screens/ProfileScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 const MainNavigator = createStackNavigator({
         Profile: {screen: ProfileScreen},

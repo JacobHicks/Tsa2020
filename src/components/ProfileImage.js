@@ -8,7 +8,7 @@ export default class ProfileImage extends React.Component {
         return (
             <Image
                 style={styles.image}
-                source={require('../images/chad.jpg')}>
+                source={require('../../assets/images/chad.jpg')}>
                 <View style={{position: 'absolute', left: 12, bottom: 8, flexDirection: 'row'}}>
                     <Text style={styles.name}>
                         Chad Smith

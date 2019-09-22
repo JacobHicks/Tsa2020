@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import ProfileImage from '../assets/components/ProfileImage';
+import ProfileImage from '../components/ProfileImage';
 import {Text} from 'native-base';
-import ElevatedDisplay from '../assets/components/ElevatedDisplay';
-import FloatingButton from '../assets/components/FloatingButton';
+import ElevatedDisplay from '../components/ElevatedDisplay';
+import FloatingButton from '../components/FloatingButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ProfileScreen extends React.Component {
