@@ -1,5 +1,4 @@
 import React from 'react';
-import {Button} from 'react-native-elements';
 import DoubleTap from '../components/DoubleTap';
 import {Text, View} from 'react-native';
 

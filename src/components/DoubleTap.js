@@ -16,7 +16,7 @@
 *-------------------------------------------------------------------*/
 
 import React from 'react';
-import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
 
 export default class DoubleTap extends React.Component {
     constructor(props) {
