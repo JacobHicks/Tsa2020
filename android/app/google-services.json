@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "64967151724",
+    "firebase_url": "https://banger-a0b8c.firebaseio.com",
+    "project_id": "banger-a0b8c",
+    "storage_bucket": "banger-a0b8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64967151724:android:21c196b6843e9b1f738849",
+        "android_client_info": {
+          "package_name": "com.banger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64967151724-efpnvvv5n4lnmaq0umrsr003vathd6k9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnnA1IZ5WaPaPgRF5miMcJbFLphAiff1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64967151724-efpnvvv5n4lnmaq0umrsr003vathd6k9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -25,7 +25,7 @@ export default class InitialSignup extends React.Component {
                 </Text>
                 <View style={Styles.formBounding}>
                     <Provider store={store}>
-                        <RegistrationForm handleSubmit={this.handleRegistration}/>
+                        <RegistrationForm onSubmit={this.handleRegistration}/>
                     </Provider>
                 </View>
             </ImageBackground>
@@ -34,7 +34,9 @@ export default class InitialSignup extends React.Component {
 
     handleRegistration(values) {
         const {navigation} = this.props.navigation;
-        console.log(values);
+        this.setState({
+           dbg: '' + values
+        });
         db.ref('/unregisteredUsers').push({
             name: values.name,
             phoneNumber: values.phoneNumber

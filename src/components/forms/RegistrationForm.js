@@ -1,6 +1,6 @@
 import React from 'react';
 import {Input, Item, Button, Text} from 'native-base';
-import {Field, Form, reduxForm} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import {StyleSheet, View} from 'react-native';
 
 const validate = values => {
@@ -38,7 +38,7 @@ class RegistrationForm extends React.Component {
             <View>
                 <Field name='email' component={this.renderEmailInput}/>
                 <Field name='phoneNumber' component={this.renderPhoneNumberInput}/>
-                <Button style={Styles.continueButton} onPress={values => this.props.handleSubmit(values)}>
+                <Button style={Styles.continueButton} onPress={this.props.handleSubmit}>
                     <Text style={Styles.continueText}>
                         Continue
                     </Text>
@@ -47,24 +47,24 @@ class RegistrationForm extends React.Component {
         );
     }
 
-    renderEmailInput({meta: {touched, error, warning}}) {
+    renderEmailInput({input, label, type, meta: {touched, error, warning}}) {
         let hasError = error !== undefined;
 
         return (
             <Item error={hasError}>
                 <Input placeholder='First and last name' style={Styles.placeholder}
-                       placeholderTextColor='#FFF'/>
+                       placeholderTextColor='#FFF' {...input}/>
             </Item>
         );
     }
 
-    renderPhoneNumberInput({meta: {touched, error, warning}}) {
+    renderPhoneNumberInput({input, label, type, meta: {touched, error, warning}}) {
         let hasError = error !== undefined;
 
         return (
             <Item error={hasError}>
                 <Input placeholder='Phone number' style={Styles.placeholder} placeholderTextColor='#FFF'
-                       keyboardType='number-pad'/>
+                       keyboardType='number-pad' {...input}/>
             </Item>
         );
     }
