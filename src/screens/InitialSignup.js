@@ -1,13 +1,14 @@
 import React from 'react';
 import {StyleSheet, ImageBackground, View} from 'react-native';
 import {Input, Item, Form, Button, Text} from 'native-base';
-import {db} from '../config';
 
 import background from '../../assets/images/party1.jpg';
 import RegistrationForm from '../components/forms/RegistrationForm';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import allReducers from '../reducers';
+
+//import firestore from '@react-native-firebase/firestore';
 
 const store = createStore(allReducers);
 export default class InitialSignup extends React.Component {
@@ -34,16 +35,15 @@ export default class InitialSignup extends React.Component {
 
     handleRegistration(values) {
         const {navigation} = this.props.navigation;
-        this.setState({
-           dbg: '' + values
-        });
-        db.ref('/unregisteredUsers').push({
+/*
+        const unregisteredUsers = firestore().collection('unregisteredUsers');
+        unregisteredUsers.add({
             name: values.name,
             phoneNumber: values.phoneNumber
         })
+ */
     }
 }
-
 const Styles = StyleSheet.create({
     background: {
         position: 'absolute',
