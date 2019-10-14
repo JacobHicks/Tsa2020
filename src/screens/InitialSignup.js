@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, ImageBackground, View} from 'react-native';
+import {StyleSheet, ImageBackground, View, Dimensions} from 'react-native';
 import {Input, Item, Form, Button, Text} from 'native-base';
 
 import background from '../../assets/images/party1.jpg';
@@ -7,8 +7,6 @@ import RegistrationForm from '../components/forms/RegistrationForm';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import allReducers from '../reducers';
-
-//import firestore from '@react-native-firebase/firestore';
 
 const store = createStore(allReducers);
 export default class InitialSignup extends React.Component {
@@ -34,21 +32,22 @@ export default class InitialSignup extends React.Component {
     }
 
     handleRegistration(values) {
-        const {navigation} = this.props.navigation;
-/*
-        const unregisteredUsers = firestore().collection('unregisteredUsers');
-        unregisteredUsers.add({
+        const {navigation} = this.props;
+
+        values.phoneNumber = values.phoneNumber.replace(/-|\s/g, '');   //remove all spaces and hyphens so we can guarantee our desired format
+        values.phoneNumber = '+1 ' + values.phoneNumber.substring(0, 3) + '-' + values.phoneNumber.substring(3, 6) + '-' + values.phoneNumber.substring(6, 10);
+        navigation.navigate('TextConfirm', {
             name: values.name,
             phoneNumber: values.phoneNumber
         })
- */
     }
 }
+
 const Styles = StyleSheet.create({
     background: {
         position: 'absolute',
-        width: '100%',
-        height: '100%',
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
     },
 
     welcomeText: {

@@ -1,11 +1,13 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import ProfileScreen from './src/screens/ProfileScreen';
-import HomeScreen from './src/screens/HomeScreen';
-import InitialSignup from './src/screens/InitialSignup';
+import ProfileScreen from './screens/ProfileScreen';
+import HomeScreen from './screens/HomeScreen';
+import InitialSignup from './screens/InitialSignup';
+import TextConfirm from './screens/TextConfirm';
 
 const MainNavigator = createStackNavigator({
         InitialSignup: {screen: InitialSignup},
+        TextConfirm: {screen: TextConfirm},
         Home: {screen: HomeScreen},
         Profile: {screen: ProfileScreen},
     },

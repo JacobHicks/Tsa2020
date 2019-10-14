@@ -17,26 +17,11 @@ const validate = values => {
 };
 
 class RegistrationForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isReady: false,
-        };
-    }
-
-    componentDidMount() {
-        this.setState({
-            isReady: true,
-        });
-    }
 
     render() {
-        if (!this.state.isReady) {
-            //TODO: make this return a proper loading animation
-        }
         return (
             <View>
-                <Field name='email' component={this.renderEmailInput}/>
+                <Field name='name' component={this.renderNameInput}/>
                 <Field name='phoneNumber' component={this.renderPhoneNumberInput}/>
                 <Button style={Styles.continueButton} onPress={this.props.handleSubmit}>
                     <Text style={Styles.continueText}>
@@ -47,7 +32,7 @@ class RegistrationForm extends React.Component {
         );
     }
 
-    renderEmailInput({input, label, type, meta: {touched, error, warning}}) {
+    renderNameInput({input, label, type, meta: {touched, error, warning}}) {
         let hasError = error !== undefined;
 
         return (
