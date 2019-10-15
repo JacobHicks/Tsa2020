@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React from "react";
+import { View, StyleSheet, Image } from "react-native";
 import {
 	Card,
 	CardItem,
 	Text,
 	Left,
-	Right,
-} from 'native-base';
+	Right
+} from "native-base";
 
 export default class PartyCard extends React.Component {
 	render() {
@@ -14,14 +14,18 @@ export default class PartyCard extends React.Component {
 			<Card transparent style={ styles.partyCard }>
 				<CardItem cardBody>
 					<Image
-						source={ { uri: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png' } }
+						source={ { uri: this.props.imageURL } }
 						style={ { height: 200, width: null, flex: 1 } } />
 					<View style={ styles.partyText }>
 						<Left>
-							<Text style={styles.partyTitle}>{ this.props.title }</Text>
+							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
+							<View>
+								<Text style={ styles.partyInfo }>{ this.props.time } | { this.props.host }</Text>
+							</View>
+
 						</Left>
 						<Right>
-							{/*<Text>{ this.props.attendees }</Text>*/}
+							{/*<Text>{ this.props.attendees }</Text>*/ }
 						</Right>
 					</View>
 				</CardItem>
@@ -37,18 +41,23 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		minHeight: 120,
 		minWidth: 220,
-		borderRadius: 6.67,
+		// borderRadius: 6.67
 	},
 	partyTitle: {
 		marginBottom: 20,
-		textAlign: 'left',
-		paddingTop: '10%',
-		color: "#FFFFFF"
+		textAlign: "left",
+		paddingTop: "10%",
+		color: "#FFFFFF",
+		// marginLeft: "5%"
 	},
 	partyText: {
-		position: 'absolute',
+		position: "absolute",
 		left: 0,
 		bottom: 0,
-		color: "#ffffff"
+		color: "#FFF"
 	},
+	partyInfo: {
+		color: "#FFF",
+
+	}
 });
