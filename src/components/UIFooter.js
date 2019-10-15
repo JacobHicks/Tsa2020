@@ -9,14 +9,20 @@ export default class UIFooter extends Component {
 				<Content />
 				<Footer>
 					<FooterTab>
-						<Button>
-							<Text>B</Text>
+						<Button active={ this.props.homeIsActive }
+						    //     onPress={
+							// this.props.navigation.navigate("TextConfirm", {
+							// 	name: "test",
+							// 	phoneNumber: "test"
+							// }) }
+						>
+							<Text>Home</Text>
 						</Button>
-						<Button>
-							<Text>B</Text>
+						<Button active={ this.props.createIsActive }>
+							<Text>Create</Text>
 						</Button>
-						<Button active>
-							<Text>B</Text>
+						<Button active={ this.props.profileIsActive }>
+							<Text>Profile</Text>
 						</Button>
 					</FooterTab>
 				</Footer>

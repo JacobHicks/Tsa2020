@@ -4,10 +4,7 @@ import PartyCard from "../components/PartyCard";
 import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
 import Footer from "../components/UIFooter";
-import { Spinner } from "native-base";
-import { Text, View, StyleSheet, FlatList, StatusBar } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet";
-// todo import Toasts from native base
+import { Text, View, StyleSheet, StatusBar } from "react-native";
 
 // import '@react-native-firebase/functions';
 // import '@react-native-firebase/auth';
@@ -23,7 +20,6 @@ export default class CreatePartyScreen extends React.Component {
 		this.state = {
 
 			dbg: "tst",
-
 		};
 	}
 
@@ -31,7 +27,7 @@ export default class CreatePartyScreen extends React.Component {
 
 
 	render() {
-		const { navigate } = this.props.navigation;
+		const { navigate } = this.props;
 		return (
 			<View style={ styles.body }>
 
@@ -57,5 +53,4 @@ const styles = StyleSheet.create({
 		// padding: 7,
 		maxHeight: 750 // todo get device height - height of bottom navigation
 	},
-
 });
