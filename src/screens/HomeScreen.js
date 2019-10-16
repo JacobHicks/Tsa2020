@@ -1,5 +1,5 @@
 import React from "react";
-import DoubleTap from "../components/DoubleTap";
+import DoubleTap from "../components/MultiTap";
 import PartyCard from "../components/PartyCard";
 import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
@@ -162,6 +162,7 @@ export default class HomeScreen extends React.Component {
 			<View style={ styles.body }>
 				<View style={ styles.header }>
 					<Text style={ styles.headerText }>UCLA</Text>
+					<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
 				</View>
 				<View style={ styles.container }>
 					<FlatList
@@ -180,7 +181,7 @@ export default class HomeScreen extends React.Component {
 									data={ this.state.featuredParties }
 									renderItem={ ({ item }) =>
 										<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
-										           onPress={ () => this.enrollInParty(item.key) }>
+										           onPress={ () => this.showPartySheet(item.key) }>
 											<View>
 												<FeaturedPartyCard title={ item.title } date={ item.date }
 												                   time={ item.time }
@@ -201,7 +202,6 @@ export default class HomeScreen extends React.Component {
 								</View>
 							</DoubleTap> }
 					/>
-					<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
 				</View>
 				<RBSheet
 					ref={ ref => {

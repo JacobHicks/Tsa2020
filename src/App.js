@@ -7,9 +7,9 @@ import TextConfirm from './screens/TextConfirm';
 import CreatePartyScreen from "./screens/CreatePartyScreen";
 
 const MainNavigator = createStackNavigator({
+        Home: {screen: HomeScreen},
         InitialSignup: {screen: HomeScreen},
         TextConfirm: {screen: TextConfirm},
-        Home: {screen: HomeScreen},
         Profile: {screen: ProfileScreen},
         CreateParty: {screen: CreatePartyScreen}
     },

@@ -1,5 +1,5 @@
 import React from "react";
-import DoubleTap from "../components/DoubleTap";
+import DoubleTap from "../components/MultiTap";
 import PartyCard from "../components/PartyCard";
 import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
