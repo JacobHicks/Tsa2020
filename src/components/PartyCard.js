@@ -13,9 +13,8 @@ export default class PartyCard extends React.Component {
 		return (
 			<Card transparent style={ styles.partyCard }>
 				<CardItem cardBody>
-					<Image
-						source={ { uri: this.props.imageURL } }
-						style={ { height: 200, width: null, flex: 1 } } />
+					<View
+						style={ { height: 200, width: null, flex: 1, backgroundColor: "#4834d4" } } />
 					<View style={ styles.partyText }>
 						<Left>
 							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
@@ -40,14 +39,14 @@ const styles = StyleSheet.create({
 		margin: 5,
 		marginBottom: 10,
 		minHeight: 120,
-		minWidth: 220,
+		minWidth: 220
 		// borderRadius: 6.67
 	},
 	partyTitle: {
 		marginBottom: 20,
 		textAlign: "left",
 		paddingTop: "10%",
-		color: "#FFFFFF",
+		color: "#FFFFFF"
 		// marginLeft: "5%"
 	},
 	partyText: {
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
 		color: "#FFF"
 	},
 	partyInfo: {
-		color: "#FFF",
+		color: "#FFF"
 
 	}
 });

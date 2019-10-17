@@ -1,8 +1,7 @@
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet } from "react-native";
 import {
 	Card,
-	CardItem,
 	Text,
 	Left,
 	Right
@@ -12,10 +11,9 @@ export default class PartyCard extends React.Component {
 	render() {
 		return (
 			<Card transparent style={ styles.partyCard }>
-				<CardItem cardBody>
-					<Image
-						source={ { uri: this.props.imageURL } }
-						style={ { height: 135, width: null, flex: 1 } } />
+				<View>
+					<View
+						style={ { minHeight: 135, width: null, flex: 1, backgroundColor: "#30336b"} } />
 					<View style={ styles.partyText }>
 						<Left>
 							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
@@ -27,7 +25,7 @@ export default class PartyCard extends React.Component {
 							{/*<Text>{ this.props.attendees }</Text>*/ }
 						</Right>
 					</View>
-				</CardItem>
+				</View>
 			</Card>
 		);
 	}

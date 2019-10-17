@@ -4,13 +4,15 @@ import PartyCard from "../components/PartyCard";
 import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
 import Footer from "../components/UIFooter";
+import Header from "../components/Header";
 import { Spinner } from "native-base";
-import { Text, View, StyleSheet, FlatList, StatusBar } from "react-native";
+import { Text, View, StyleSheet, FlatList, SafeAreaView, RefreshControl } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 
 // import '@react-native-firebase/functions';
 // import '@react-native-firebase/auth';
+
 
 export default class HomeScreen extends React.Component {
 	static navigationOptions = {
@@ -23,6 +25,7 @@ export default class HomeScreen extends React.Component {
 		this.state = {
 			showSpinner: false,
 			isRefreshingList: false,
+			refreshing: false,
 			dbg: "tst",
 			sheetTitle: "Sheet Title",
 			sheetHost: "Sheet Host",
@@ -30,7 +33,7 @@ export default class HomeScreen extends React.Component {
 			parties: [
 				{
 					key: "1",
-					title: "Testing Party ",
+					title: "Testing Party",
 					host: "Diego",
 					description: "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ",
 					date: new Date(),
@@ -38,7 +41,7 @@ export default class HomeScreen extends React.Component {
 				},
 				{
 					key: "2",
-					title: "Testing Party 2",
+					title: "Testing Party",
 					host: "Richard",
 					description: "desc",
 					date: new Date(),
@@ -148,6 +151,13 @@ export default class HomeScreen extends React.Component {
 		this.setState({ dbg: key })
 	}
 
+	onRefresh() {
+		this.setState({ refreshing: false });
+		return (
+			<Text>test</Text>
+		)
+	}
+
 
 	// todo change text color of statusbar
 
@@ -159,17 +169,21 @@ export default class HomeScreen extends React.Component {
 		const { navigate } = this.props;
 		// navigation.navigate("TextConfirm");
 		return (
-			<View style={ styles.body }>
-				<View style={ styles.header }>
-					<Text style={ styles.headerText }>UCLA</Text>
-					<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
-				</View>
+			<SafeAreaView style={ styles.body }>
+				<Header collegeName="UCLA" />
 				<View style={ styles.container }>
 					<FlatList
 						onEndReachedThreshold={ 0 }
 						onEndReached={ () => { this.reachedEndOfList()} }
 						showsVerticalScrollIndicator={ false }
-						refreshing={ this.state.isRefreshingList }
+
+						refreshControl={
+							<RefreshControl
+								refreshing={ false }
+								onRefresh={ this.onRefresh.bind(this) }
+							/>
+						}
+
 						listEmptyContent={ <Spinner color={ "white" } /> }
 						ListHeaderComponent={
 							<View>
@@ -222,8 +236,9 @@ export default class HomeScreen extends React.Component {
 					<SheetContent title={ this.state.sheetTitle } host={ this.state.sheetHost }
 					              description={ this.state.sheetDescription } />
 				</RBSheet>
-				<Footer homeIsActive={ true }  />
-			</View>
+				<Footer homeIsActive={ true } />
+				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
+			</SafeAreaView>
 		);
 	}
 }
@@ -232,18 +247,8 @@ const styles = StyleSheet.create({
 	body: {
 		backgroundColor: "#000"
 	},
-	header: {
-		paddingLeft: 10,
-		paddingTop: 60, // todo dynamically get statusbar height
-		borderBottomColor: "#555",
-		borderBottomWidth: .5
-	},
-	headerText: {
-		color: "#FFFFFF"
-	},
 	container: {
-		// padding: 7,
-		maxHeight: 750 // todo get device height - height of bottom navigation
+		maxHeight: 720 // todo get device height - height of bottom navigation
 	},
 	trendingContainer: {
 		maxHeight: 175,
