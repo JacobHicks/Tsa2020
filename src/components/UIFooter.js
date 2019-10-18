@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Footer, FooterTab, Button, Text } from "native-base";
-import { LinearTextGradient } from "react-native-text-gradient";
 
 
 const UIFooter = function(props) {
