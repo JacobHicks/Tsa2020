@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import { View, StyleSheet, StatusBar } from "react-native";
 import ProfileImage from '../components/ProfileImage';
 import {Text} from 'native-base';
 import ElevatedDisplay from '../components/ElevatedDisplay';
@@ -78,14 +78,14 @@ const styles = StyleSheet.create({
 
     reputationLabel: {
         textAlignVertical: 'center',
-        fontFamily: 'Segoe UI',
+        // fontFamily: 'Segoe UI',
         fontSize: 20,
         color: '#858a91',
     },
 
     reputationValue: {
         textAlignVertical: 'center',
-        fontFamily: 'Segoe UI',
+        // fontFamily: 'Segoe UI',
         fontSize: 33,
         color: '#11FF00',
         marginLeft: 'auto',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 
     descriptionText: {
         margin: 'auto',
-        fontFamily: 'Segoe UI',
+        // fontFamily: 'Segoe UI',
         fontSize: 17,
         lineHeight: 26,
         color: '#C6CBD2',

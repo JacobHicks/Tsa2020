@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, ImageBackground, View, Dimensions } from "react-native";
+import { StyleSheet, ImageBackground, View, Dimensions, StatusBar } from "react-native";
 import { Input, Item, Form, Button, Text } from "native-base";
 
 import background from "../../assets/images/party1.jpg";
@@ -18,6 +18,7 @@ export default class InitialSignup extends React.Component {
 	render() {
 		return (
 			<ImageBackground source={ background } style={ Styles.background }>
+				<StatusBar barStyle="light-content" />
 				<Text style={ Styles.welcomeText }>
 					Welcome. Let's get partying.
 				</Text>

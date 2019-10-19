@@ -1,4 +1,4 @@
-import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
+import { Dimensions, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 import background from '../../assets/images/party2.jpg';
 import {Text} from "native-base";
 import {Provider} from 'react-redux';
@@ -31,6 +31,7 @@ export default class TextConfirm extends React.Component {
         const {navigation} = this.props;
         return (
             <ImageBackground source={background} style={Styles.background}>
+                <StatusBar barStyle="light-content" />
                 <Text style={Styles.welcomeText}>
                     {'Hey ' + navigation.getParam('name', 'User') + '.\nText code OTW.'}
                 </Text>

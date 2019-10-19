@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet } from "react-native";
 import {
 	Card,
 	CardItem,
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		paddingTop: "10%",
 		color: "#FFFFFF"
-		// marginLeft: "5%"
 	},
 	partyText: {
 		position: "absolute",

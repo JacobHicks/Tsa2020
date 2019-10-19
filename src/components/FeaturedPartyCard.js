@@ -4,16 +4,16 @@ import {
 	Card,
 	Text,
 	Left,
-	Right
+	Right, CardItem
 } from "native-base";
 
 export default class PartyCard extends React.Component {
 	render() {
 		return (
 			<Card transparent style={ styles.partyCard }>
-				<View>
+				<CardItem cardBody>
 					<View
-						style={ { minHeight: 135, width: null, flex: 1, backgroundColor: "#30336b"} } />
+						style={ { height: 135, width: null, flex: 1, backgroundColor: "#4834d4" } } />
 					<View style={ styles.partyText }>
 						<Left>
 							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
@@ -25,7 +25,7 @@ export default class PartyCard extends React.Component {
 							{/*<Text>{ this.props.attendees }</Text>*/ }
 						</Right>
 					</View>
-				</View>
+				</CardItem>
 			</Card>
 		);
 	}
@@ -34,16 +34,17 @@ export default class PartyCard extends React.Component {
 const styles = StyleSheet.create({
 	partyCard: {
 		padding: 0,
-		margin: 7,
+		margin: 5,
 		marginBottom: 10,
-		minHeight: 75,
-		minWidth: 220,
+		minHeight: 100,
+		minWidth: 220
+		// borderRadius: 6.67
 	},
 	partyTitle: {
 		marginBottom: 20,
 		textAlign: "left",
 		paddingTop: "10%",
-		color: "#FFFFFF",
+		color: "#FFFFFF"
 		// marginLeft: "5%"
 	},
 	partyText: {
@@ -53,6 +54,6 @@ const styles = StyleSheet.create({
 		color: "#FFF"
 	},
 	partyInfo: {
-		color: "#FFF",
+		color: "#FFF"
 	}
 });

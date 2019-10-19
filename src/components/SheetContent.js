@@ -8,10 +8,9 @@ import {
 } from "native-base";
 
 export default class SheetContent extends React.Component {
-	// todo change close button into icon
 	render() {
 		return (
-			<Container style={ styles.sheetContainer }>
+			<ScrollView style={ styles.sheetContainer }>
 				<Text style={ styles.sheetTitle }>{ this.props.title }</Text>
 				<View style={ styles.sheetView }>
 					<Text style={ styles.sheetDetail }><Text>Icon</Text> { this.props.host }</Text>
@@ -21,7 +20,7 @@ export default class SheetContent extends React.Component {
 				</View>
 				<View style={ styles.sheetView }>
 					<Text style={ styles.sheetDetail }><Text>Icon</Text> $5 entry fee</Text>
-					<Text style={ styles.sheetSubDetail }>Covers: supplies, fire extinguishers, insurance, cum</Text>
+					<Text style={ styles.sheetSubDetail }>Supplies, fire extinguishers, insurance, cum</Text>
 				</View>
 				<View style={ styles.sheetView }>
 					<Text style={ styles.sheetDetail }><Text>Icon</Text> About</Text>
@@ -32,7 +31,7 @@ export default class SheetContent extends React.Component {
 				<Button style={ styles.joinButton }>
 					<Text style={ styles.joinButtonText }>I'm in</Text>
 				</Button>
-			</Container>
+			</ScrollView>
 		);
 	}
 }
@@ -67,19 +66,18 @@ const styles = StyleSheet.create({
 		marginLeft: 38
 	},
 	joinButton: {
-		marginTop: 150,
-		backgroundColor: "green",
+		backgroundColor: "red",
 		borderRadius: 10,
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		maxWidth: 200,
-		maxHeight: 50
+		maxHeight: 50,
+		position: "absolute",
+		top: 500,
+		left: "25%",
+		right: "25%"
 	},
 	joinButtonText: {
 		fontWeight: "700",
-		fontSize: 24,
-		textAlign: "center",
-		textTransform: "uppercase"
+		fontSize: 18,
+		marginLeft: "31%",
 	}
 });

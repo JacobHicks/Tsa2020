@@ -5,11 +5,13 @@ import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
 import Footer from "../components/UIFooter";
 import Header from "../components/Header";
-import { Spinner } from "native-base";
-import { Text, View, StyleSheet, FlatList, SafeAreaView, RefreshControl } from "react-native";
+import { Spinner, Container } from "native-base";
+import { Text, View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 import firestore from "@react-native-firebase/firestore";
+const db = firestore();
+
 
 export default class HomeScreen extends React.Component {
 	static navigationOptions = {
@@ -71,7 +73,7 @@ export default class HomeScreen extends React.Component {
 			featuredParties: [
 				{
 					key: "1",
-					title: "Testing Party ",
+					title: "Testing Party",
 					host: "Diego",
 					description: "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ",
 					date: new Date(),
@@ -97,7 +99,7 @@ export default class HomeScreen extends React.Component {
 		};
 	}
 
-	getPartyList(cb) {
+	getPartyList() {
 		// todo make relative to school user is in
 		const timeSettings = {
 			month: "short",
@@ -106,7 +108,7 @@ export default class HomeScreen extends React.Component {
 			minute: "numeric"
 		};
 
-		firestore().collection("schoolData/ucla/parties")
+		db.collection("schoolData/ucla/parties")
 			.get()
 			.then(QuerySnapshot => {
 				let parties = [];
@@ -114,7 +116,7 @@ export default class HomeScreen extends React.Component {
 					.forEach(doc => {
 						const rawParty = doc.data();
 						const formattedParty = {
-							key: rawParty.id,
+							key: Math.random().toString(), // todo fix
 							title: rawParty.title,
 							host: rawParty.host,
 							description: rawParty.description,
@@ -126,7 +128,6 @@ export default class HomeScreen extends React.Component {
 				this.setState({
 					parties: parties
 				});
-				cb();
 			});
 	}
 
@@ -146,9 +147,11 @@ export default class HomeScreen extends React.Component {
 	reachedEndOfList() {
 		this.setState({ dbg: "endOfList" });
 		this.setState({ showSpinner: true, isRefreshingList: true });
-		this.getPartyList(() => {
-			this.setState({ showSpinner: false, isRefreshingList: false });
-		});
+		this.getPartyList(
+			// 	() => {
+			// 	this.setState({ showSpinner: false, isRefreshingList: false });
+			// }
+		);
 	}
 
 	showPartySheet(party) {
@@ -162,6 +165,12 @@ export default class HomeScreen extends React.Component {
 
 	enrollInParty(key) {
 		this.setState({ dbg: key });
+		const userRef = db.collection("schoolData").doc("ucla").collection("users").doc("user");
+		const partyRef = db.collection("schoolData").doc("ucla").collection("parties").doc("party");
+		const newUser = firestore.FieldValue.arrayUnion("user"); // todo create references for other docs
+		const newParty = firestore.FieldValue.arrayUnion("party");
+		userRef.update({ partiesList: newParty });
+		partyRef.update({ userList: newUser });
 	}
 
 	onRefresh() {
@@ -172,65 +181,62 @@ export default class HomeScreen extends React.Component {
 	}
 
 
-	// todo change text color of statusbar
-
 	// todo https://facebook.github.io/react-native/docs/refreshcontrol
 
 	// todo make scrolling of featured paginated(?), when user scrolls it'll auto scroll to be in view
 	// todo loading icon before images are loaded
+	// todo indication of party that a user is going to
 	render() {
 		const { navigate } = this.props;
 		// navigation.navigate("TextConfirm");
 		return (
-			<SafeAreaView style={ styles.body }>
-				<Header collegeName="UCLA" />
-				<View style={ styles.container }>
-					<FlatList
-						onEndReachedThreshold={ 0 }
-						onEndReached={ () => {
-							this.reachedEndOfList();
-						} }
-						showsVerticalScrollIndicator={ false }
-						refreshControl={
-							<RefreshControl
-								refreshing={ false }
-								onRefresh={ this.onRefresh.bind(this) }
-							/>
-						}
+			<Container style={ styles.body }>
+				<Header collegeName="Stanford" />
+				<FlatList
+					onEndReachedThreshold={ 0 }
+					onEndReached={ () => {
+						this.reachedEndOfList();
+					} }
+					showsVerticalScrollIndicator={ false }
+					refreshControl={
+						<RefreshControl
+							refreshing={ false }
+							onRefresh={ this.onRefresh.bind(this) }
+						/>
+					}
 
-						listEmptyContent={ <Spinner color={ "white" } /> }
-						ListHeaderComponent={
+					listEmptyContent={ <Spinner color={ "white" } /> }
+					ListHeaderComponent={
+						<View>
+							<Text style={ styles.titleText }>Trending</Text>
+							<FlatList
+								showsHorizontalScrollIndicator={ false }
+								horizontal={ true }
+								style={ styles.trendingContainer }
+								data={ this.state.featuredParties }
+								renderItem={ ({ item }) =>
+									<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
+									           onPress={ () => this.showPartySheet(item.key) }>
+										<View>
+											<FeaturedPartyCard title={ item.title } date={ item.date }
+											                   time={ item.time }
+											                   host={ item.host } imageURL={ item.imageURL } />
+										</View>
+									</DoubleTap> }
+							/>
+							<Text style={ styles.titleText }>All Parties</Text>
+						</View> }
+					ListFooterComponent={ this.state.showSpinner ? <Spinner color={ "white" } /> : <View></View> }
+					data={ this.state.parties }
+					renderItem={ ({ item }) =>
+						<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
+						           onPress={ () => this.showPartySheet(item) }>
 							<View>
-								<Text style={ styles.titleText }>Trending</Text>
-								<FlatList
-									showsHorizontalScrollIndicator={ false }
-									horizontal={ true }
-									style={ styles.trendingContainer }
-									data={ this.state.featuredParties }
-									renderItem={ ({ item }) =>
-										<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
-										           onPress={ () => this.showPartySheet(item.key) }>
-											<View>
-												<FeaturedPartyCard title={ item.title } date={ item.date }
-												                   time={ item.time }
-												                   host={ item.host } imageURL={ item.imageURL } />
-											</View>
-										</DoubleTap> }
-								/>
-								<Text style={ styles.titleText }>All Parties</Text>
-							</View> }
-						ListFooterComponent={ this.state.showSpinner ? <Spinner color={ "white" } /> : <View></View> }
-						data={ this.state.parties }
-						renderItem={ ({ item }) =>
-							<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
-							           onPress={ () => this.showPartySheet(item) }>
-								<View>
-									<PartyCard title={ item.title } date={ item.date } time={ item.time }
-									           host={ item.host } imageURL={ item.imageURL } />
-								</View>
-							</DoubleTap> }
-					/>
-				</View>
+								<PartyCard title={ item.title } date={ item.date } time={ item.time }
+								           host={ item.host } imageURL={ item.imageURL } />
+							</View>
+						</DoubleTap> }
+				/>
 				<RBSheet
 					ref={ ref => {
 						this.RBSheet = ref;
@@ -250,9 +256,9 @@ export default class HomeScreen extends React.Component {
 					<SheetContent title={ this.state.sheetTitle } host={ this.state.sheetHost }
 					              description={ this.state.sheetDescription } />
 				</RBSheet>
-				<Footer homeIsActive={ true } style={ styles.bodyFooter } />
 				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
-			</SafeAreaView>
+				<Footer style={ styles.bodyFooter } />
+			</Container>
 		);
 	}
 }
@@ -263,22 +269,23 @@ const styles = StyleSheet.create({
 		height: "100%"
 	},
 	container: {
-		maxHeight: 720, // todo get device height - height of bottom navigation
+		maxHeight: "87%"
 	},
 	trendingContainer: {
-		maxHeight: 175,
-		marginVertical: 25,
+		maxHeight: 175
 	},
 	titleText: {
 		fontSize: 25,
 		color: "#FFFFFF",
 		marginLeft: 15,
-		fontWeight: "700"
+		fontWeight: "700",
+		marginTop: 15
 	},
 	bodyFooter: {
-		position: "absolute",
+		position: "relative",
 		bottom: 0,
-		minHeight: 1000
+		top: "auto",
+		height: 1000
 	},
 
 	// debug

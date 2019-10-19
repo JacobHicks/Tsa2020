@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView, StatusBar } from "react-native";
 import {
 	Container,
 	Header,
@@ -16,14 +16,30 @@ import {
 	Col,
 	DatePicker
 } from "native-base";
-
+import firestore from "@react-native-firebase/firestore";
+const db = firestore();
 
 const CreatePartyScreen = function(props) {
-	// todo change the title of the party when they enter text
 	const [partyTitle, setPartyTitle] = useState("Untitled Party");
-	// setPartyTitle(() => {
-	//
-	// });
+	const createNewParty = () => {
+		let docRef = db.collection("schoolData").doc(school).collection("parties");
+		docRef.add({
+			title: title,
+			location: location,
+			time: time,
+			host: host,
+			fee: fee,
+			description: description,
+			deleted: false,
+			attendees: 1
+		}).then((status) => {
+			res.send(status);
+			// todo toast here
+		}).catch(err => {
+			if (err) throw err;
+		});
+	};
+
 	return (
 		<Container style={ styles.body }>
 			<Header style={ styles.header }>

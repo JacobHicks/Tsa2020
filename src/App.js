@@ -5,6 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import InitialSignup from './screens/InitialSignup';
 import TextConfirm from './screens/TextConfirm';
 import CreatePartyScreen from "./screens/CreatePartyScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 import TestScreen from "./screens/TestScreen";
 
 const MainNavigator = createStackNavigator({
