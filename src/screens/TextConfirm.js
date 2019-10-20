@@ -23,8 +23,10 @@ export default class TextConfirm extends React.Component {
     componentDidMount() {
         const {navigation} = this.props;
 
-        const {ConfirmationResult} = auth().signInWithPhoneNumber(navigation.getParam('phoneNumber'));
-        this.setState({ConfirmationResult});
+        auth().signInWithPhoneNumber(navigation.getParam('phoneNumber'))
+            .then(ConfirmationResult => {
+                this.setState({ConfirmationResult});
+            });
     }
 
     render() {

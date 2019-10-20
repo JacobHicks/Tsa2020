@@ -1,111 +1,148 @@
 import React from 'react';
-import { View, StyleSheet, StatusBar } from "react-native";
-import ProfileImage from '../components/ProfileImage';
-import {Text} from 'native-base';
+import {View, StyleSheet, Image, Dimensions, RefreshControl, FlatList, ScrollView} from 'react-native';
+import {Spinner, Text} from 'native-base';
 import ElevatedDisplay from '../components/ElevatedDisplay';
 import FloatingButton from '../components/FloatingButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import DoubleTap from '../components/MultiTap';
+import FeaturedPartyCard from '../components/FeaturedPartyCard';
+import PartyCard from '../components/PartyCard';
+import PartyWalletCard from '../components/PartyWalletCard';
+import UIFooter from '../components/UIFooter';
+
+const db = firestore();
 
 export default class ProfileScreen extends React.Component {
-    static NavigationOptions = {
-        title: 'Profile',
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: true,
+            user: null,
+            parties: [],
+        };
+    }
+
+    getParties() {
+        return [
+            {
+                key: '1',
+                name: 'Beta Chad Kappa',
+                date: 'Oct 8th',
+                details: 'Whom is Joe',
+            },
+
+            {
+                key: '2',
+                name: 'Party at Scoob House',
+                date: 'Oct 26th',
+            },
+        ];
+    }
+
+    componentDidMount() {
+        //const user = auth().currentUser;
+        /*
+        const phoneNumber = user.phoneNumber;
+        db.collection("users-schools")
+            .doc(phoneNumber)
+            .get()
+            .then(DocumentSnapshot => {
+                this.setState({
+                    user: DocumentSnapshot.data()
+                });
+            });
+
+         */
+        this.setState({
+            isLoading: false,
+            parties: this.getParties(),
+        });
+    }
 
     render() {
-        return (
-            <View style={{flex: 1}}>
-                <View style={styles.image}>
-                    <ProfileImage/>
-                </View>
+        if (this.state.isLoading) {
+            return null;
+            //TODO: load screen
+        } else {
+            return (
+                <ScrollView contentContainerStyle={{
+                    backgroundColor: '#000',
+                }}>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={this.state.parties}
+                        style={{
+                            marginLeft: '10%',
+                            marginRight: '10%',
+                        }}
+                        ListHeaderComponent={
+                            <View>
+                                <View style={{
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}>
+                                    <Image source={require('../../assets/images/chad.jpg')} style={Styles.image}/>
 
-                <ElevatedDisplay important>
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <Text style={styles.reputationLabel}>
-                            Reputation
-                        </Text>
-                        <Text style={styles.reputationValue}>
-                            4.8
-                        </Text>
-                    </View>
-                </ElevatedDisplay>
+                                    <Text style={Styles.nameText}>
+                                        Joe Mama
+                                    </Text>
 
-                <ElevatedDisplay>
-                    <Text style={styles.descriptionText}>
-                        Age: 21{'\n'}Major: Custodial Engineering{'\n'}Relationship status: Single
-                    </Text>
-                </ElevatedDisplay>
+                                    <Text style={Styles.schoolText}>
+                                        University of Waterloo
+                                    </Text>
+                                </View>
 
-                <ElevatedDisplay>
-                    <Text style={styles.descriptionText}>
-                        Starting quarterback, I love to party and i'm not afraid to have a good time.
-                    </Text>
-                </ElevatedDisplay>
-
-                <View style={styles.buttons}>
-                    <FloatingButton>
-                        <Icon name="envelope" style={{color: '#C67B7B', fontSize: 35}}/>
-                    </FloatingButton>
-
-                    <FloatingButton diameter={48}>
-                        <Icon name="plus" style={{color: '#76BC6E', fontSize: 24, marginLeft: 1, marginTop: 2}}/>
-                    </FloatingButton>
-
-                    <FloatingButton diameter={60}>
-                        <Icon name="comment" style={{color: '#76BC6E', fontSize: 30, marginLeft: 1, marginBottom: 2}}/>
-                    </FloatingButton>
-                </View>
-            </View>
-        );
+                                <Text style={Styles.walletText}>
+                                    Party Wallet
+                                </Text>
+                            </View>
+                        }
+                        renderItem={({item}) =>
+                            <View>
+                                <PartyWalletCard title={item.name} date={item.date}/>
+                            </View>
+                        }
+                    />
+                <UIFooter />
+                </ScrollView>
+            );
+        }
     }
 }
 
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
     image: {
-        width: '100%',
-        height: '40%',
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
-
-        elevation: 6,
-        alignSelf: 'center',
-    },
-
-    reputationLabel: {
-        textAlignVertical: 'center',
-        // fontFamily: 'Segoe UI',
-        fontSize: 20,
-        color: '#858a91',
-    },
-
-    reputationValue: {
-        textAlignVertical: 'center',
-        // fontFamily: 'Segoe UI',
-        fontSize: 33,
-        color: '#11FF00',
-        marginLeft: 'auto',
-    },
-
-    descriptionText: {
-        margin: 'auto',
-        // fontFamily: 'Segoe UI',
-        fontSize: 17,
-        lineHeight: 26,
-        color: '#C6CBD2',
-    },
-
-    buttons: {
-        position: 'absolute',
-        bottom: 20,
-        flexDirection: 'row',
-        alignSelf: 'center',
+        borderRadius: 100,
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingRight: 6
-    }
+        width: Dimensions.get('window').width * .32,
+        height: Dimensions.get('window').width * .32,
+        marginTop: 55,
+        marginBottom: 25,
+    },
+
+    walletText: {
+        color: '#FFF',
+        fontFamily: 'Glacial Indifference',
+        fontSize: Dimensions.get('window').width * .07,
+        fontWeight: '700',
+        marginBottom: 16,
+    },
+
+    nameText: {
+        color: '#FFF',
+        fontFamily: 'Glacial Indifference',
+        fontSize: Dimensions.get('window').width * .07,
+        fontWeight: '700',
+        marginBottom: 5,
+    },
+
+    schoolText: {
+        color: '#FFF',
+        fontFamily: 'Glacial Indifference',
+        fontSize: Dimensions.get('window').width * .04,
+        fontWeight: '700',
+        marginBottom: 44,
+    },
 });

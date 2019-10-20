@@ -9,10 +9,10 @@ import SettingsScreen from "./screens/SettingsScreen";
 import TestScreen from "./screens/TestScreen";
 
 const MainNavigator = createStackNavigator({
-        Home: {screen: HomeScreen},
-        InitialSignup: {screen: InitialSignup},
-        TextConfirm: {screen: TextConfirm},
         Profile: {screen: ProfileScreen},
+        InitialSignup: {screen: InitialSignup},
+        Home: {screen: HomeScreen},
+        TextConfirm: {screen: TextConfirm},
         CreateParty: {screen: CreatePartyScreen}
     },
     {
