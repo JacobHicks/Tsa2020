@@ -6,7 +6,7 @@ import SheetContent from '../components/SheetContent';
 import Footer from '../components/UIFooter';
 import Header from '../components/Header';
 import {Spinner, Container} from 'native-base';
-import {Text, View, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {Text, View, StyleSheet, FlatList, RefreshControl, Dimensions} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 // todo import Toasts from native base
 import firestore from '@react-native-firebase/firestore';
@@ -242,20 +242,20 @@ export default class HomeScreen extends React.Component {
                     ref={ref => {
                         this.RBSheet = ref;
                     }}
-                    height={650}
+                    height={Dimensions.get('window').height * .70}
                     duration={250}
                     closeOnDragDown={true}
                     customStyles={{
                         container: {
-                            borderRadius: 6.67,
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12
                         },
                         draggableIcon: {
                             borderColor: '#333',
                         },
                     }}
                 >
-                    <SheetContent title={this.state.sheetTitle} host={this.state.sheetHost}
-                                  description={this.state.sheetDescription}/>
+                    <SheetContent name={this.state.sheetTitle} description={this.state.sheetDescription}/>
                 </RBSheet>
                 <Text style={{color: '#FFF'}}>{this.state.dbg}</Text>
                 <Footer style={styles.bodyFooter}/>
