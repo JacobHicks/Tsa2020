@@ -13,8 +13,10 @@ export default class PartyCard extends React.Component {
 		return (
 			<Card transparent style={ styles.partyCard }>
 				<CardItem cardBody>
-					<View
-						style={ { height: 200, width: null, flex: 1, backgroundColor: "#4834d4" } } />
+					<View style={ { height: 200, width: null, flex: 1, backgroundColor: "#4834d4" } }>
+						<CalendarIcon style={ styles.calendarIcon } />
+					</View>
+
 					<View style={ styles.partyText }>
 						<Left>
 							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
@@ -36,26 +38,29 @@ export default class PartyCard extends React.Component {
 const styles = StyleSheet.create({
 	partyCard: {
 		padding: 0,
-		margin: 5,
 		marginBottom: 10,
 		minHeight: 120,
 		minWidth: 220
 		// borderRadius: 6.67
 	},
 	partyTitle: {
-		marginBottom: 20,
+		bottom: 25,
 		textAlign: "left",
 		paddingTop: "10%",
-		color: "#FFFFFF"
+		color: "#FFFFFF",
+		fontSize: 30,
+		fontWeight: "600",
+		position: "absolute",
+		left: 12
 	},
 	partyText: {
 		position: "absolute",
-		left: 0,
-		bottom: 0,
+		bottom: 10,
 		color: "#FFF"
 	},
 	partyInfo: {
-		color: "#FFF"
+		color: "#FFF",
+		left: 14,
 
 	}
 });

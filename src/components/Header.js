@@ -15,14 +15,14 @@ const Header = function(props) {
 const styles = StyleSheet.create({
 	header: {
 		paddingLeft: 10,
-		marginTop:42,
+		marginTop: 42,
 		borderBottomColor: "#555",
 		borderBottomWidth: .5,
 		textAlign: "center",
-		backgroundColor: "#000",
+		backgroundColor: "#000"
 	},
 	headerText: {
-		color: "#fff",
+		color: "#ee5253",
 		fontSize: 18,
 		textTransform: "uppercase",
 		fontWeight: "700",
