@@ -60,7 +60,7 @@ const Styles = StyleSheet.create({
         marginTop: '10%',
         color: '#FFF',
 
-        fontFamily: 'Glacial Indifference',
+        // fontFamily: 'Glacial Indifference',
         fontSize: 22,
         lineHeight: 8,
         fontWeight: '700',   //React Native wants this in quotes
@@ -82,7 +82,7 @@ const Styles = StyleSheet.create({
     continueText: {
         color: '#000',
 
-        fontFamily: 'Glacial Indifference',
+        // fontFamily: 'Glacial Indifference',
         fontSize: 22,
         fontWeight: '700',   //React Native wants this in quotes
     },

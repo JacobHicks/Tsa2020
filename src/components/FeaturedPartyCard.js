@@ -41,17 +41,17 @@ const styles = StyleSheet.create({
 		// borderRadius: 6.67
 	},
 	partyTitle: {
-		marginBottom: 20,
 		textAlign: "left",
-		paddingTop: "10%",
-		color: "#FFFFFF"
-		// marginLeft: "5%"
+		color: "#FFFFFF",
+		position: "absolute",
+		bottom: 15,
+		fontWeight: "600",
+
 	},
 	partyText: {
 		position: "absolute",
-		left: 0,
-		bottom: 0,
-		color: "#FFF"
+		color: "#FFF",
+		bottom: 5
 	},
 	partyInfo: {
 		color: "#FFF"
