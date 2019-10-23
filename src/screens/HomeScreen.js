@@ -258,7 +258,7 @@ export default class HomeScreen extends React.Component {
                     <SheetContent name={this.state.sheetTitle} description={this.state.sheetDescription}/>
                 </RBSheet>
                 <Text style={{color: '#FFF'}}>{this.state.dbg}</Text>
-                <Footer style={styles.bodyFooter}/>
+                <Footer/>
             </Container>
         );
     }
@@ -281,12 +281,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         fontWeight: '700',
         marginTop: 15,
-    },
-    bodyFooter: {
-        position: 'relative',
-        bottom: 0,
-        top: 'auto',
-        height: 1000,
     },
 
     // debug
