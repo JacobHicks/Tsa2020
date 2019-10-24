@@ -10,6 +10,7 @@ import { Text, View, StyleSheet, FlatList, RefreshControl, Dimensions } from "re
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 import firestore from "@react-native-firebase/firestore";
+import Carousel from "react-native-snap-carousel";
 
 const db = firestore();
 
@@ -19,8 +20,10 @@ export default class HomeScreen extends React.Component {
 		title: "Home"
 	};
 
+
 	constructor(props) {
 		super(props);
+		this.enrollInParty = this.enrollInParty.bind(this)
 		this.state = {
 			showSpinner: false,
 			isRefreshingList: false,
@@ -119,10 +122,12 @@ export default class HomeScreen extends React.Component {
 						const formattedParty = {
 							key: Math.random().toString(), // todo fix
 							title: rawParty.title,
-							host: rawParty.host,
+							// host: rawParty.host,
 							description: rawParty.description,
-							fee: rawParty.fee,
-							time: new Date(rawParty.time).toLocaleDateString("en-US", timeSettings)
+							// fee: rawParty.fee,
+							time: rawParty.time.toDate(),
+							shortLocation: rawParty.shortLocation,
+							attendees: rawParty.attendees
 						};
 						parties.push(formattedParty);
 					});
@@ -148,11 +153,11 @@ export default class HomeScreen extends React.Component {
 	reachedEndOfList() {
 		this.setState({ dbg: "endOfList" });
 		this.setState({ showSpinner: true, isRefreshingList: true });
-		this.getPartyList(
-			// 	() => {
-			// 	this.setState({ showSpinner: false, isRefreshingList: false });
-			// }
-		);
+		// this.getPartyList(
+		// 	// 	() => {
+		// 	// 	this.setState({ showSpinner: false, isRefreshingList: false });
+		// 	// }
+		// );
 	}
 
 	showPartySheet(party) {
@@ -164,8 +169,9 @@ export default class HomeScreen extends React.Component {
 		this.RBSheet.open();
 	}
 
-	enrollInParty(key) {
-		this.setState({ dbg: key });
+	enrollInParty() {
+
+		this.setState({ dbg: "enrolled" });
 		const userRef = db.collection("schoolData").doc("ucla").collection("users").doc("user");
 		const partyRef = db.collection("schoolData").doc("ucla").collection("parties").doc("party");
 		const newUser = firestore.FieldValue.arrayUnion("user"); // todo create references for other docs
@@ -186,7 +192,6 @@ export default class HomeScreen extends React.Component {
 
 	// todo make scrolling of featured paginated(?), when user scrolls it'll auto scroll to be in view
 	// todo loading icon before images are loaded
-	// todo indication of party that a user is going to
 	render() {
 		const { navigate } = this.props;
 		// navigation.navigate("TextConfirm");
@@ -194,7 +199,7 @@ export default class HomeScreen extends React.Component {
 			<Container style={ styles.body }>
 				<Header collegeName="UCLA" />
 				<FlatList
-					onEndReachedThreshold={ 0 }
+					onEndReachedThreshold={ 10 }
 					onEndReached={ () => {
 						this.reachedEndOfList();
 					} }
@@ -210,20 +215,40 @@ export default class HomeScreen extends React.Component {
 					ListHeaderComponent={
 						<View>
 							<Text style={ styles.titleText }>Trending</Text>
-							<FlatList
-								showsHorizontalScrollIndicator={ false }
-								horizontal={ true }
-								style={ styles.trendingContainer }
+							{/*<FlatList*/ }
+							{/*	showsHorizontalScrollIndicator={ false }*/ }
+							{/*	horizontal={ true }*/ }
+							{/*	style={ styles.trendingContainer }*/ }
+							{/*	data={ this.state.featuredParties }*/ }
+							{/*	renderItem={ ({ item }) =>*/ }
+							{/*		<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }*/ }
+							{/*		           onPress={ () => this.showPartySheet(item.key) }>*/ }
+							{/*			<View>*/ }
+							{/*				<FeaturedPartyCard title={ item.title } date={ item.date }*/ }
+							{/*				                   time={ item.time }*/ }
+							{/*				                   host={ item.host } imageURL={ item.imageURL } />*/ }
+							{/*			</View>*/ }
+							{/*		</DoubleTap> }*/ }
+							{/*/>*/ }
+							<Carousel
+								ref={ (c) => { this._carousel = c; } }
 								data={ this.state.featuredParties }
-								renderItem={ ({ item }) =>
-									<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
-									           onPress={ () => this.showPartySheet(item.key) }>
-										<View>
-											<FeaturedPartyCard title={ item.title } date={ item.date }
-											                   time={ item.time }
-											                   host={ item.host } imageURL={ item.imageURL } />
-										</View>
-									</DoubleTap> }
+								sliderWidth={ Dimensions.get("window").width + 130 }
+								itemWidth={ 220 }
+								containerCustomStyle={ { left: -147 } }
+								loop={ true }
+								enableMomentum={ true }
+								enableSnap={ true }
+								renderItem={ (item, index) => {
+									return (
+										<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
+										           onPress={ () => this.showPartySheet(item.key) }>
+											<View>
+												<FeaturedPartyCard />
+											</View>
+										</DoubleTap>
+									)
+								} }
 							/>
 							<Text style={ styles.titleText }>All Parties</Text>
 						</View> }
@@ -233,25 +258,32 @@ export default class HomeScreen extends React.Component {
 						<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }
 						           onPress={ () => this.showPartySheet(item) }>
 							<View>
-								<PartyCard title={ item.title } date={ item.date } time={ item.time }
-								           host={ item.host } imageURL={ item.imageURL } />
+								<PartyCard
+									title={ item.title }
+									time={ item.time } shortLocation={ item.shortLocation }
+									attendees={ item.attendees } joinParty={ this.enrollInParty } />
 							</View>
 						</DoubleTap> }
 				/>
 				<RBSheet
+					joinParty={ this.enrollInParty }
 					ref={ ref => {
 						this.RBSheet = ref;
 					} }
 					height={ Dimensions.get("window").height * .70 }
 					duration={ 250 }
+					animationType={ "fade" }
 					closeOnDragDown={ true }
 					customStyles={ {
 						container: {
-							borderTopLeftRadius: 12,
-							borderTopRightRadius: 12
+							borderTopLeftRadius: 16,
+							borderTopRightRadius: 16,
+							backgroundColor: "#111"
 						},
 						draggableIcon: {
-							borderColor: "#333"
+							backgroundColor: "#ee5253",
+							width: 75,
+							top: 5
 						}
 					} }
 				>
@@ -264,13 +296,10 @@ export default class HomeScreen extends React.Component {
 	}
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ // todo fix spacing between titles and content
 	body: {
 		backgroundColor: "#000",
 		height: "100%"
-	},
-	container: {
-		maxHeight: "87%"
 	},
 	trendingContainer: {
 		maxHeight: 175
@@ -280,13 +309,13 @@ const styles = StyleSheet.create({
 		color: "#FFFFFF",
 		marginLeft: 15,
 		fontWeight: "700",
-		marginTop: 15
+		marginTop: 20,
+		// marginBottom: -7
 	},
 	bodyFooter: {
 		position: "relative",
 		bottom: 0,
-		top: "auto",
-		height: 1000
+		top: "auto"
 	},
 
 	// debug
