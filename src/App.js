@@ -1,7 +1,6 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import ProfileScreen from './screens/ProfileScreen';
-import RegisterScreen from "./screens/RegisterScreen"
 import HomeScreen from './screens/HomeScreen';
 import InitialSignup from './screens/InitialSignup';
 import TextConfirm from './screens/TextConfirm';

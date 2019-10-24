@@ -105,7 +105,7 @@ export default class ProfileScreen extends React.Component {
                             </View>
                         }
                     />
-                <UIFooter />
+                <UIFooter style={{height: '100%'}} navigation={this.props.navigation}/>
                 </ScrollView>
             );
         }

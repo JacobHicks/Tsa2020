@@ -4,25 +4,25 @@ import {Footer, FooterTab, Button, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const UIFooter = function (props) {
-
+    const navigation = props.navigation;
     return (
         <Footer style={styles.footer}>
             <FooterTab style={styles.footerTab}>
                 <Button active={props.homeIsActive} style={styles.footerButton}
-                    //     onPress={
-                    // this.props.navigation.navigate("TextConfirm", {
-                    // 	name: "test",
-                    // 	phoneNumber: "test"
-                    // }) }
+                        onPress={() => navigation.navigate('Home')}
                 >
                     <Icon name='home' size={43} color='#FFF'/>
                     <Text style={styles.footerButtonText}>Home</Text>
                 </Button>
-                <Button active={props.createIsActive} style={styles.footerButton}>
+                <Button active={props.createIsActive} style={styles.footerButton}
+                        onPress={() => navigation.navigate('CreateParty')}
+                >
                     <Icon name='control-point' size={43} color='#FFF'/>
                     <Text style={styles.footerButtonText}>Host</Text>
                 </Button>
-                <Button active={props.profileIsActive} style={styles.footerButton}>
+                <Button active={props.profileIsActive} style={styles.footerButton}
+                        onPress={() => navigation.navigate('Profile')}
+                >
                     <Icon name='person' size={43} color='#FFF'/>
                     <Text style={styles.footerButtonText}>Profile</Text>
                 </Button>
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 13,
         textAlign: 'center',
-        fontWeight: '700'
+        fontWeight: '700',
     },
 
 

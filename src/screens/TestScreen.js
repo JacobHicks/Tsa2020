@@ -258,7 +258,7 @@ export default class HomeScreen extends React.Component {
 					<SheetContent name={ this.state.sheetTitle } description={ this.state.sheetDescription } />
 				</RBSheet>
 				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
-				<Footer style={ styles.bodyFooter } />
+				<Footer style={ styles.bodyFooter } navigation={this.props.navigation}/>
 			</Container>
 		);
 	}
