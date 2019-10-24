@@ -13,12 +13,12 @@ export default class PartyCard extends React.Component {
 			<Card transparent style={ styles.partyCard }>
 				<CardItem cardBody>
 					<View
-						style={ { height: 135, width: null, flex: 1, backgroundColor: "#4834d4" } } />
+						style={ { height: 135, width: null, flex: 1, backgroundColor: "#ee5253" } } />
 					<View style={ styles.partyText }>
 						<Left>
-							<Text style={ styles.partyTitle }>{ this.props.title }</Text>
+							<Text style={ styles.partyTitle }>This is the title of party</Text>
 							<View>
-								<Text style={ styles.partyInfo }>{ this.props.time } | { this.props.host }</Text>
+								<Text style={ styles.partyInfo }>OCT 8 @ 5:00PM</Text>
 							</View>
 						</Left>
 						<Right>
@@ -31,14 +31,12 @@ export default class PartyCard extends React.Component {
 	}
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ // todo change border radius
 	partyCard: {
-		padding: 0,
-		margin: 5,
 		marginBottom: 10,
 		minHeight: 100,
-		minWidth: 220
-		// borderRadius: 6.67
+		minWidth: 220,
+		borderRadius: 6.67
 	},
 	partyTitle: {
 		textAlign: "left",
@@ -46,7 +44,6 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 15,
 		fontWeight: "600",
-
 	},
 	partyText: {
 		position: "absolute",
