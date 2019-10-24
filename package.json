@@ -12,6 +12,7 @@
     "@react-native-firebase/auth": "~6.0.1",
     "@react-native-firebase/firestore": "~6.0.1",
     "assets": "^3.0.1",
+    "react-navigation-transitions": "~1.0.12",
     "font-awesome": "4.7.0",
     "native-base": "2.13.8",
     "react": "16.8.6",

@@ -8,12 +8,6 @@ const UIFooter = function (props) {
     return (
         <Footer style={styles.footer}>
             <FooterTab style={styles.footerTab}>
-                <Button active={props.homeIsActive} style={styles.footerButton}
-                        onPress={() => navigation.navigate('Home')}
-                >
-                    <Icon name='home' size={43} color='#FFF'/>
-                    <Text style={styles.footerButtonText}>Home</Text>
-                </Button>
                 <Button active={props.createIsActive} style={styles.footerButton}
                         onPress={() => navigation.navigate('CreateParty')}
                 >
