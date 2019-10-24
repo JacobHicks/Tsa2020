@@ -21,6 +21,8 @@ import PartyCard from '../components/PartyCard';
 import PartyWalletCard from '../components/PartyWalletCard';
 import Footer from '../components/UIFooter';
 import {Container} from 'native-base';
+import SheetContent from '../components/SheetContent';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const db = firestore();
 
@@ -32,6 +34,7 @@ export default class ProfileScreen extends React.Component {
             user: null,
             parties: [],
         };
+        this.openSheet = this.openSheet.bind(this);
     }
 
     getParties() {
@@ -47,6 +50,7 @@ export default class ProfileScreen extends React.Component {
                 key: '2',
                 name: 'Party at Scoob House',
                 date: 'Oct 26th',
+                details: 'Whom is Joe',
             },
         ];
     }
@@ -80,7 +84,7 @@ export default class ProfileScreen extends React.Component {
             return (
                 <Container style={{backgroundColor: '#000'}}>
                     <TouchableWithoutFeedback onPress={() => {
-                        navigation.navigate('Home')
+                        navigation.navigate('Home');
                     }}>
                         <Icon name='arrow-back' size={43} color='#FFF' style={{marginLeft: 8, marginTop: 8}}/>
                     </TouchableWithoutFeedback>
@@ -116,15 +120,45 @@ export default class ProfileScreen extends React.Component {
                             }
                             renderItem={({item}) =>
                                 <View>
-                                    <PartyWalletCard title={item.name} date={item.date}/>
+                                    <PartyWalletCard title={item.name} date={item.date}
+                                                     onDetails={() => {
+                                                         this.setState({
+                                                             sheetTitle: item.name,
+                                                             sheetDescription: item.details,
+                                                         }, this.openSheet);
+                                                     }}/>
                                 </View>
                             }
                         />
                     </ScrollView>
+
+                    <RBSheet
+                        ref={ref => {
+                            this.RBSheet = ref;
+                        }}
+                        height={Dimensions.get('window').height * .70}
+                        duration={250}
+                        closeOnDragDown={true}
+                        customStyles={{
+                            container: {
+                                borderTopLeftRadius: 12,
+                                borderTopRightRadius: 12,
+                            },
+                            draggableIcon: {
+                                borderColor: '#333',
+                            },
+                        }}
+                    >
+                        <SheetContent name={this.state.sheetTitle} description={this.state.sheetDescription} registered={true}/>
+                    </RBSheet>
                 </Container>
             );
         }
     }
+
+    openSheet = (() => {
+        this.RBSheet.open();
+    });
 }
 
 const Styles = StyleSheet.create({

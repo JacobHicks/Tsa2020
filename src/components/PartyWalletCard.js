@@ -10,7 +10,7 @@ export default class PartyWalletCard extends React.Component {
                     {this.props.title + ' | ' + this.props.date}
                 </Text>
                 <View style={Styles.buttons}>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={this.props.onDetails}>
                         <View style={Styles.detailButton}>
                             <Text style={Styles.buttonText}>
                                 Details
@@ -18,7 +18,7 @@ export default class PartyWalletCard extends React.Component {
                         </View>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={this.props.onSignIn}>
                         <View style={Styles.signInButton}>
                             <Text style={Styles.buttonText}>
                                 Sign in
