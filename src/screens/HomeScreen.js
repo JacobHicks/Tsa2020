@@ -197,7 +197,7 @@ export default class HomeScreen extends React.Component {
 		// navigation.navigate("TextConfirm");
 		return (
 			<Container style={ styles.body }>
-				<Header collegeName="UCLA" />
+				<Header collegeName="UC Berkeley" />
 				<FlatList
 					onEndReachedThreshold={ 10 }
 					onEndReached={ () => {
@@ -235,7 +235,7 @@ export default class HomeScreen extends React.Component {
 								data={ this.state.featuredParties }
 								sliderWidth={ Dimensions.get("window").width + 130 }
 								itemWidth={ 220 }
-								containerCustomStyle={ { left: -147 } }
+								containerCustomStyle={ { left: -153 } }
 								loop={ true }
 								enableMomentum={ true }
 								enableSnap={ true }

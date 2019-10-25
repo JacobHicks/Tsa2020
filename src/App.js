@@ -22,7 +22,7 @@ function handleTransition({scenes}) {
 }
 
 const MainNavigator = createStackNavigator({
-        Home: {screen: TestScreen},
+        Home: {screen: HomeScreen},
         Profile: {screen: ProfileScreen},
         InitialSignup: {screen: InitialSignup},
         TextConfirm: {screen: TextConfirm},
