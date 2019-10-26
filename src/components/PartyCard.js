@@ -11,6 +11,16 @@ import {
 	Col
 } from "native-base";
 
+function formatAMPM(date) {
+	let hours = date.getHours();
+	let minutes = date.getMinutes();
+	const ampm = hours >= 12 ? "PM" : "AM";
+	hours = hours % 12;
+	hours = hours ? hours : 12;
+	minutes = minutes < 10 ? "0" + minutes : minutes;
+	return `${ hours }:${ minutes } ${ ampm }`;
+}
+
 const userIsGoing = false; // todo get from props
 // todo fill in share info
 // todo implement Dynamic Link from firebase
@@ -37,21 +47,22 @@ export default class PartyCard extends React.Component {
 		}
 	};
 
+
 	formatDate(time) {
-		const formattedTime = new Date(time);
-		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "NOV", "DEC"];
-		return `${ months[formattedTime.getMonth() + 1] } ${ formattedTime.getDate() } @ ${ formattedTime.getHours() }:${ formattedTime.getMinutes() }`
+		const newTime = time.toDate();
+		const formattedTime = new Date(newTime);
+		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+		return `${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`
 	}
 
 	render() {
-		// this.setState({dbg: this.props.userIsGoing})
 		return (
 			<Card transparent style={ [styles.partyCard, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
 				<CardItem cardBody style={ [styles.cardBody, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
-					<Text style={ styles.title } ellipsizeMode='tail' numberOfLines={ 2 }>{ this.props.title }</Text>
+					<Text style={ styles.title } numberOfLines={ 2 }>{ this.props.title }</Text>
 					<Text style={ styles.dateTime }>{ this.formatDate(this.props.time) }</Text>
 				</CardItem>
-				<Text style={ styles.shortLocation } ellipsizeMode='tail' numberOfLines={ 1 }>
+				<Text style={ styles.shortLocation } numberOfLines={ 1 }>
 					{ this.props.shortLocation }
 				</Text>
 				<Grid style={ styles.buttonGrid }>

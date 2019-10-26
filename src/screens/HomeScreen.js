@@ -105,13 +105,6 @@ export default class HomeScreen extends React.Component {
 
 	getPartyList() {
 		// todo make relative to school user is in
-		const timeSettings = {
-			month: "short",
-			day: "2-digit",
-			hour: "numeric",
-			minute: "numeric"
-		};
-
 		db.collection("schoolData/ucla/parties")
 			.get()
 			.then(QuerySnapshot => {
@@ -125,7 +118,7 @@ export default class HomeScreen extends React.Component {
 							// host: rawParty.host,
 							description: rawParty.description,
 							// fee: rawParty.fee,
-							time: rawParty.time.toDate(),
+							time: rawParty.time,
 							shortLocation: rawParty.shortLocation,
 							attendees: rawParty.attendees
 						};
@@ -215,21 +208,6 @@ export default class HomeScreen extends React.Component {
 					ListHeaderComponent={
 						<View>
 							<Text style={ styles.titleText }>Trending</Text>
-							{/*<FlatList*/ }
-							{/*	showsHorizontalScrollIndicator={ false }*/ }
-							{/*	horizontal={ true }*/ }
-							{/*	style={ styles.trendingContainer }*/ }
-							{/*	data={ this.state.featuredParties }*/ }
-							{/*	renderItem={ ({ item }) =>*/ }
-							{/*		<DoubleTap onDoublePress={ () => this.enrollInParty(item.key) }*/ }
-							{/*		           onPress={ () => this.showPartySheet(item.key) }>*/ }
-							{/*			<View>*/ }
-							{/*				<FeaturedPartyCard title={ item.title } date={ item.date }*/ }
-							{/*				                   time={ item.time }*/ }
-							{/*				                   host={ item.host } imageURL={ item.imageURL } />*/ }
-							{/*			</View>*/ }
-							{/*		</DoubleTap> }*/ }
-							{/*/>*/ }
 							<Carousel
 								ref={ (c) => { this._carousel = c; } }
 								data={ this.state.featuredParties }
@@ -287,10 +265,11 @@ export default class HomeScreen extends React.Component {
 						}
 					} }
 				>
-					<SheetContent name={ this.state.sheetTitle } description={ this.state.sheetDescription } />
+					<SheetContent name={ this.state.sheetTitle } description={ this.state.sheetDescription }
+					              userIsGoing={ false } />
 				</RBSheet>
 				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
-				<Footer style={ styles.bodyFooter } />
+				<Footer style={ styles.bodyFooter } navigation={ this.props.navigation } />
 			</Container>
 		);
 	}
@@ -309,7 +288,7 @@ const styles = StyleSheet.create({ // todo fix spacing between titles and conten
 		color: "#FFFFFF",
 		marginLeft: 15,
 		fontWeight: "700",
-		marginTop: 20,
+		marginTop: 20
 		// marginBottom: -7
 	},
 	bodyFooter: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch } from "native-base";
+import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch, Separator } from "native-base";
 import { StyleSheet } from "react-native";
 import Header from "../components/Header"
 
@@ -7,47 +7,35 @@ export default class SettingsScreen extends Component {
 	render() {
 		return (
 			<Container style={ styles.body }>
-				<Header schoolName={ "test" } />
+				<Header collegeName={ "UCLA" } />
 				<Content>
+					<Separator style={ styles.separator }></Separator>
 					<ListItem icon>
 						<Left>
-							<Button style={ { backgroundColor: "#FF9501" } }>
-								<Text>test</Text>
+							<Button disabled style={ { backgroundColor: "#007AFF" } }>
+								<Text>{ " >" }</Text>
 							</Button>
 						</Left>
 						<Body>
-							<Text>Airplane Mode</Text>
+							<Text style={styles.itemText}>School</Text>
 						</Body>
 						<Right>
-							<Switch value={ false } />
+							<Text>UCLA</Text>
+							<Text>{ " >" }</Text>
 						</Right>
 					</ListItem>
 					<ListItem icon>
 						<Left>
-							<Button style={ { backgroundColor: "#007AFF" } }>
-								<Text>test</Text>
+							<Button disabled style={ { backgroundColor: "#007AFF" } }>
+								<Text>{ " >" }</Text>
 							</Button>
 						</Left>
 						<Body>
-							<Text>Wi-Fi</Text>
-						</Body>
-						<Right>
-							<Text>GeekyAnts</Text>
-							<Text>test</Text>
-						</Right>
-					</ListItem>
-					<ListItem icon>
-						<Left>
-							<Button style={ { backgroundColor: "#007AFF" } }>
-								<Text>test</Text>
-							</Button>
-						</Left>
-						<Body>
-							<Text>Bluetooth</Text>
+							<Text style={styles.itemText}>Bluetooth</Text>
 						</Body>
 						<Right>
 							<Text>On</Text>
-							<Text>test</Text>
+							<Text>{ " >" }</Text>
 						</Right>
 					</ListItem>
 				</Content>
@@ -60,5 +48,11 @@ const styles = StyleSheet.create({
 	body: {
 		backgroundColor: "#000",
 		height: "100%"
+	},
+	itemText: {
+		color: "#fff"
+	},
+	separator: {
+		backgroundColor: "#000"
 	}
 });

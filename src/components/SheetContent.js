@@ -11,7 +11,6 @@ export default class SheetContent extends React.Component {
 		return (
 			<ScrollView style={ styles.sheetContainer }>
 				<Text style={ styles.sheetTitle }>{ this.props.name }</Text>
-
 				<View style={ styles.sheetView }>
 					{/*<Icon name='calendar-check' size={Dimensions.get('window').width * .06} color='#8b8b8b'*/ }
 					{/*      style={{marginRight: 16, marginTop: Dimensions.get('window').height * .005}}/>*/ }
@@ -61,12 +60,22 @@ export default class SheetContent extends React.Component {
 						</Text>
 					</View>
 				</View>
+				{ this.props.userIsGoing ?
+					<View style={ styles.sheetView }>
+						<View style={ styles.detailContainer }>
+							<Text style={ styles.sheetDetail }>
+								Location
+							</Text>
+							<Text style={ styles.sheetSubDetail }>
+								{ this.props.location }
+							</Text>
+						</View>
+					</View> : <View style={ { alignItems: "center" } }>
+						<Button style={ styles.joinButton } onPress={ this.props.joinParty }>
+							<Text style={ styles.joinButtonText }>I'm in</Text>
+						</Button>
+					</View> }
 
-				<View style={ { alignItems: "center" } }>
-					<Button style={ styles.joinButton } onPress={ this.props.joinParty }>
-						<Text style={ styles.joinButtonText }>I'm in</Text>
-					</Button>
-				</View>
 			</ScrollView>
 		);
 	}
@@ -87,7 +96,7 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 		marginRight: 57,
 		marginLeft: 37,
-		marginBottom: Dimensions.get("window").width * .03,
+		marginBottom: Dimensions.get("window").width * .03
 	},
 
 	sheetView: {
