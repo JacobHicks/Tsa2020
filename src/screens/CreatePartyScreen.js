@@ -22,7 +22,6 @@ import {
 import firestore from "@react-native-firebase/firestore";
 
 const db = firestore();
-// todo create max lengths for each element
 const openGeneralLocationAlert = function() {
 	return Alert.alert(
 		"General Location",
@@ -72,7 +71,7 @@ const CreatePartyScreen = function(props) {
 	const [partyTime, setPartyTime] = useState("time*");
 	const [partyDate, setPartyDate] = useState("date*");
 	const [partyDescription, setPartyDescription] = useState("");
-	const [postButtonIsDisabled, setPostButtonIsDisabled] = useState(false); // todo form validation for checking if they can post it or not
+	const [postButtonIsDisabled, setPostButtonIsDisabled] = useState(false);
 	const [dbg, setDbg] = useState("default state");
 
 
@@ -91,7 +90,6 @@ const CreatePartyScreen = function(props) {
 
 	});
 
-	// todo make post button colored when they're good to post
 	return (
 		<Container style={ styles.body }>
 			<StatusBar />

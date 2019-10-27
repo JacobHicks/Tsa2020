@@ -183,7 +183,6 @@ export default class HomeScreen extends React.Component {
 
 	// todo https://facebook.github.io/react-native/docs/refreshcontrol
 
-	// todo make scrolling of featured paginated(?), when user scrolls it'll auto scroll to be in view
 	// todo loading icon before images are loaded
 	render() {
 		const { navigate } = this.props;
