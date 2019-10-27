@@ -13,7 +13,7 @@ const updateParty = function(data) {
 
 const UserPostedPartySheet = function() {
 	let editedParty = false;
-	let partyTitle = "Testing party";
+	let partyTitle = "USERHOSTED";
 	let partyDescription = "Bruh bruh bruh";
 	return (
 		<ScrollView style={ styles.sheetContainer }>
