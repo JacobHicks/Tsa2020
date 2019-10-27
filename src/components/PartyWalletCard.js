@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Dimensions, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 
 export default class PartyWalletCard extends React.Component {
 

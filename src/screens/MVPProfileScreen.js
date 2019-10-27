@@ -46,11 +46,11 @@ export default class MVPProfileScreen extends React.Component {
 				location: "8904 bruh zone"
 			}
 		];
-		let sortedParties;
-		return sortedParties;
+
+		return parties;
 	}
 	getPartyList() {
-		db.collection("schoolData/ucla/users/user") // todo use relations in firestore, user is user
+		db.collection("schoolData/ucla/users").doc("user") // todo use relations in firestore, "user" is user
 			.get()
 			.then(QuerySnapshot => {
 				let partyCards = [];
@@ -85,7 +85,6 @@ export default class MVPProfileScreen extends React.Component {
 					user: DocumentSnapshot.data()
 				});
 			});
-
 		 */
 		this.setState({
 			isLoading: false,
