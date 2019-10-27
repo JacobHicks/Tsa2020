@@ -14,7 +14,7 @@ import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 import PartyWalletCard from "../components/PartyWalletCard";
 import { Container } from "native-base";
-import SheetContent from "../components/SheetContent";
+import UserHostedPartySheet from "../components/UserHostedPartySheet";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 const db = firestore();
@@ -161,7 +161,7 @@ export default class MVPProfileScreen extends React.Component {
 							}
 						} }
 					>
-						<SheetContent name={ this.state.sheetTitle } description={ this.state.sheetDescription }
+						<UserHostedPartySheet name={ this.state.sheetTitle } description={ this.state.sheetDescription }
 						              registered={ true } userIsGoing={ true } location={ this.state.location } />
 					</RBSheet>
 					<UIFooter navigation={ navigation } />

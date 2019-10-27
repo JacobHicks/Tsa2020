@@ -6,6 +6,7 @@ import {
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome5";
 // fix icons on ios
+// todo if user is going, convert short location to acutal location on sheet page
 export default class SheetContent extends React.Component {
 	render() {
 		return (
