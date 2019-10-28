@@ -65,7 +65,7 @@ const Styles = StyleSheet.create({
 
 	formBounding: {
 		marginLeft: "10%",
-		marginTop: "30%",
+		marginTop: "20%",
 		width: "80%"
 	}
 

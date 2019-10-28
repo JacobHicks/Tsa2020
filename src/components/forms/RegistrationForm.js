@@ -1,7 +1,8 @@
 import React from 'react';
 import {Input, Item, Button, Text} from 'native-base';
 import {Field, reduxForm} from 'redux-form';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, Picker, StyleSheet, TouchableOpacity, View} from 'react-native';
+import InstitutionList from '../InstitutionList';
 
 const validate = values => {
     const error = {};
@@ -18,11 +19,21 @@ const validate = values => {
 
 class RegistrationForm extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            college: '',
+        };
+
+        this.renderAutocompleteInput = this.renderAutocompleteInput.bind(this);
+    }
+
     render() {
         return (
             <View>
                 <Field name='name' component={this.renderNameInput}/>
                 <Field name='phoneNumber' component={this.renderPhoneNumberInput}/>
+                <Field name='school' component={this.renderAutocompleteInput}/>
                 <Button style={Styles.continueButton} onPress={this.props.handleSubmit}>
                     <Text style={Styles.continueText}>
                         Continue
@@ -53,6 +64,19 @@ class RegistrationForm extends React.Component {
             </Item>
         );
     }
+
+    renderAutocompleteInput({input, label, type, meta: {touched, error, warning}}) {
+        let hasError = error !== undefined;
+
+        return (
+            <View>
+                <Text style={Styles.placeholder}>{input.value}</Text>
+                <Item error={hasError}>
+                    <InstitutionList {...input}/>
+                </Item>
+            </View>
+        );
+    }
 }
 
 const Styles = StyleSheet.create({
@@ -70,9 +94,10 @@ const Styles = StyleSheet.create({
         marginTop: '20%',
         marginLeft: '5%',
         width: '85%',
-        height: '22%',
+        height: Dimensions.get('window').height * .11,
         justifyContent: 'center',
         alignItems: 'center',
+        //flex: 1,
 
 
         backgroundColor: '#FFF',
@@ -81,7 +106,6 @@ const Styles = StyleSheet.create({
 
     continueText: {
         color: '#000',
-
         // fontFamily: 'Glacial Indifference',
         fontSize: 22,
         fontWeight: '700',   //React Native wants this in quotes

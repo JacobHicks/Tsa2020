@@ -7,7 +7,7 @@ import TextConfirm from './screens/TextConfirm';
 import CreatePartyScreen from './screens/CreatePartyScreen';
 
 import TestScreen from './screens/TestScreen';
-import {fromLeft, fromRight} from 'react-navigation-transitions';
+import {fromBottom, fromLeft} from 'react-navigation-transitions';
 
 function handleTransition({scenes}) {
     const previousScene = scenes[scenes.length - 2];
@@ -15,15 +15,15 @@ function handleTransition({scenes}) {
 
     if (previousScene &&
         previousScene.route.routeName === 'Home' && (nextScene.route.routeName === 'CreateParty' || nextScene.route.routeName === 'Profile')) {
-            return fromRight();
+            return fromBottom();
     }
     return fromLeft();
 }
 
 const MainNavigator = createStackNavigator({
-        Home: {screen: MVPProfileScreen},
-        Profile: {screen: MVPProfileScreen},
         InitialSignup: {screen: InitialSignup},
+        Home: {screen: HomeScreen},
+        Profile: {screen: MVPProfileScreen},
         TextConfirm: {screen: TextConfirm},
         CreateParty: {screen: CreatePartyScreen},
     },
