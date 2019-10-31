@@ -238,7 +238,9 @@ export default class HomeScreen extends React.Component {
 								<PartyCard
 									title={ item.title }
 									time={ item.time } shortLocation={ item.shortLocation }
-									attendees={ item.attendees } joinParty={ this.enrollInParty } />
+									attendees={ item.attendees }
+									school={'ucla'}
+									joinParty={ this.enrollInParty } />
 							</View>
 						</DoubleTap> }
 				/>
