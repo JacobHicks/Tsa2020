@@ -6,7 +6,7 @@ import {
 	FlatList,
 	TouchableHighlight
 } from "react-native";
-import { Separator } from "native-base";
+import Footer, { Separator } from "native-base";
 import Header from "../components/Header";
 import UIFooter from "../components/UIFooter";
 import { Spinner, Text } from "native-base";
@@ -105,8 +105,16 @@ export default class MVPProfileScreen extends React.Component {
 
 	render() {
 		if (this.state.isLoading) {
-			return null;
-			//TODO: load screen
+			return (
+				<Container style={styles.body}>
+					<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+						<Spinner isVisible={true} size={Dimensions.get('window').width * .25} type={'ThreeBounce'}
+								 color={'#ee5253'}/>
+						<Text style={[styles.titleText, {marginLeft: 0, marginTop: 0}]}>Good times await</Text>
+					</View>
+					<Footer style={styles.bodyFooter} navigation={this.props.navigation}/>
+				</Container>
+			);
 		} else {
 			const { navigation } = this.props;
 			return (
@@ -235,6 +243,21 @@ export default class MVPProfileScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	body: {
+		backgroundColor: '#000',
+		height: '100%',
+		width: '100%'
+	},
+
+	titleText: {
+		fontSize: 25,
+		color: '#FFFFFF',
+		marginLeft: 15,
+		fontWeight: '700',
+		marginTop: 20,
+		// marginBottom: -7
+	},
+	
 	header: {
 		backgroundColor: "#000"
 	},
