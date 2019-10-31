@@ -10,6 +10,7 @@ import { Text, View, StyleSheet, FlatList, RefreshControl, Dimensions } from "re
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 import firestore from "@react-native-firebase/firestore";
+import {firebase} from '@react-native-firebase/dynamic-links';
 import Carousel from "react-native-snap-carousel";
 
 const db = firestore();
@@ -23,7 +24,7 @@ export default class HomeScreen extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.enrollInParty = this.enrollInParty.bind(this)
+		this.enrollInParty = this.enrollInParty.bind(this);
 		this.state = {
 			showSpinner: false,
 			isRefreshingList: false,
@@ -140,11 +141,35 @@ export default class HomeScreen extends React.Component {
 
 	componentDidMount() {
 		this.getPartyList();
+		// firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
+		// this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
 		// this.getFeaturedPartyList();
+
+	}
+
+	componentWillUnmount() {
+		this.unsubscribeLinkListener();
+	}
+
+	linkHandler(linkPromise) {
+		// let link;
+		// linkPromise.then(rlink => link = rlink);
+		// this.setState({
+		// 	dbg: 'test'
+		// });
+		if(link) {
+			// this.setState({
+			// 	dbg: 'test2' + link.url
+			// });
+			//TODO implement actually opening party
+			// this.setState({
+			// 	dbg: link.url
+			// })
+		}
 	}
 
 	reachedEndOfList() {
-		this.setState({ dbg: "endOfList" });
+		//this.setState({ dbg: "endOfList" });
 		this.setState({ showSpinner: true, isRefreshingList: true });
 		// this.getPartyList(
 		// 	// 	() => {
@@ -164,7 +189,7 @@ export default class HomeScreen extends React.Component {
 
 	enrollInParty() {
 
-		this.setState({ dbg: "enrolled" });
+		//this.setState({ dbg: "enrolled" });
 		const userRef = db.collection("schoolData").doc("ucla").collection("users").doc("user");
 		const partyRef = db.collection("schoolData").doc("ucla").collection("parties").doc("party");
 		const newUser = firestore.FieldValue.arrayUnion("user"); // todo create references for other docs
@@ -189,6 +214,7 @@ export default class HomeScreen extends React.Component {
 		// navigation.navigate("TextConfirm");
 		return (
 			<Container style={ styles.body }>
+				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
 				<Header collegeName="UC Berkeley" />
 				<FlatList
 					onEndReachedThreshold={ 10 }
@@ -269,7 +295,6 @@ export default class HomeScreen extends React.Component {
 					<SheetContent name={ this.state.sheetTitle } description={ this.state.sheetDescription }
 					              userIsGoing={ false } />
 				</RBSheet>
-				<Text style={ { color: "#FFF" } }>{ this.state.dbg }</Text>
 				<Footer style={ styles.bodyFooter } navigation={ this.props.navigation } />
 			</Container>
 		);
