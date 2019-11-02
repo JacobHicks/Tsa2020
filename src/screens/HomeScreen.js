@@ -108,7 +108,7 @@ export default class HomeScreen extends React.Component {
 
     getPartyList() {
         // todo make relative to school user is in
-        db.collection('schoolData/ucla/parties')
+        db.collection('schoolData/' + this.state.institution + '/parties')
             .get()
             .then(QuerySnapshot => {
                 let parties = [];
@@ -142,10 +142,15 @@ export default class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.getPartyList();
+        const {navigation} = this.props;
         this.setState({
-        	isLoading: false
-        })
+            institution: navigation.getParam('institution')
+        }, () => {
+            this.getPartyList();
+            this.setState({
+                isLoading: false
+            })
+        });
         // firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
         // this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
         // this.getFeaturedPartyList();
@@ -195,11 +200,11 @@ export default class HomeScreen extends React.Component {
     enrollInParty() {
 
         //this.setState({ dbg: "enrolled" });
-        const userRef = db.collection('schoolData').doc('ucla').collection('users').doc('user');
-        const partyRef = db.collection('schoolData').doc('ucla').collection('parties').doc('party');
+        //const userRef = db.collection('schoolData').doc('ucla').collection('users').doc('user');
+        const partyRef = db.collection('schoolData').doc(this.state.institution).collection('parties').doc('party');
         const newUser = firestore.FieldValue.arrayUnion('user'); // todo create references for other docs
         const newParty = firestore.FieldValue.arrayUnion('party');
-        userRef.update({partiesList: newParty});
+        //userRef.update({partiesList: newParty});
         partyRef.update({userList: newUser});
     }
 
@@ -232,7 +237,7 @@ export default class HomeScreen extends React.Component {
             return (
                 <Container style={styles.body}>
                     <Text style={{color: '#FFF'}}>{this.state.dbg}</Text>
-                    <Header collegeName="UC Berkeley"/>
+                    <Header collegeName={this.state.institution}/>
                     <FlatList
                         onEndReachedThreshold={10}
                         onEndReached={() => {
@@ -284,7 +289,7 @@ export default class HomeScreen extends React.Component {
                                         title={item.title}
                                         time={item.time} shortLocation={item.shortLocation}
                                         attendees={item.attendees}
-                                        school={'ucla'}
+                                        school={this.state.institution}
                                         joinParty={this.enrollInParty}/>
                                 </View>
                             </DoubleTap>}

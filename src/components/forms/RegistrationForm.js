@@ -1,8 +1,7 @@
 import React from 'react';
 import {Input, Item, Button, Text} from 'native-base';
 import {Field, reduxForm} from 'redux-form';
-import {Dimensions, Picker, StyleSheet, TouchableOpacity, View} from 'react-native';
-import InstitutionList from '../InstitutionList';
+import {Dimensions, Picker, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 
 const validate = values => {
     const error = {};
@@ -21,9 +20,6 @@ class RegistrationForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            college: '',
-        };
 
         this.renderAutocompleteInput = this.renderAutocompleteInput.bind(this);
     }
@@ -33,7 +29,7 @@ class RegistrationForm extends React.Component {
             <View>
                 <Field name='name' component={this.renderNameInput}/>
                 <Field name='phoneNumber' component={this.renderPhoneNumberInput}/>
-                <Field name='school' component={this.renderAutocompleteInput}/>
+                <Field name='institution' component={props => this.renderAutocompleteInput(props, this.props.navigation.getParam('institution', 'Select your school'))}/>
                 <Button style={Styles.continueButton} onPress={this.props.handleSubmit}>
                     <Text style={Styles.continueText}>
                         Continue
@@ -65,16 +61,16 @@ class RegistrationForm extends React.Component {
         );
     }
 
-    renderAutocompleteInput({input, label, type, meta: {touched, error, warning}}) {
+    renderAutocompleteInput({input, label, type, meta: {touched, error, warning}}, institution) {
         let hasError = error !== undefined;
 
+        input.onChange(institution);
         return (
-            <View>
-                <Text style={Styles.placeholder}>{input.value}</Text>
-                <Item error={hasError}>
-                    <InstitutionList {...input}/>
-                </Item>
-            </View>
+            <Item error={hasError}>
+                <TouchableWithoutFeedback style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('InstitutionList')}>
+                    <Text style={Styles.institutionPlaceholder}>{input.value}</Text>
+                </TouchableWithoutFeedback>
+            </Item>
         );
     }
 }
@@ -90,16 +86,23 @@ const Styles = StyleSheet.create({
         fontWeight: '700',   //React Native wants this in quotes
     },
 
+    institutionPlaceholder: {
+        marginTop: '10%',
+        marginBottom: 8,
+        marginLeft: 4,
+        color: '#FFF',
+
+        // fontFamily: 'Glacial Indifference',
+        fontSize: 22,
+        fontWeight: '700',   //React Native wants this in quotes
+    },
+
     continueButton: {
         marginTop: '20%',
         marginLeft: '5%',
         width: '85%',
         height: Dimensions.get('window').height * .11,
         justifyContent: 'center',
-        alignItems: 'center',
-        //flex: 1,
-
-
         backgroundColor: '#FFF',
         borderRadius: 33,
     },
@@ -109,6 +112,8 @@ const Styles = StyleSheet.create({
         // fontFamily: 'Glacial Indifference',
         fontSize: 22,
         fontWeight: '700',   //React Native wants this in quotes
+        textAlign: 'center',
+        width: '100%',
     },
 
 });

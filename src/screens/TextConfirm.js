@@ -1,5 +1,4 @@
 import { Dimensions, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
-import background from '../../assets/images/party2.jpg';
 import {Text} from "native-base";
 import {Provider} from 'react-redux';
 import RegistrationForm from '../components/forms/RegistrationForm';
@@ -9,8 +8,10 @@ import auth from '@react-native-firebase/auth';
 import ConfirmForm from '../components/forms/ConfirmForm';
 import {createStore} from 'redux';
 import allReducers from '../reducers';
+import firestore from '@react-native-firebase/firestore';
 
 const store = createStore(allReducers);
+const db = firestore();
 export default class TextConfirm extends React.Component {
     constructor(props) {
         super(props);
@@ -32,7 +33,7 @@ export default class TextConfirm extends React.Component {
     render() {
         const {navigation} = this.props;
         return (
-            <ImageBackground source={background} style={Styles.background}>
+            <ImageBackground source={require('../../assets/images/party2.jpg')} style={Styles.background}>
                 <StatusBar barStyle="light-content" />
                 <Text style={Styles.welcomeText}>
                     {'Hey ' + navigation.getParam('name', 'User') + '.\nText code OTW.'}
@@ -56,10 +57,27 @@ export default class TextConfirm extends React.Component {
     }
 
     userLoggedIn(user) {
-        const {navigation} = this.props;
         if(user) {
-            navigation.navigate('Home', {user: user});
+            const {navigation} = this.props;
+            const name = navigation.getParam('name');
+            const institution = db.collection('schoolData').doc(navigation.getParam('institution'));
+
+            const userDocument = db.collection('users').doc(user.uid);
+
+            if(!institution.exists) {
+                institution.set({})
+                    .then(() => navigation.navigate('Home', {user: user, institution: navigation.getParam('institution')}));//institution.collection('parties').);
+            }
+
+            if(!userDocument.exists) {
+                userDocument.set({
+                    name: name,
+                    institution: institution
+                }).then(() => navigation.navigate('Home', {user: user, institution: navigation.getParam('institution')}))
+            }
+
         }
+
     }
 }
 
