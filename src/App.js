@@ -9,6 +9,7 @@ import TestScreen from './screens/TestScreen';
 import {fromBottom, fromLeft} from 'react-navigation-transitions';
 import InstitutionList from './screens/InstitutionList';
 import MVPProfileScreen from './screens/MVPProfileScreen';
+import EntryScreen from './screens/EntryScreen';
 
 function handleTransition({scenes}) {
     const previousScene = scenes[scenes.length - 2];
@@ -22,6 +23,7 @@ function handleTransition({scenes}) {
 }
 
 const MainNavigator = createStackNavigator({
+        EntryScreen: {screen: EntryScreen},
         Profile: {screen: MVPProfileScreen},
         InitialSignup: {screen: InitialSignup},
         InstitutionList: {screen: InstitutionList},
