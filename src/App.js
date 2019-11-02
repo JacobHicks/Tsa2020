@@ -1,6 +1,5 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import MVPProfileScreen from './screens/MVPProfileScreen';
 import HomeScreen from './screens/HomeScreen';
 import InitialSignup from './screens/InitialSignup';
 import TextConfirm from './screens/TextConfirm';
@@ -9,6 +8,7 @@ import CreatePartyScreen from './screens/CreatePartyScreen';
 import TestScreen from './screens/TestScreen';
 import {fromBottom, fromLeft} from 'react-navigation-transitions';
 import InstitutionList from './screens/InstitutionList';
+import MVPProfileScreen from './screens/MVPProfileScreen';
 
 function handleTransition({scenes}) {
     const previousScene = scenes[scenes.length - 2];
@@ -22,10 +22,10 @@ function handleTransition({scenes}) {
 }
 
 const MainNavigator = createStackNavigator({
+        Profile: {screen: MVPProfileScreen},
         InitialSignup: {screen: InitialSignup},
         InstitutionList: {screen: InstitutionList},
         Home: {screen: HomeScreen},
-        Profile: {screen: MVPProfileScreen},
         TextConfirm: {screen: TextConfirm},
         CreateParty: {screen: CreatePartyScreen},
     },

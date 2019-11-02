@@ -6,7 +6,7 @@ import {
 	FlatList,
 	TouchableHighlight
 } from "react-native";
-import Footer, { Separator } from "native-base";
+import Footer from "native-base";
 import Header from "../components/Header";
 import UIFooter from "../components/UIFooter";
 import { Spinner, Text } from "native-base";
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		// marginBottom: -7
 	},
-	
+
 	header: {
 		backgroundColor: "#000"
 	},
@@ -281,6 +281,12 @@ const styles = StyleSheet.create({
 		fontSize: Dimensions.get("window").width * .04,
 		fontWeight: "700",
 		marginBottom: 44
+	},
+
+	bodyFooter: {
+		position: 'relative',
+		bottom: 0,
+		top: 'auto',
 	}
 
 });
