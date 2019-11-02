@@ -32,55 +32,10 @@ export default class HomeScreen extends React.Component {
             isRefreshingList: false,
             refreshing: false,
             dbg: 'tst',
-            sheetTitle: 'Sheet Title',
-            sheetHost: 'Sheet Host',
-            sheetDescription: 'Sheet Description',
-            // parties: [
-            // 	{
-            // 		key: '1',
-            // 		title: 'Testing Party',
-            // 		host: 'Diego',
-            // 		description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-            // 		date: new Date(),
-            // 		imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-            // 	},
-            // 	{
-            // 		key: '2',
-            // 		title: 'Testing Party',
-            // 		host: 'Richard',
-            // 		description: 'desc',
-            // 		date: new Date(),
-            // 		imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-            // 	},
-            // 	{
-            // 		key: '3',
-            // 		title: 'Testing 3',
-            // 		host: 'Azhan',
-            // 		description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-            // 		date: new Date(),
-            // 		imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-            // 	},
-            // 	{
-            // 		key: '4',
-            // 		title: 'Testing 4',
-            // 		host: 'Ethan',
-            // 		description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-            // 		date: new Date(),
-            // 		imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-            // 	},
-            // 	{
-            // 		key: '5',
-            // 		title: 'Testing 5',
-            // 		host: 'Jacob',
-            // 		description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-            // 		date: new Date(),
-            // 		imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-            // 	},
-            // ],
             featuredParties: [
                 {
                     key: '1',
-                    title: 'Testing Party',
+                    name: 'Testing Party',
                     host: 'Diego',
                     description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
                     date: new Date(),
@@ -88,7 +43,7 @@ export default class HomeScreen extends React.Component {
                 },
                 {
                     key: '2',
-                    title: 'Testing Party 2',
+                    name: 'Testing Party 2',
                     host: 'Richard',
                     description: 'desc',
                     date: new Date(),
@@ -96,7 +51,7 @@ export default class HomeScreen extends React.Component {
                 },
                 {
                     key: '3',
-                    title: 'Testing 3',
+                    name: 'Testing 3',
                     host: 'Azhan',
                     description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
                     date: new Date(),
@@ -117,12 +72,14 @@ export default class HomeScreen extends React.Component {
                         const rawParty = doc.data();
                         const formattedParty = {
                             key: Math.random().toString(), // todo fix
-                            title: rawParty.title,
-                            // host: rawParty.host,
+                            name: rawParty.name,
+                            host: rawParty.host,
                             description: rawParty.description,
                             // fee: rawParty.fee,
                             time: rawParty.time,
-                            shortLocation: rawParty.shortLocation,
+                            endTime: rawParty.endTime,
+                            generalLocation: rawParty.generalLocation,
+                            location: rawParty.location,
                             attendees: rawParty.attendees,
                         };
                         parties.push(formattedParty);
@@ -190,9 +147,15 @@ export default class HomeScreen extends React.Component {
 
     showPartySheet(party) {
         this.setState({
-            sheetTitle: party.title,
-            sheetHost: party.host,
-            sheetDescription: party.description,
+            selectedPartyInfo: {
+                name: party.name,
+                host: party.host,
+                description: party.description,
+                time: party.time,
+                endTime: party.endTime,
+                location: party.location,
+                generalLocation: party.generalLocation
+            }
         });
         this.RBSheet.open();
     }
@@ -286,7 +249,7 @@ export default class HomeScreen extends React.Component {
                                        onPress={() => this.showPartySheet(item)}>
                                 <View>
                                     <PartyCard
-                                        title={item.title}
+                                        title={item.name}
                                         time={item.time} shortLocation={item.shortLocation}
                                         attendees={item.attendees}
                                         school={this.state.institution}
@@ -316,8 +279,7 @@ export default class HomeScreen extends React.Component {
                             },
                         }}
                     >
-                        <SheetContent name={this.state.sheetTitle} description={this.state.sheetDescription}
-                                      userIsGoing={false}/>
+                        <SheetContent partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
                     </RBSheet>
                     <Footer name={this.props.name} institution={this.props.institution} style={styles.bodyFooter} navigation={this.props.navigation}/>
                 </Container>

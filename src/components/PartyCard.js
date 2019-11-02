@@ -40,8 +40,7 @@ export default class PartyCard extends React.Component {
 
 
     formatDate(time) {
-        const newTime = time.toDate();
-        const formattedTime = new Date(newTime);
+        const formattedTime = new Date(time);
         const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
         return `${months[formattedTime.getMonth()]} ${formattedTime.getDate()} @ ${formatAMPM(formattedTime)}`;
     }

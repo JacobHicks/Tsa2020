@@ -25,7 +25,6 @@ export default class MVPProfileScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbg: "default",
 			isLoading: true,
 			user: null,
 			parties: [],
@@ -118,7 +117,7 @@ export default class MVPProfileScreen extends React.Component {
 			const { navigation } = this.props;
 			return (
 				<Container style={ { backgroundColor: "#000" } }>
-					<Header collegeName={ this.state.dbg } />
+					<Header collegeName={navigation.getParam('institution')} />
 					<FlatList
 						showsVerticalScrollIndicator={ false }
 						data={ this.state.parties }
