@@ -112,7 +112,6 @@ export default class MVPProfileScreen extends React.Component {
 								 color={'#ee5253'}/>
 						<Text style={[styles.titleText, {marginLeft: 0, marginTop: 0}]}>Good times await</Text>
 					</View>
-					<Footer style={styles.bodyFooter} navigation={this.props.navigation}/>
 				</Container>
 			);
 		} else {
@@ -134,11 +133,11 @@ export default class MVPProfileScreen extends React.Component {
 									alignItems: "center"
 								} }>
 									<Text style={ styles.nameText }>
-										Joe Mama
+										{this.props.name}
 									</Text>
 
 									<Text style={ styles.schoolText }>
-										UCLA
+										{this.props.institution}
 									</Text>
 								</View>
 								<Text style={ styles.walletText }>
@@ -228,7 +227,7 @@ export default class MVPProfileScreen extends React.Component {
 						                      registered={ true } userIsGoing={ true }
 						                      location={ this.state.location } />
 					</RBSheet>
-					<UIFooter navigation={ navigation } />
+					<UIFooter name={this.props.name} institution={this.props.institution} navigation={ navigation } />
 				</Container>
 			);
 		}

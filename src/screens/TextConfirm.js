@@ -66,14 +66,14 @@ export default class TextConfirm extends React.Component {
 
             if(!institution.exists) {
                 institution.set({})
-                    .then(() => navigation.navigate('Home', {user: user, institution: navigation.getParam('institution')}));//institution.collection('parties').);
+                    .then(() => navigation.navigate('Home', {user: user, name: name, institution: navigation.getParam('institution')}));//institution.collection('parties').);
             }
 
             if(!userDocument.exists) {
                 userDocument.set({
                     name: name,
                     institution: institution
-                }).then(() => navigation.navigate('Home', {user: user, institution: navigation.getParam('institution')}))
+                }).then(() => navigation.navigate('Home', {user: user, name: name, institution: navigation.getParam('institution')}))
             }
 
         }
