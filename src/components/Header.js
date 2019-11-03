@@ -15,7 +15,7 @@ const Header = function(props) {
 const styles = StyleSheet.create({
 	header: {
 		paddingLeft: 10,
-		marginTop: 42,
+		marginTop: 32,
 		borderBottomColor: "#555",
 		borderBottomWidth: .5,
 		textAlign: "center",

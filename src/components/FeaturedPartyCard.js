@@ -12,10 +12,10 @@ import {
 
 export default class PartyCard extends React.Component {
 	render() {
-		return (
+		return (//All props you need will be in this.props.partyInfo
 			<Card transparent style={ styles.partyCard }>
 				<CardItem cardBody style={ styles.partyCardItem }>
-					<Text style={ styles.partyTitle } ellipsizeMode='tail' numberOfLines={ 2 }>This is the title.</Text>
+					<Text style={ styles.partyTitle } ellipsizeMode='tail' numberOfLines={ 2 }>{this.props.partyInfo.name}</Text>
 				</CardItem>
 				<Grid>
 					<Col>

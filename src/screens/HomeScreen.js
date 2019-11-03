@@ -69,85 +69,104 @@ export default class HomeScreen extends React.Component {
             });
     }
 
-    getPartyList() {
-        // todo make relative to school user is in
+    getPartyList(callback) {
+        // javascript promises be like:
         db.collection('schoolData/' + this.state.institution + '/parties')
             .get()
             .then(QuerySnapshot => {
                 let parties = [];
+                let docs = [];
+                let enrollmentPromises = [];
+                let attendeePromises = [];
+                let enrollments = [];
+
                 QuerySnapshot.docs
                     .forEach(doc => {
-                        const rawParty = doc.data();
-                        const formattedParty = {
-                            key: Math.random().toString(), // todo fix
-                            name: rawParty.name,
-                            host: rawParty.host,
-                            description: rawParty.description,
-                            // fee: rawParty.fee,
-                            time: rawParty.time,
-                            endTime: rawParty.endTime,
-                            generalLocation: rawParty.generalLocation,
-                            location: rawParty.location,
-                            attendees: rawParty.attendees,
-                            partyReference: doc.ref,
-                            enrolled: this.checkEnrollment(doc.ref)
-                        };
-                        parties.push(formattedParty);
+                        docs.push(doc);
+                        enrollmentPromises.push(this.checkEnrollment(doc.ref));
                     });
-                this.setState({
-                    parties: parties,
+
+                for(let i = 0; i < enrollmentPromises.length; i++) {
+                    enrollmentPromises[i].then(enrolled => {
+                        enrollments.push(enrolled);
+                        attendeePromises.push(docs[i].ref.collection('attendees').get());
+                    });
+                }
+
+                Promise.all(enrollmentPromises).then(() => {
+                    for(let i = 0; i < attendeePromises.length; i++) {
+                        attendeePromises[i].then(QuerySnapshot => {
+                            let attendees = [];
+                            QuerySnapshot.docs.forEach(DocumentSnapshot => {
+                                attendees.push(DocumentSnapshot.data());
+                            });
+
+                            const rawParty = docs[i].data();
+                            const formattedParty = {
+                                key: i.toString(),
+                                name: rawParty.name,
+                                host: rawParty.host,
+                                description: rawParty.description,
+                                // fee: rawParty.fee,
+                                time: rawParty.time,
+                                endTime: rawParty.endTime,
+                                generalLocation: rawParty.generalLocation,
+                                location: rawParty.location,
+                                attendees: attendees,
+                                partyReference: docs[i].ref,
+                                enrolled: enrollments[i],
+                            };
+                            parties.push(formattedParty);
+                        });
+                    }
+
+                    Promise.all(attendeePromises).then(() => {
+                        parties.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
+                        || b.attendees === undefined ? -1 : 1));
+
+                        this.setState({
+                            parties: parties,
+                            featuredParties: [parties[0], parties[1], parties[2]],
+                        });
+
+                        parties.sort((a, b) => a.time > b.time ? 1 : -1);
+
+                        callback();
+                    });
                 });
             });
-    }
-
-    getFeaturedPartyList() {
-        // todo make call to database here
-        let featuredParties = [];
-        this.setState({
-            featuredParties: featuredParties,
-        });
     }
 
     componentDidMount() {
         const {navigation} = this.props;
         this.setState({
-            institution: navigation.getParam('institution')
+            institution: navigation.getParam('institution'),
         }, () => {
-            this.getPartyList();
-            this.setState({
-                isLoading: false
-            })
+            this.getPartyList(() => {
+                this.setState({
+                    isLoading: false,
+                });
+            });
         });
-        // firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
-        // this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
-        // this.getFeaturedPartyList();
-
+        firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
+        this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
     }
 
     componentWillUnmount() {
         this.unsubscribeLinkListener();
     }
 
-    linkHandler(linkPromise) {
-        // let link;
-        // linkPromise.then(rlink => link = rlink);
-        // this.setState({
-        // 	dbg: 'test'
-        // });
+    linkHandler(link) {
         if (link) {
-            // this.setState({
-            // 	dbg: 'test2' + link.url
-            // });
-            //TODO implement actually opening party
-            // this.setState({
-            // 	dbg: link.url
-            // })
+            this.setState({
+                dbg: link.url,
+            });
         }
     }
 
     reachedEndOfList() {
         //this.setState({ dbg: "endOfList" });
-        this.setState({showSpinner: true, isRefreshingList: true});
+        //this.setState({showSpinner: true, isRefreshingList: true});
         // this.getPartyList(
         // 	// 	() => {
         // 	// 	this.setState({ showSpinner: false, isRefreshingList: false });
@@ -167,15 +186,15 @@ export default class HomeScreen extends React.Component {
                 generalLocation: party.generalLocation,
                 partyReference: party.partyReference,
                 enrolled: party.enrolled,
-                partyInfo: party
-            }
+                partyInfo: party,
+            },
         });
         this.RBSheet.open();
     }
 
     enrollInParty(party, partyInfo) {
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties').add({
-            party: party
+            party: party,
         });
 
         party.collection('attendees').add({uid: auth().currentUser.uid});
@@ -186,12 +205,12 @@ export default class HomeScreen extends React.Component {
     leaveParty(party, partyInfo) {
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties')
             .where('party', '==', party).get().then(QuerySnapshot => {
-                QuerySnapshot.docs.forEach(doc => doc.ref.delete())
+            QuerySnapshot.docs.forEach(doc => doc.ref.delete());
         });  //looks cursed, but actually fast
 
         party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
             .then(QuerySnapshot => {
-                QuerySnapshot.docs.forEach(doc => doc.ref.delete())
+                QuerySnapshot.docs.forEach(doc => doc.ref.delete());
             });
 
         partyInfo.enrolled = false;
@@ -225,7 +244,6 @@ export default class HomeScreen extends React.Component {
         } else {
             return (
                 <Container style={styles.body}>
-                    <Text style={{color: '#FFF'}}>{this.state.dbg}</Text>
                     <Header collegeName={this.state.institution}/>
                     <FlatList
                         onEndReachedThreshold={10}
@@ -257,18 +275,17 @@ export default class HomeScreen extends React.Component {
                                     enableSnap={true}
                                     renderItem={(item, index) => {
                                         return (
-                                            <DoubleTap onDoublePress={() => this.enrollInParty(item.key)}
-                                                       onPress={() => this.showPartySheet(item.key)}>
+                                            <DoubleTap onDoublePress={() => this.enrollInParty(item.item)}
+                                                       onPress={() => this.showPartySheet(item.item)}>
                                                 <View>
-                                                    <FeaturedPartyCard/>
+                                                    <FeaturedPartyCard partyInfo={item.item}/>
                                                 </View>
                                             </DoubleTap>
                                         );
                                     }}
                                 />
-                                <Text style={styles.titleText}>All Parties</Text>
+                                <Text style={styles.titleText}>Parties</Text>
                             </View>}
-                        ListFooterComponent={this.state.showSpinner ? <Spinner color={'white'}/> : <View></View>}
                         data={this.state.parties}
                         renderItem={({item}) =>
                             <DoubleTap onDoublePress={() => this.enrollInParty(item.key)}
@@ -306,9 +323,11 @@ export default class HomeScreen extends React.Component {
                             },
                         }}
                     >
-                        <SheetContent joinParty={this.enrollInParty} leaveParty={this.leaveParty} partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
+                        <SheetContent joinParty={this.enrollInParty} leaveParty={this.leaveParty}
+                                      partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
                     </RBSheet>
-                    <Footer name={this.props.name} institution={this.props.institution} style={styles.bodyFooter} navigation={this.props.navigation}/>
+                    <Footer name={this.props.name} institution={this.props.institution} style={styles.bodyFooter}
+                            navigation={this.props.navigation}/>
                 </Container>
             );
         }
@@ -319,7 +338,7 @@ const styles = StyleSheet.create({ // todo fix spacing between titles and conten
     body: {
         backgroundColor: '#000',
         height: '100%',
-        width: '100%'
+        width: '100%',
     },
     trendingContainer: {
         maxHeight: 175,
