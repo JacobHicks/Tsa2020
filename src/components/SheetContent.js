@@ -28,6 +28,12 @@ export default class SheetContent extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            enrolled: this.props.partyInfo.enrolled
+        })
+    }
+
     render() {
         return (
             <View style={styles.sheetContainer}>
@@ -103,7 +109,7 @@ export default class SheetContent extends React.Component {
                                 this.setState({
                                     enrolled: false
                                 });
-                                this.props.leaveParty(this.props.partyInfo.partyReference)
+                                this.props.leaveParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
                             }}>
                                 <Text style={styles.joinButtonText}>Bail out</Text>
                             </Button>
@@ -112,7 +118,7 @@ export default class SheetContent extends React.Component {
                                 this.setState({
                                     enrolled: true
                                 });
-                                this.props.joinParty(this.props.partyInfo.partyReference)
+                                this.props.joinParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
                             }}>
                                 <Text style={styles.joinButtonText}>I'm in</Text>
                             </Button>

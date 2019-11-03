@@ -62,6 +62,13 @@ export default class HomeScreen extends React.Component {
         };
     }
 
+    async checkEnrollment(party) {
+        await party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
+            .then(QuerySnapshot => {
+                return QuerySnapshot.docs.length > 0;
+            });
+    }
+
     getPartyList() {
         // todo make relative to school user is in
         db.collection('schoolData/' + this.state.institution + '/parties')
@@ -82,7 +89,8 @@ export default class HomeScreen extends React.Component {
                             generalLocation: rawParty.generalLocation,
                             location: rawParty.location,
                             attendees: rawParty.attendees,
-                            partyReference: doc.ref
+                            partyReference: doc.ref,
+                            enrolled: this.checkEnrollment(doc.ref)
                         };
                         parties.push(formattedParty);
                     });
@@ -157,21 +165,25 @@ export default class HomeScreen extends React.Component {
                 endTime: party.endTime,
                 location: party.location,
                 generalLocation: party.generalLocation,
-                partyReference: party.partyReference
+                partyReference: party.partyReference,
+                enrolled: party.enrolled,
+                partyInfo: party
             }
         });
         this.RBSheet.open();
     }
 
-    enrollInParty(party) {
+    enrollInParty(party, partyInfo) {
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties').add({
             party: party
         });
 
         party.collection('attendees').add({uid: auth().currentUser.uid});
+
+        partyInfo.enrolled = true;
     }
 
-    leaveParty(party) {
+    leaveParty(party, partyInfo) {
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties')
             .where('party', '==', party).get().then(QuerySnapshot => {
                 QuerySnapshot.docs.forEach(doc => doc.ref.delete())
@@ -181,6 +193,8 @@ export default class HomeScreen extends React.Component {
             .then(QuerySnapshot => {
                 QuerySnapshot.docs.forEach(doc => doc.ref.delete())
             });
+
+        partyInfo.enrolled = false;
     }
 
     onRefresh() {
@@ -265,8 +279,8 @@ export default class HomeScreen extends React.Component {
                                         time={item.time} shortLocation={item.shortLocation}
                                         attendees={item.attendees}
                                         school={this.state.institution}
-                                        joinParty={() => this.enrollInParty(item.partyReference)}
-                                        leaveParty={() => this.leaveParty(item.partyReference)}
+                                        joinParty={() => this.enrollInParty(item.partyReference, item)}
+                                        leaveParty={() => this.leaveParty(item.partyReference, item)}
                                     />
                                 </View>
                             </DoubleTap>}
