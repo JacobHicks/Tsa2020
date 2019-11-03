@@ -15,7 +15,6 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import PartyWalletCard from '../components/PartyWalletCard';
 import {Container} from 'native-base';
-import UserHostedPartySheet from '../components/UserHostedPartySheet';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import SheetContent from '../components/SheetContent';
 
@@ -30,6 +29,7 @@ export default class MVPProfileScreen extends React.Component {
             parties: [],
         };
         this.showPartySheet = this.showPartySheet.bind(this);
+        this.leaveParty = this.leaveParty.bind(this);
     }
 
     async checkEnrollment(party) {
@@ -50,11 +50,30 @@ export default class MVPProfileScreen extends React.Component {
             }))); // WatchMojo top 10 react native firebase moments;
             Promise.all(promises).then(() => {
                 for (let i = 0; i < parties.length; i++) {
-                    parties[i].key = 'joinedParty' + i.toString();
+                    parties[i].key = i.toString();
                 }
                 callback(parties);
             })
         });
+    }
+
+    leaveParty(party, partyInfo) {
+        db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties')
+            .where('party', '==', party).get().then(QuerySnapshot => {
+            QuerySnapshot.docs.forEach(doc => doc.ref.delete());
+        });
+
+        party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
+            .then(QuerySnapshot => {
+                QuerySnapshot.docs.forEach(doc => doc.ref.delete());
+            });
+
+        partyInfo.enrolled = false;
+
+        let newParties = this.state.parties;
+        newParties.splice(partyInfo.key, 1);
+        this.setState({parties: newParties});
+        this.RBSheet.close();
     }
 
     componentDidMount() {
@@ -137,7 +156,7 @@ export default class MVPProfileScreen extends React.Component {
                             },
                         }}
                     >
-                        <SheetContent joinParty={this.enrollInParty} leaveParty={this.leaveParty}
+                        <SheetContent leaveParty={this.leaveParty}
                                       partyInfo={this.state.selectedPartyInfo}/>
                     </RBSheet>
                     <UIFooter name={this.props.name} institution={this.props.institution} navigation={navigation}/>
