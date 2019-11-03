@@ -10,6 +10,7 @@ import {Text, View, StyleSheet, FlatList, RefreshControl, Dimensions} from 'reac
 import RBSheet from 'react-native-raw-bottom-sheet';
 // todo import Toasts from native base
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {firebase} from '@react-native-firebase/dynamic-links';
 import Carousel from 'react-native-snap-carousel';
 import Spinner from 'react-native-spinkit';
@@ -81,6 +82,7 @@ export default class HomeScreen extends React.Component {
                             generalLocation: rawParty.generalLocation,
                             location: rawParty.location,
                             attendees: rawParty.attendees,
+                            partyReference: doc.ref
                         };
                         parties.push(formattedParty);
                     });
@@ -154,21 +156,31 @@ export default class HomeScreen extends React.Component {
                 time: party.time,
                 endTime: party.endTime,
                 location: party.location,
-                generalLocation: party.generalLocation
+                generalLocation: party.generalLocation,
+                partyReference: party.partyReference
             }
         });
         this.RBSheet.open();
     }
 
-    enrollInParty() {
+    enrollInParty(party) {
+        db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties').add({
+            party: party
+        });
 
-        //this.setState({ dbg: "enrolled" });
-        //const userRef = db.collection('schoolData').doc('ucla').collection('users').doc('user');
-        const partyRef = db.collection('schoolData').doc(this.state.institution).collection('parties').doc('party');
-        const newUser = firestore.FieldValue.arrayUnion('user'); // todo create references for other docs
-        const newParty = firestore.FieldValue.arrayUnion('party');
-        //userRef.update({partiesList: newParty});
-        partyRef.update({userList: newUser});
+        party.collection('attendees').add({uid: auth().currentUser.uid});
+    }
+
+    leaveParty(party) {
+        db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties')
+            .where('party', '==', party).get().then(QuerySnapshot => {
+                QuerySnapshot.docs.forEach(doc => doc.ref.delete())
+        });  //looks cursed, but actually fast
+
+        party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
+            .then(QuerySnapshot => {
+                QuerySnapshot.docs.forEach(doc => doc.ref.delete())
+            });
     }
 
     onRefresh() {
@@ -253,12 +265,13 @@ export default class HomeScreen extends React.Component {
                                         time={item.time} shortLocation={item.shortLocation}
                                         attendees={item.attendees}
                                         school={this.state.institution}
-                                        joinParty={this.enrollInParty}/>
+                                        joinParty={() => this.enrollInParty(item.partyReference)}
+                                        leaveParty={() => this.leaveParty(item.partyReference)}
+                                    />
                                 </View>
                             </DoubleTap>}
                     />
                     <RBSheet
-                        joinParty={this.enrollInParty}
                         ref={ref => {
                             this.RBSheet = ref;
                         }}
@@ -279,7 +292,7 @@ export default class HomeScreen extends React.Component {
                             },
                         }}
                     >
-                        <SheetContent partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
+                        <SheetContent joinParty={this.enrollInParty} leaveParty={this.leaveParty} partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
                     </RBSheet>
                     <Footer name={this.props.name} institution={this.props.institution} style={styles.bodyFooter} navigation={this.props.navigation}/>
                 </Container>

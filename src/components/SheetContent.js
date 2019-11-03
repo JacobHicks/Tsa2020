@@ -21,6 +21,13 @@ export default class SheetContent extends React.Component {
         return date.toLocaleTimeString(options);
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            enrolled: false
+        }
+    }
+
     render() {
         return (
             <View style={styles.sheetContainer}>
@@ -82,7 +89,7 @@ export default class SheetContent extends React.Component {
                                     Location
                                 </Text>
                                 <Text style={styles.sheetSubDetail}>
-                                    {this.props.location}
+                                    {this.props.partyInfo.location}
                                 </Text>
                             </View>
                         </View> : <View style={{alignItems: 'center'}}>
@@ -90,9 +97,26 @@ export default class SheetContent extends React.Component {
 
                 </ScrollView>
                 <View style={{alignItems: 'center', width: '100%', paddingBottom: '15%'}}>
-                    <Button style={styles.joinButton} onPress={this.props.joinParty}>
-                        <Text style={styles.joinButtonText}>I'm in</Text>
-                    </Button>
+                    {
+                        this.state.enrolled ?
+                            <Button style={styles.joinButton} onPress={() => {
+                                this.setState({
+                                    enrolled: false
+                                });
+                                this.props.leaveParty(this.props.partyInfo.partyReference)
+                            }}>
+                                <Text style={styles.joinButtonText}>Bail out</Text>
+                            </Button>
+                            :
+                            <Button style={styles.joinButton} onPress={() => {
+                                this.setState({
+                                    enrolled: true
+                                });
+                                this.props.joinParty(this.props.partyInfo.partyReference)
+                            }}>
+                                <Text style={styles.joinButtonText}>I'm in</Text>
+                            </Button>
+                    }
                 </View>
             </View>
         );
