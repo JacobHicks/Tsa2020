@@ -32,12 +32,21 @@ export default class MVPProfileScreen extends React.Component {
         this.showPartySheet = this.showPartySheet.bind(this);
     }
 
+    async checkEnrollment(party) {
+        await party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
+            .then(QuerySnapshot => {
+                return QuerySnapshot.docs.length > 0;
+            });
+    }
+
     getParties(callback) {
         let parties = [];
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties').get().then(QuerySnapshot => {
             let promises = [];
             QuerySnapshot.docs.forEach(doc => promises.push(doc.data().party.get().then(PartyDocument => {
                 parties.push(PartyDocument.data());
+                parties[parties.length - 1].partyReference = PartyDocument.ref;
+                parties[parties.length - 1].enrolled = this.checkEnrollment(PartyDocument.ref);
             }))); // WatchMojo top 10 react native firebase moments;
             Promise.all(promises).then(() => {
                 for (let i = 0; i < parties.length; i++) {
