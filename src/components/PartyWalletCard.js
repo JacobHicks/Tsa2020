@@ -8,7 +8,7 @@ export default class PartyWalletCard extends React.Component {
 		return (
 			<View style={ styles.container }>
 				<Text style={ styles.titleText }>
-					{ this.props.title }
+					{ this.props.partyInfo.name }
 				</Text>
 				<Text style={ styles.titleText }>testing</Text>
 				<View style={ styles.buttons }>
