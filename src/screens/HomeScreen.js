@@ -62,10 +62,10 @@ export default class HomeScreen extends React.Component {
         };
     }
 
-    async checkEnrollment(party) {
+    async checkEnrollment(party, callback) {
         await party.collection('attendees').where('uid', '==', auth().currentUser.uid).get()
             .then(QuerySnapshot => {
-                return QuerySnapshot.docs.length > 0;
+                callback(QuerySnapshot.docs.length > 0);
             });
     }
 
@@ -83,15 +83,11 @@ export default class HomeScreen extends React.Component {
                 QuerySnapshot.docs
                     .forEach(doc => {
                         docs.push(doc);
-                        enrollmentPromises.push(this.checkEnrollment(doc.ref));
+                        enrollmentPromises.push(this.checkEnrollment(doc.ref, enrolled => {
+                            enrollments.push(enrolled);
+                            attendeePromises.push(doc.ref.collection('attendees').get());
+                        }));
                     });
-
-                for(let i = 0; i < enrollmentPromises.length; i++) {
-                    enrollmentPromises[i].then(enrolled => {
-                        enrollments.push(enrolled);
-                        attendeePromises.push(docs[i].ref.collection('attendees').get());
-                    });
-                }
 
                 Promise.all(enrollmentPromises).then(() => {
                     for(let i = 0; i < attendeePromises.length; i++) {
