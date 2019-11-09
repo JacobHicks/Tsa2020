@@ -14,6 +14,7 @@ const validate = values => {
             error.phoneNumber = 'Invalid phone number';
         }
     }
+    return error;
 };
 
 class RegistrationForm extends React.Component {

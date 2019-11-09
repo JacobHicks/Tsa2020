@@ -115,7 +115,7 @@ export default class MVPProfileScreen extends React.Component {
                                     alignItems: 'center',
                                 }}>
                                     <Text style={styles.nameText}>
-                                        {this.props.name}
+                                        {navigation.getParam('name')}
                                     </Text>
 
                                     <Text style={styles.schoolText}>
