@@ -5,8 +5,8 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const UIFooter = function(props) {
 	const navigation = props.navigation;
-	const name = props.name;
-	const institution = props.institution;
+	const name = navigation.getParam('name');
+	const institution = navigation.getParam('institution');
 	return (
 		<Footer style={ styles.footer }>
 			<FooterTab style={ styles.footerTab }>

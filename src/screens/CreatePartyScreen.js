@@ -20,6 +20,7 @@ import {
 } from 'native-base';
 
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import PartyForm from '../components/forms/PartyForm';
 import {createStore} from 'redux';
 import allReducers from '../reducers';
@@ -37,24 +38,24 @@ const showErrorMessage = function (title, message) {
         {cancelable: false},
     );
 };
-const createNewParty = (title, location, time, description) => {
-    let docRef = db.collection('schoolData').doc(school).collection('parties');
+const createNewParty = (values, navigation) => {
+    const institution = navigation.getParam('institution');
+    let docRef = db.collection('schoolData').doc(institution).collection('parties');
     docRef.add({
-        title: title,
-        location: location,
-        time: time,
-        // host: host,
-        // fee: fee,
-        description: description,
-        deleted: false,
-        attendees: 1,
+        name: values.name,
+        location: values.location,
+        time: values.startTime,
+        endTime: values.endTime,
+        description: values.description,
+        generalLocation: values.generalLocation,
+        host: db.collection('users').doc(auth().currentUser.uid)
+
     }).then((status) => {
-        setDbg(status);
         // todo toast here
-    }).catch(err => {
-        if (err) {
-            throw err;
-        }
+        navigation.navigate('Home', {
+            name: navigation.getParam('name'),
+            institution: navigation.getParam('institution')
+        });
     });
 };
 
@@ -73,14 +74,6 @@ const CreatePartyScreen = function (props) {
 
     const enabledCallback = (enabled) => setPostButtonDisabled(!enabled);
     const onSubmitPress = () => formReference.submit();
-
-
-    useEffect(() => {
-
-        timeValid = true; // todo check if time is entered, not in the past
-        descriptionValid = partyDescription.length <= 500;
-
-    });
 
     return (
         <Container style={styles.body}>
@@ -103,7 +96,7 @@ const CreatePartyScreen = function (props) {
             </Header>
             <Content>
                 <Provider store={store}>
-                    <PartyForm style={styles.form} onSubmit={createNewParty} ref={form => formReference = form}
+                    <PartyForm style={styles.form} onSubmit={values => createNewParty(values, props.navigation)} ref={form => formReference = form}
                                onTitleChange={setPartyTitle} enabledCallback={enabledCallback}/>
                 </Provider>
             </Content>

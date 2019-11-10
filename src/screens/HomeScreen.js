@@ -33,33 +33,9 @@ export default class HomeScreen extends React.Component {
             isRefreshingList: false,
             refreshing: false,
             dbg: 'tst',
-            featuredParties: [
-                {
-                    key: '1',
-                    name: 'Testing Party',
-                    host: 'Diego',
-                    description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-                    date: new Date(),
-                    imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-                },
-                {
-                    key: '2',
-                    name: 'Testing Party 2',
-                    host: 'Richard',
-                    description: 'desc',
-                    date: new Date(),
-                    imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-                },
-                {
-                    key: '3',
-                    name: 'Testing 3',
-                    host: 'Azhan',
-                    description: 'Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah ',
-                    date: new Date(),
-                    imageURL: 'https://marvel-live.freetls.fastly.net/canvas/2019/10/399f689db39646b990a80bb3ce21cd54?quality=95&fake=.png',
-                },
-            ],
         };
+
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     async checkEnrollment(party, callback) {
@@ -222,10 +198,7 @@ export default class HomeScreen extends React.Component {
 
     // todo https://facebook.github.io/react-native/docs/refreshcontrol
 
-    // todo loading icon before images are loaded
     render() {
-        const {navigate} = this.props;
-        // navigation.navigate("TextConfirm");
         if (this.state.isLoading) {
             return (
                 <Container style={styles.body}>
@@ -249,8 +222,8 @@ export default class HomeScreen extends React.Component {
                         showsVerticalScrollIndicator={false}
                         refreshControl={
                             <RefreshControl
-                                refreshing={false}
-                                onRefresh={this.onRefresh.bind(this)}
+                                refreshing={this.state.refreshing}
+                                onRefresh={this.onRefresh}
                             />
                         }
 
@@ -322,8 +295,7 @@ export default class HomeScreen extends React.Component {
                         <SheetContent joinParty={this.enrollInParty} leaveParty={this.leaveParty}
                                       partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
                     </RBSheet>
-                    <Footer name={this.props.name} institution={this.props.institution} style={styles.bodyFooter}
-                            navigation={this.props.navigation}/>
+                    <Footer style={styles.bodyFooter} navigation={this.props.navigation}/>
                 </Container>
             );
         }
