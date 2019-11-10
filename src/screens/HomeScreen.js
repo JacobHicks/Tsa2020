@@ -189,14 +189,13 @@ export default class HomeScreen extends React.Component {
     }
 
     onRefresh() {
-        this.setState({refreshing: false});
-        return (
-            <Text>test</Text>
-        );
+        this.setState({refreshing: true});
+        this.getPartyList(() => {
+            this.setState({
+                refreshing: false,
+            });
+        });
     }
-
-
-    // todo https://facebook.github.io/react-native/docs/refreshcontrol
 
     render() {
         if (this.state.isLoading) {

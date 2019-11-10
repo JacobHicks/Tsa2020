@@ -44,8 +44,8 @@ const createNewParty = (values, navigation) => {
     docRef.add({
         name: values.name,
         location: values.location,
-        time: values.startTime,
-        endTime: values.endTime,
+        time: values.startTime.getTime(),
+        endTime: values.endTime.getTime(),
         description: values.description,
         generalLocation: values.generalLocation,
         host: db.collection('users').doc(auth().currentUser.uid)
