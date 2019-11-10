@@ -79,7 +79,6 @@ export default class HomeScreen extends React.Component {
                                 name: rawParty.name,
                                 host: rawParty.host,
                                 description: rawParty.description,
-                                // fee: rawParty.fee,
                                 time: rawParty.time,
                                 endTime: rawParty.endTime,
                                 generalLocation: rawParty.generalLocation,
@@ -122,6 +121,20 @@ export default class HomeScreen extends React.Component {
         });
         firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
         this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
+    }
+
+    componentDidUpdate(prevProps) {
+        if(!prevProps.navigation.getParam('refresh') && this.props.navigation.getParam('refresh')) {
+            this.setState({
+                loading: true
+            });
+
+            this.getPartyList(() => {
+                this.setState({
+                    isLoading: false,
+                });
+            });
+        }
     }
 
     componentWillUnmount() {

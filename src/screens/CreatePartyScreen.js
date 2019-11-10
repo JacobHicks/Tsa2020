@@ -41,6 +41,7 @@ const showErrorMessage = function (title, message) {
 const createNewParty = (values, navigation) => {
     const institution = navigation.getParam('institution');
     let docRef = db.collection('schoolData').doc(institution).collection('parties');
+    values.startTime.
     docRef.add({
         name: values.name,
         location: values.location,
@@ -54,7 +55,8 @@ const createNewParty = (values, navigation) => {
         // todo toast here
         navigation.navigate('Home', {
             name: navigation.getParam('name'),
-            institution: navigation.getParam('institution')
+            institution: navigation.getParam('institution'),
+            refresh: true
         });
     });
 };
