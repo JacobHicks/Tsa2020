@@ -41,7 +41,13 @@ const showErrorMessage = function (title, message) {
 const createNewParty = (values, navigation) => {
     const institution = navigation.getParam('institution');
     let docRef = db.collection('schoolData').doc(institution).collection('parties');
-    values.startTime.
+    values.startTime.setDate(values.date.getDate());
+    values.startTime.setMonth(values.date.getMonth());
+    values.startTime.setFullYear(values.date.getFullYear());
+
+    values.endTime.setDate(values.date.getDate());
+    values.endTime.setMonth(values.date.getMonth());
+    values.endTime.setFullYear(values.date.getFullYear());
     docRef.add({
         name: values.name,
         location: values.location,
