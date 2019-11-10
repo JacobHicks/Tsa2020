@@ -57,6 +57,24 @@ export default class MVPProfileScreen extends React.Component {
         });
     }
 
+    getHostedParties(callback) {
+        let parties = [];
+        db.collection('users').doc(auth().currentUser.uid).collection('hostedParties').get().then(QuerySnapshot => {
+            let promises = [];
+            QuerySnapshot.docs.forEach(doc => promises.push(doc.data().party.get().then(PartyDocument => {
+                parties.push(PartyDocument.data());
+                parties[parties.length - 1].partyReference = PartyDocument.ref;
+                parties[parties.length - 1].enrolled = this.checkEnrollment(PartyDocument.ref);
+            }))); // WatchMojo top 10 react native firebase moments;
+            Promise.all(promises).then(() => {
+                for (let i = 0; i < parties.length; i++) {
+                    parties[i].key = i.toString();
+                }
+                callback(parties);
+            })
+        });
+    }
+
     leaveParty(party, partyInfo) {
         db.collection('users').doc(auth().currentUser.uid).collection('enrolledParties')
             .where('party', '==', party).get().then(QuerySnapshot => {
@@ -79,9 +97,14 @@ export default class MVPProfileScreen extends React.Component {
     componentDidMount() {
         this.getParties(parties =>
             this.setState({
-                isLoading: false,
                 parties: parties,
             }),
+            this.getHostedParties(parties =>
+                this.setState({
+                    hostedParties: parties,
+                    isLoading: false
+                })
+            )
         );
     }
 
@@ -107,23 +130,40 @@ export default class MVPProfileScreen extends React.Component {
                         style={{
                             marginLeft: '10%',
                             marginRight: '10%',
+                            marginTop: 50
                         }}
                         ListHeaderComponent={
                             <View>
-                                <View style={{
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                }}>
-                                    <Text style={styles.nameText}>
-                                        {navigation.getParam('name')}
-                                    </Text>
-
-                                    <Text style={styles.schoolText}>
-                                        {this.props.institution}
-                                    </Text>
-                                </View>
+                                {/*<View style={{*/}
+                                {/*    flexDirection: 'column',*/}
+                                {/*    alignItems: 'center',*/}
+                                {/*}}>*/}
+                                {/*    <Text style={styles.nameText}>*/}
+                                {/*        {navigation.getParam('name')}*/}
+                                {/*    </Text>*/}
+                                {/**/}
+                                {/*    <Text style={styles.schoolText}>*/}
+                                {/*        {navigation.getParam('institution')}*/}
+                                {/*    </Text>*/}
+                                {/*</View>*/}
                                 <Text style={styles.walletText}>
                                     My Parties
+                                </Text>
+
+                                <FlatList
+                                    showsVerticalScrollIndicator={false}
+                                    data={this.state.hostedParties}
+                                    renderItem={({item}) =>
+                                        <TouchableHighlight onPress={() => {
+                                            this.showPartySheet(item);
+                                        }}>
+                                            <PartyWalletCard partyInfo={item}/>
+                                        </TouchableHighlight>
+                                    }
+                                />
+
+                                <Text style={styles.walletText}>
+                                    RSVPs
                                 </Text>
                             </View>
                         }
@@ -215,7 +255,6 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: Dimensions.get('window').width * .07,
         fontWeight: '700',
-        marginBottom: 5,
     },
 
     schoolText: {

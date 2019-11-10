@@ -40,7 +40,7 @@ const showErrorMessage = function (title, message) {
 };
 const createNewParty = (values, navigation) => {
     const institution = navigation.getParam('institution');
-    let docRef = db.collection('schoolData').doc(institution).collection('parties');
+    let collectionReference = db.collection('schoolData').doc(institution).collection('parties');
     values.startTime.setDate(values.date.getDate());
     values.startTime.setMonth(values.date.getMonth());
     values.startTime.setFullYear(values.date.getFullYear());
@@ -48,22 +48,25 @@ const createNewParty = (values, navigation) => {
     values.endTime.setDate(values.date.getDate());
     values.endTime.setMonth(values.date.getMonth());
     values.endTime.setFullYear(values.date.getFullYear());
-    docRef.add({
+    collectionReference.add({
         name: values.name,
         location: values.location,
         time: values.startTime.getTime(),
         endTime: values.endTime.getTime(),
         description: values.description,
         generalLocation: values.generalLocation,
-        host: db.collection('users').doc(auth().currentUser.uid)
+        host: auth().currentUser.uid
 
-    }).then((status) => {
-        // todo toast here
-        navigation.navigate('Home', {
-            name: navigation.getParam('name'),
-            institution: navigation.getParam('institution'),
-            refresh: true
-        });
+    }).then(documentReference => {
+        db.collection('users').doc(auth().currentUser.uid).collection('hostedParties').add({
+            party: documentReference,
+        }).then(
+            navigation.navigate('Home', {
+                name: navigation.getParam('name'),
+                institution: navigation.getParam('institution'),
+                refresh: true
+            })
+        );
     });
 };
 
