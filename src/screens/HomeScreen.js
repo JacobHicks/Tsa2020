@@ -74,20 +74,25 @@ export default class HomeScreen extends React.Component {
                             });
 
                             const rawParty = docs[i].data();
-                            const formattedParty = {
-                                key: i.toString(),
-                                name: rawParty.name,
-                                host: rawParty.host,
-                                description: rawParty.description,
-                                time: rawParty.time,
-                                endTime: rawParty.endTime,
-                                generalLocation: rawParty.generalLocation,
-                                location: rawParty.location,
-                                attendees: attendees,
-                                partyReference: docs[i].ref,
-                                enrolled: enrollments[i],
-                            };
-                            parties.push(formattedParty);
+                            if(rawParty.time < new Date().getTime()) {
+                                docs[i].ref.delete();
+                            }
+                            else {
+                                const formattedParty = {
+                                    key: i.toString(),
+                                    name: rawParty.name,
+                                    host: rawParty.host,
+                                    description: rawParty.description,
+                                    time: rawParty.time,
+                                    endTime: rawParty.endTime,
+                                    generalLocation: rawParty.generalLocation,
+                                    location: rawParty.location,
+                                    attendees: attendees,
+                                    partyReference: docs[i].ref,
+                                    enrolled: enrollments[i],
+                                };
+                                parties.push(formattedParty);
+                            }
                         });
                     }
 
@@ -95,9 +100,13 @@ export default class HomeScreen extends React.Component {
                         parties.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
                         || b.attendees === undefined ? -1 : 1));
 
+                        let featuredParties = [];
+                        for(let i = 0; i < parties.length && i < 3; i++) {
+                            featuredParties.push(parties[i]);
+                        }
                         this.setState({
                             parties: parties,
-                            featuredParties: [parties[0], parties[1], parties[2]],
+                            featuredParties: featuredParties,
                         });
 
                         parties.sort((a, b) => a.time > b.time ? 1 : -1);
@@ -254,7 +263,7 @@ export default class HomeScreen extends React.Component {
                                     loop={true}
                                     enableMomentum={true}
                                     enableSnap={true}
-                                    renderItem={(item, index) => {
+                                    renderItem={(item) => {
                                         return (
                                             <DoubleTap onDoublePress={() => this.enrollInParty(item.item)}
                                                        onPress={() => this.showPartySheet(item.item)}>
