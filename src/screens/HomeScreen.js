@@ -252,11 +252,10 @@ export default class HomeScreen extends React.Component {
             return (
                 <Container style={styles.body}>
                     <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-                        <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={"ThreeBounce"}
+                        <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={'ThreeBounce'}
                                  color={"#ee5253"}/>
                         <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
                     </View>
-                    <Footer style={styles.bodyFooter} navigation={this.props.navigation}/>
                 </Container>
             );
         } else {

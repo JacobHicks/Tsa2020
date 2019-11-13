@@ -6,24 +6,30 @@ import TextConfirm from './screens/TextConfirm';
 import CreatePartyScreen from './screens/CreatePartyScreen';
 
 import TestScreen from './screens/TestScreen';
-import {fromBottom, fromLeft} from 'react-navigation-transitions';
+import {fadeIn, fromBottom, fromLeft, fromRight} from 'react-navigation-transitions';
 import InstitutionList from './screens/InstitutionList';
 import MVPProfileScreen from './screens/MVPProfileScreen';
 import EntryScreen from './screens/EntryScreen';
 
 function handleTransition({scenes}) {
+    const navScreens = ['Home', 'CreateParty', 'Profile'];
+
     const previousScene = scenes[scenes.length - 2];
     const nextScene = scenes[scenes.length - 1];
 
-    if (previousScene &&
-        previousScene.route.routeName === 'Home' && (nextScene.route.routeName === 'CreateParty' || nextScene.route.routeName === 'Profile')) {
-            return fromBottom();
+    if (previousScene && navScreens.indexOf(previousScene.route.routeName) !== -1 && navScreens.indexOf(nextScene.route.routeName) !== -1) {
+        if (navScreens.indexOf(previousScene.route.routeName) > navScreens.indexOf(nextScene.route.routeName)) {
+            return fromLeft();
+        } else {
+            return fromRight();
+        }
+    } else if (previousScene && previousScene.route.routeName === 'EntryScreen') {
+        return fadeIn();
     }
-    return fromLeft();
 }
 
 const MainNavigator = createStackNavigator({
-         EntryScreen: {screen: EntryScreen},
+        EntryScreen: {screen: EntryScreen},
         Profile: {screen: MVPProfileScreen},
         InitialSignup: {screen: InitialSignup},
         InstitutionList: {screen: InstitutionList},

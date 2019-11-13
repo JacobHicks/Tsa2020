@@ -2,7 +2,8 @@ import React from "react";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import {Container, Spinner, Text} from 'native-base';
+import {Container, Text} from 'native-base';
+import Spinner from "react-native-spinkit";
 
 const db = firestore();
 export default class EntryScreen extends React.Component {
@@ -29,8 +30,8 @@ export default class EntryScreen extends React.Component {
         return (
             <Container style={styles.body}>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <Spinner isVisible={true} size={Dimensions.get('window').width * .25} type={'ThreeBounce'}
-                             color={'#ee5253'}/>
+                    <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={'ThreeBounce'}
+                             color={"#ee5253"}/>
                     <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
                 </View>
             </Container>
