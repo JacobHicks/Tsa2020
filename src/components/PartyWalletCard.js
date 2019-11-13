@@ -12,12 +12,6 @@ export default class PartyWalletCard extends React.Component {
 				</Text>
 				<Text style={ styles.titleText }>testing</Text>
 				<View style={ styles.buttons }>
-					<View style={ styles.detailButton }>
-						<Text style={ styles.buttonText }>
-							Details
-						</Text>
-					</View>
-
 					<View style={ styles.signInButton }>
 						<Text style={ styles.buttonText }>
 							Check In
