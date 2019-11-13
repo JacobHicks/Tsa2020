@@ -74,7 +74,7 @@ let formReference = null;
 let partyTitleValid, generalLocationValid, locationValid, timeValid, dateValid, descriptionValid = false;
 
 const CreatePartyScreen = function (props) {
-    const [partyTitle, setPartyTitle] = useState('untitled party');
+    const [partyTitle, setPartyTitle] = useState('');
     const [partyGeneralLocation, setPartyGeneralLocation] = useState('');
     const [partyLocation, setPartyLocation] = useState('');
     const [partyTime, setPartyTime] = useState('time*');

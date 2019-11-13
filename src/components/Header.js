@@ -15,7 +15,7 @@ const Header = function(props) {
 const styles = StyleSheet.create({
 	header: {
 		paddingLeft: 10,
-		marginTop: 32,
+		marginTop: 34,
 		borderBottomColor: "#555",
 		borderBottomWidth: .5,
 		textAlign: "center",
@@ -23,14 +23,14 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		color: "#ee5253",
-		fontSize: 18,
+		fontSize: 16,
 		textTransform: "uppercase",
 		fontWeight: "700",
 		textAlign: "center"
 	},
 	collegeText: {
 		color: "#ddd",
-		fontSize: 13,
+		fontSize: 11,
 		textTransform: "uppercase",
 		fontWeight: "700",
 		textAlign: "center",

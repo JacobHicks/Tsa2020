@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Share} from 'react-native';
+import { View, StyleSheet, Share, Dimensions } from "react-native";
 import {
     Card,
     CardItem,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         padding: 0,
         backgroundColor: '#000',
         paddingBottom: 30,
-        maxWidth: 375,
+        maxWidth: Dimensions.get("window").width * .8,
     },
     cardBody: {
         backgroundColor: '#000',
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     buttonGrid: {
         marginTop: -25,
         maxWidth: 75,
-        marginLeft: 270,
+        left: Dimensions.get("window").width * .66,
 
     },
     joinButton: {
