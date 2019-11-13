@@ -30,6 +30,7 @@ export default class MVPProfileScreen extends React.Component {
 		};
 		this.showPartySheet = this.showPartySheet.bind(this);
 		this.leaveParty = this.leaveParty.bind(this);
+		this.cancelParty = this.cancelParty.bind(this);
 	}
 
 	async checkEnrollment(party) {
@@ -92,6 +93,32 @@ export default class MVPProfileScreen extends React.Component {
 		newParties.splice(partyInfo.key, 1);
 		this.setState({ parties: newParties });
 		this.RBSheet.close();
+	}
+
+	cancelParty(party, partyInfo) {
+
+		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties")
+			.where("party", "==", party).get().then(QuerySnapshot => {
+			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
+		});
+
+		party.collection("attendees").get().then(QuerySnapshot => {
+			const attendees = QuerySnapshot.docs;
+			attendees.forEach(attendeeSnapshot => {
+				const uid = attendeeSnapshot.uid;
+				db.collection('users').doc(uid).collection('enrolledParties').where('party', '==', party).get().then(QuerySnapshot => {
+					QuerySnapshot.docs.forEach(rsvpSnapshot => {
+						rsvpSnapshot.ref.delete();
+					});
+				});
+				attendeeSnapshot.ref.delete();
+			});
+			party.delete();
+			let newParties = this.state.hostedParties;
+			newParties.splice(partyInfo.key, 1);
+			this.setState({ parties: newParties });
+			this.RBSheet.close();
+		});
 	}
 
 	componentDidMount() {
@@ -157,7 +184,7 @@ export default class MVPProfileScreen extends React.Component {
 										data={ this.state.hostedParties }
 										renderItem={ ({ item }) =>
 											<TouchableHighlight onPress={ () => {
-												this.showPartySheet(item);
+												this.showPartySheet(item, true);
 											} }>
 												<PartyWalletCard partyInfo={ item } />
 											</TouchableHighlight>
@@ -204,6 +231,7 @@ export default class MVPProfileScreen extends React.Component {
 						} }
 					>
 						<SheetContent leaveParty={ this.leaveParty }
+									  cancelParty={this.cancelParty}
 						              partyInfo={ this.state.selectedPartyInfo } />
 					</RBSheet>
 					<UIFooter name={ this.props.name } institution={ this.props.institution }

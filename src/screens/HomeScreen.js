@@ -74,8 +74,8 @@ export default class HomeScreen extends React.Component {
 							});
 
 							const rawParty = docs[i].data();
-							if (rawParty.time < new Date().getTime()) {
-								docs[i].ref.delete();
+							if (rawParty.endTime < new Date().getTime()) {
+								docs[i].ref.delete(); //TODO actual delete
 							} else {
 								const formattedParty = {
 									key: i.toString(),

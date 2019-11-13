@@ -6,7 +6,11 @@ import {
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 // fix icons on ios
-// todo if user is going, convert short location to actual location on sheet page
+import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
+
+const db = firestore();
+
 export default class SheetContent extends React.Component {
     getDate(millis) {
         const options = {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'};
@@ -35,6 +39,7 @@ export default class SheetContent extends React.Component {
     }
 
     render() {
+        const uid = auth().currentUser.uid;
         return (
             <View style={styles.sheetContainer}>
                 <Text style={styles.sheetTitle}>{this.props.partyInfo.name}</Text>
@@ -104,24 +109,31 @@ export default class SheetContent extends React.Component {
                 </ScrollView>
                 <View style={{alignItems: 'center', width: '100%', paddingBottom: '15%'}}>
                     {
-                        this.state.enrolled ?
+                        this.props.partyInfo.host === uid ?
                             <Button style={styles.joinButton} onPress={() => {
-                                this.setState({
-                                    enrolled: false
-                                });
-                                this.props.leaveParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                this.props.cancelParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
                             }}>
-                                <Text style={styles.joinButtonText}>Bail out</Text>
+                                <Text style={styles.joinButtonText}>Cancel Party</Text>
                             </Button>
                             :
-                            <Button style={styles.joinButton} onPress={() => {
-                                this.setState({
-                                    enrolled: true
-                                });
-                                this.props.joinParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
-                            }}>
-                                <Text style={styles.joinButtonText}>I'm in</Text>
-                            </Button>
+                            this.state.enrolled ?
+                                <Button style={styles.joinButton} onPress={() => {
+                                    this.setState({
+                                        enrolled: false
+                                    });
+                                    this.props.leaveParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                }}>
+                                    <Text style={styles.joinButtonText}>Bail out</Text>
+                                </Button>
+                                :
+                                <Button style={styles.joinButton} onPress={() => {
+                                    this.setState({
+                                        enrolled: true
+                                    });
+                                    this.props.joinParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                }}>
+                                    <Text style={styles.joinButtonText}>I'm in</Text>
+                                </Button>
                     }
                 </View>
             </View>
