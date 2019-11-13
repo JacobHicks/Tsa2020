@@ -14,6 +14,12 @@ const validate = values => {
 			error.phoneNumber = "Invalid phone number";
 		}
 	}
+	if (values.name.length === 0) {
+		error.name = "Enter your full name"
+	}
+	if (values.institution.length === 0) {
+		error.institution = "Enter the name of your school"
+	}
 	return error;
 };
 
@@ -46,7 +52,7 @@ class RegistrationForm extends React.Component {
 
 		return (
 			<Item error={ hasError }>
-				<Input placeholder='Full name' selectionColor={ "#ee5253" } style={ Styles.placeholder }
+				<Input placeholder='Full name' selectionColor={ "#DE3C4B" } style={ Styles.placeholder }
 				       placeholderTextColor='#FFF' { ...input } />
 			</Item>
 		);
@@ -57,7 +63,7 @@ class RegistrationForm extends React.Component {
 
 		return (
 			<Item error={ hasError }>
-				<Input placeholder='Phone number' selectionColor={ "#ee5253" } style={ Styles.placeholder } placeholderTextColor='#FFF'
+				<Input placeholder='Phone number' selectionColor={ "#DE3C4B" } style={ Styles.placeholder } placeholderTextColor='#FFF'
 				       keyboardType='number-pad' { ...input } />
 			</Item>
 		);
@@ -101,7 +107,7 @@ const Styles = StyleSheet.create({
 		width: "85%",
 		height: Dimensions.get("window").height * .08,
 		justifyContent: "center",
-		backgroundColor: "#ee5253",
+		backgroundColor: "#DE3C4B",
 		borderRadius: 33
 	},
 

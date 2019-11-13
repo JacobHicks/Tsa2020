@@ -1,6 +1,6 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View, Keyboard, ScrollView } from "react-native";
 import { Row, Col, Grid, Input, Item, Label, Textarea, Button } from "native-base";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -90,71 +90,90 @@ class PartyForm extends React.Component {
 
 	render() {
 		return (
-			<View>
-				<Field name='name' component={ this.renderNameInput } />
-				<Field name='location' component={ this.renderLocationInput } />
-				<Field name='generalLocation' component={ this.renderGeneralLocationInput } />
+			<TouchableWithoutFeedback onPress={ Keyboard.dismiss } style={ { flex: 1 } }>
+				<ScrollView>
+					<Field name='name' component={ this.renderNameInput } />
+					<Field name='location' component={ this.renderLocationInput } />
+					<Field name='generalLocation' component={ this.renderGeneralLocationInput } />
 
-				<Item regular style={ styles.formItem }>
-					<Button style={ { backgroundColor: "transparent" } }
-					        onPress={ () => this.setState({ showingDate: true }) }>
-						<Text style={ {
-							color: "#ee5253",
-							fontSize: 18,
-							fontWeight: "600"
-						} }>{ this.state.showDateText ? this.state.startDate.toLocaleDateString() : "Date" }</Text>
-					</Button>
-				</Item>
+					<Item regular style={ styles.formItem }>
+						<Button style={ { backgroundColor: "transparent" } }
+						        onPress={ () => {
+							        Keyboard.dismiss;
+							        this.setState({ showingDate: true })
+						        } }>
+							<Text style={ {
+								color: "#DE3C4B",
+								fontSize: 18,
+								fontWeight: "600"
+							} }>{ this.state.showDateText ? this.state.startDate.toLocaleDateString() : "Date" }</Text>
+						</Button>
+					</Item>
 
-				<Grid>
-					<Col style={ { maxWidth: 150 } }>
-						<Item regular style={ styles.formItem }>
-							<Button transparent onPress={ () => this.setState({ showingStart: true }) }>
-								<Text style={ {
-									color: "#ee5253",
-									fontSize: 18,
-									fontWeight: "600"
-								} }>{ this.state.showStartText ? this.state.startDate.toLocaleTimeString() : "Start Time" }</Text>
-							</Button>
-						</Item>
-					</Col>
+					<Grid>
+						<Col style={ { maxWidth: 150 } }>
+							<Item regular style={ styles.formItem }>
+								<Button transparent onPress={ () => {
+									Keyboard.dismiss;
+									this.setState({ showingStart: true })
+								}
+								}>
+									<Text style={ {
+										color: "#DE3C4B",
+										fontSize: 18,
+										fontWeight: "600"
+									} }>{ this.state.showStartText ? this.state.startDate.toLocaleTimeString(navigator.language, {
+										hour: "2-digit",
+										minute: "2-digit"
+									}) : "Start Time" }</Text>
+								</Button>
+							</Item>
+						</Col>
 
-					<Col style={ { maxWidth: 150 } }>
-						<Item regular style={ styles.formItem }>
-							<Button transparent onPress={ () => this.setState({ showingEnd: true }) }>
-								<Text style={ {
-									color: "#ee5253",
-									fontSize: 18,
-									fontWeight: "600"
-								} }>{ this.state.showEndText ? this.state.endDate.toLocaleTimeString() : "End Time" }</Text>
-							</Button>
-						</Item>
-					</Col>
-				</Grid>
+						<Col style={ { maxWidth: 150 } }>
+							<Item regular style={ styles.formItem }>
+								<Button transparent onPress={ () => {
+									Keyboard.dismiss;
+									this.setState({ showingEnd: true })
+								}
+								}>
+									<Text style={ {
+										color: "#DE3C4B",
+										fontSize: 18,
+										fontWeight: "600"
+									} }>{ this.state.showEndText ? this.state.endDate.toLocaleTimeString(navigator.language, {
+										hour: "2-digit",
+										minute: "2-digit"
+									}) : "End Time" }</Text>
+								</Button>
+							</Item>
+						</Col>
+					</Grid>
 
-				<Field name='description' component={ this.renderDescriptionInput } />
+					<Field name='description' component={ this.renderDescriptionInput } />
 
-				{
-					this.state.showingDate ?
-						<Field name='date' component={ this.renderDateInput } />
-						:
-						undefined
-				}
+					{
+						this.state.showingDate ?
+							<Field name='date' component={ this.renderDateInput } />
+							:
+							undefined
+					}
 
-				{
-					this.state.showingStart ?
-						<Field name='startTime' component={ this.renderStartInput } />
-						:
-						undefined
-				}
+					{
+						this.state.showingStart ?
+							<Field name='startTime' component={ this.renderStartInput } />
+							:
+							undefined
+					}
 
-				{
-					this.state.showingEnd ?
-						<Field name='endTime' component={ this.renderEndInput } />
-						:
-						undefined
-				}
-			</View>
+					{
+						this.state.showingEnd ?
+							<Field name='endTime' component={ this.renderEndInput } />
+							:
+							undefined
+					}
+				</ScrollView>
+			</TouchableWithoutFeedback>
 		);
 	}
 
@@ -164,7 +183,7 @@ class PartyForm extends React.Component {
 		return (
 			<Item regular style={ { borderColor: "#000", marginLeft: 20 } }>
 				<Input placeholder="what's the plan?" style={ styles.titleInput }
-				       selectionColor={ "#ee5253" } { ...input }
+				       selectionColor={ "#DE3C4B" } { ...input }
 				       onChangeText={ text => {
 					       input.onChange(text);
 					       this.props.onTitleChange(text);
@@ -180,7 +199,7 @@ class PartyForm extends React.Component {
 			<Item stackedLabel style={ styles.formItem }>
 				<Label style={ { color: "#FFF", fontSize: 18, fontWeight: "600" } }>location*</Label>
 				<Input placeholder="123 main street" style={ styles.formInput }
-				       selectionColor={ "#ee5253" } { ...input } />
+				       selectionColor={ "#DE3C4B" } { ...input } />
 			</Item>
 		);
 	}
@@ -193,7 +212,8 @@ class PartyForm extends React.Component {
 				<Label style={ { flexDirection: "row" } }>
 					<Text style={ { color: "#fff", fontSize: 18, fontWeight: "600" } }>general location</Text>
 				</Label>
-				<Input placeholder="main street" style={ styles.formInput } selectionColor={ "#ee5253" } { ...input } />
+				<Input placeholder="on main street" style={ styles.formInput }
+				       selectionColor={ "#DE3C4B" } { ...input } />
 			</Item>
 		);
 	}
@@ -291,8 +311,8 @@ class PartyForm extends React.Component {
 		return (
 			<Item style={ styles.formItem }>
 				<Textarea bordered={ false } underline={ false } rowSpan={ 10 }
-				          style={ [styles.formInput, { left: -9, top: 12 }] }
-				          placeholder={ "description" } selectionColor={ "#ee5253" }
+				          style={ [styles.formInput, { left: -9, top: 12, width: 300 }] }
+				          placeholder={ "description" } selectionColor={ "#DE3C4B" }
 				          { ...input } />
 			</Item>
 		);

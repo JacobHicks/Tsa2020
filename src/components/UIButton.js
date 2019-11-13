@@ -12,7 +12,7 @@ const UIButton = function(props) {
 
 const styles = StyleSheet.create({
 	button: {
-		backgroundColor: "#ee5253",
+		backgroundColor: "#DE3C4B",
 	},
 	text: {
 		color: "#FFF",
