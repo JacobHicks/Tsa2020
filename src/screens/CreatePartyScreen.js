@@ -85,13 +85,16 @@ const CreatePartyScreen = function (props) {
 
     const enabledCallback = (enabled) => setPostButtonDisabled(!enabled);
     const onSubmitPress = () => formReference.submit();
+    const {navigation} = props;
 
     return (
         <Container style={styles.body}>
             <StatusBar/>
             <Header style={styles.header}>
                 <Left>
-                    <Button transparent>
+                    <Button transparent onPress={() => {
+                        navigation.goBack();
+                    }}>
                         <Text style={styles.headerButtonText}>Cancel</Text>
                     </Button>
                 </Left>
