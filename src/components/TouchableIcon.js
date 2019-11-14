@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 		borderColor: "transparent"
 	},
 	text: {
-		color: "#333",
+		color: "#2B2D42",
 		fontWeight: "700",
 		fontSize: 16
 	}

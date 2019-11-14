@@ -95,9 +95,7 @@ const Styles = StyleSheet.create({
 
         color: '#FFF',
 
-        fontFamily: 'Glacial Indifference',
         fontSize: 36.67,
-        lineHeight: 43,
         fontWeight: '700',   //React Native wants this in quotes
     },
 

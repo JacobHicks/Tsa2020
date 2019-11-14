@@ -45,8 +45,10 @@ export default class PartyCard extends React.Component {
 
 	render() {
 		return (
-			<Card transparent style={ [styles.partyCard, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
-				<CardItem cardBody style={ [styles.cardBody, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+			<Card transparent
+			      style={ [styles.partyCard, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+				<CardItem cardBody
+				          style={ [styles.cardBody, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
 					<Text style={ styles.title } numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
 					<Text style={ styles.dateTime }>{ this.formatDate(this.props.partyInfo.time) }</Text>
 				</CardItem>
@@ -66,7 +68,8 @@ export default class PartyCard extends React.Component {
 							ReactNativeHaptic.generate("notification");
 							this.props.joinParty();
 						} }>
-							<Text style={ styles.joinButtonText }>{this.props.partyInfo.enrolled}</Text>
+							<Text
+								style={ styles.joinButtonText }>{ this.props.partyInfo.enrolled ? "Joined" : "Join" }</Text>
 						</Button>
 					</Col>
 				</Grid>
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
 		padding: 0,
 		backgroundColor: "#000",
 		paddingBottom: 30,
-		maxWidth: Dimensions.get("window").width * .8
+		width: "100%"
 	},
 	cardBody: {
 		backgroundColor: "#000",
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row"
 	},
 	userIsGoing: {
-		backgroundColor: "#222"
+		backgroundColor: "#111"
 	},
 	defaultStyle: {},
 	dateTime: {
@@ -104,12 +107,13 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 		fontSize: 24,
 		left: 14,
-		top: 24
+		top: 24,
+		maxWidth: Dimensions.get("window").width * 0.70
 	},
 	shortLocation: {
 		color: "#999",
 		fontWeight: "600",
-		marginTop: 37,
+		marginTop: 27,
 		marginLeft: 14,
 		fontSize: 16,
 		maxWidth: 230
@@ -123,29 +127,31 @@ const styles = StyleSheet.create({
 		fontWeight: "600"
 	},
 	buttonGrid: {
-		marginTop: -25,
-		maxWidth: 75,
-		left: Dimensions.get("window").width * .66
+		marginTop: -50,
+		width: 120,
+		left: Dimensions.get("window").width * .65
 
 	},
 	joinButton: {
-		height: 30,
-		width: 75,
-		backgroundColor: "#DE3C4B"
+		textAlign: "center",
+		backgroundColor: "#DE3C4B",
+		marginLeft: -15,
+		height: 30
 	},
 	joinButtonText: {
-		textAlign: "center",
+
 		fontWeight: "700",
-		fontSize: 12
+		fontSize: 12,
+		// paddingHorizontal: 5
 	},
 	shareButton: {
-		height: 30,
-		width: 30,
+		textAlign: "center",
 		backgroundColor: "#DE3C4B"
 	},
 	shareButtonText: {
 		textAlign: "center",
 		fontWeight: "700",
-		fontSize: 12
+		fontSize: 12,
+		// paddingHorizontal:
 	}
 });

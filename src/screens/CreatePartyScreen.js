@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         color: '#777',
     },
     postButtonIsEnabled: {
-        color: '#ee5253',
+        color: '#DE3C4B',
     },
     form: {
         marginTop: 20,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     infoButton: { // todo replace with icon
-        color: '#ee5253',
+        color: '#DE3C4B',
     },
     testing: {
         color: '#FFF',

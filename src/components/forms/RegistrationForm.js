@@ -14,12 +14,12 @@ const validate = values => {
 			error.phoneNumber = "Invalid phone number";
 		}
 	}
-	if (values.name.length === 0) {
-		error.name = "Enter your full name"
-	}
-	if (values.institution.length === 0) {
-		error.institution = "Enter the name of your school"
-	}
+	// if (values.name.length === 0) {
+	// 	error.name = "Enter your full name"
+	// }
+	// if (values.institution.length === 0) {
+	// 	error.institution = "Enter the name of your school"
+	// }
 	return error;
 };
 

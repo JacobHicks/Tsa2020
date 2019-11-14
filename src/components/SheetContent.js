@@ -176,12 +176,13 @@ const styles = StyleSheet.create({
         fontSize: Dimensions.get('window').width * .03,
         fontWeight: '400',
         color: '#999',
+        maxWidth: Dimensions.get('window').width * .7,
     },
 
     joinButton: {
-        backgroundColor: '#ee5253',
+        backgroundColor: '#DE3C4B',
         borderRadius: 32,
-        borderColor: '#ee5253',
+        borderColor: '#DE3C4B',
         width: Dimensions.get('window').width * .51,
         height: Dimensions.get('window').height * .07,
     },

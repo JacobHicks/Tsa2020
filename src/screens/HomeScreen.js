@@ -266,7 +266,7 @@ export default class HomeScreen extends React.Component {
                 <Container style={styles.body}>
                     <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
                         <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={'ThreeBounce'}
-                                 color={"#ee5253"}/>
+                                 color={"#DE3C4B"}/>
                         <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
                     </View>
                 </Container>
@@ -352,7 +352,7 @@ export default class HomeScreen extends React.Component {
                                 backgroundColor: "#111"
                             },
                             draggableIcon: {
-                                backgroundColor: "#ee5253",
+                                backgroundColor: "#DE3C4B",
                                 width: 75,
                                 top: 5
                             }

@@ -106,7 +106,7 @@ export default class MVPProfileScreen extends React.Component {
 			const attendees = QuerySnapshot.docs;
 			attendees.forEach(attendeeSnapshot => {
 				const uid = attendeeSnapshot.uid;
-				db.collection('users').doc(uid).collection('enrolledParties').where('party', '==', party).get().then(QuerySnapshot => {
+				db.collection("users").doc(uid).collection("enrolledParties").where("party", "==", party).get().then(QuerySnapshot => {
 					QuerySnapshot.docs.forEach(rsvpSnapshot => {
 						rsvpSnapshot.ref.delete();
 					});
@@ -155,24 +155,11 @@ export default class MVPProfileScreen extends React.Component {
 						showsVerticalScrollIndicator={ false }
 						data={ this.state.parties }
 						style={ {
-							marginLeft: "10%",
-							marginRight: "10%",
-							paddingTop: 30
+							marginRight: "6%",
+							paddingTop: 25
 						} }
 						ListHeaderComponent={
 							<View>
-								{/*<View style={{*/ }
-								{/*    flexDirection: 'column',*/ }
-								{/*    alignItems: 'center',*/ }
-								{/*}}>*/ }
-								{/*    <Text style={styles.nameText}>*/ }
-								{/*        {navigation.getParam('name')}*/ }
-								{/*    </Text>*/ }
-								{/**/ }
-								{/*    <Text style={styles.schoolText}>*/ }
-								{/*        {navigation.getParam('institution')}*/ }
-								{/*    </Text>*/ }
-								{/*</View>*/ }
 								{ this.state.hostedParties.length > 0 &&
 								<View>
 									<Text style={ styles.walletText }>
@@ -197,7 +184,7 @@ export default class MVPProfileScreen extends React.Component {
 									<Text style={ styles.walletText }>
 										RSVPs
 									</Text> :
-									<Text style={ styles.walletText }>No Parties :(</Text>
+									<Text style={ styles.walletText }>Ongoing Parties</Text>
 								}
 							</View>
 						}
@@ -231,7 +218,7 @@ export default class MVPProfileScreen extends React.Component {
 						} }
 					>
 						<SheetContent leaveParty={ this.leaveParty }
-									  cancelParty={this.cancelParty}
+						              cancelParty={ this.cancelParty }
 						              partyInfo={ this.state.selectedPartyInfo } />
 					</RBSheet>
 					<UIFooter name={ this.props.name } institution={ this.props.institution }
@@ -270,10 +257,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		fontSize: 25,
 		color: "#FFFFFF",
-		marginLeft: 15,
-		fontWeight: "700",
-		// marginTop: 20
-		// marginBottom: -7
+		fontWeight: "700"
 	},
 
 	header: {
@@ -284,20 +268,14 @@ const styles = StyleSheet.create({
 		color: "#FFF",
 		fontSize: Dimensions.get("window").width * .07,
 		fontWeight: "700",
-		marginBottom: 16
+		marginBottom: 16,
+		marginLeft: "5%"
 	},
 
 	nameText: {
 		color: "#FFF",
 		fontSize: Dimensions.get("window").width * .07,
 		fontWeight: "700"
-	},
-
-	schoolText: {
-		color: "#FFF",
-		fontSize: Dimensions.get("window").width * .04,
-		fontWeight: "700",
-		marginBottom: 44
 	},
 
 	bodyFooter: {

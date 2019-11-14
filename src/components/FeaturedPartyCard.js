@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import {
 	Card,
 	Text,
@@ -17,7 +17,8 @@ export default class PartyCard extends React.Component {
 					<Text style={ styles.partyInfo }>OCT 8 @ 5:00 PM</Text>
 					<Text style={ styles.partyTitle } ellipsizeMode='tail'
 					      numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
-					<Text style={ styles.partyGeneralLocation }>Main Street</Text>
+					<Text style={ styles.partyGeneralLocation }
+					      numberOfLines={ 1 }>{ this.props.partyInfo.generalLocation }</Text>
 				</CardItem>
 				<CardItem footer style={ styles.partyCardItem }>
 					<Grid style={ styles.buttonGrid }>
@@ -58,21 +59,24 @@ const styles = StyleSheet.create({ // todo change border radius
 	partyTitle: {
 		color: "#fff",
 		fontWeight: "700",
-		fontSize: 20,
-		maxWidth: 200
+		maxWidth: 200,
+		fontSize: Dimensions.get("window").width * .06,
+		top: -5
 	},
 	partyInfo: {
-		color: "#4D3540",
-		fontWeight: "700",
-		fontSize: 14
+		color: "#2B2D42",
+		fontWeight: "800",
+		fontSize: 12,
+		top: -5
 	},
 	partyGeneralLocation: {
-		color: "#FFF",
-		fontSize: 16
+		color: "#f0f3fa",
+		fontSize: 14,
+		fontWeight: "600",
 
 	},
 	partyAttendees: {
-		color: "#333",
+		color: "#2B2D42",
 		fontWeight: "800",
 		fontSize: 12
 	},

@@ -35,13 +35,12 @@ const UIFooter = function(props) {
 
 const styles = StyleSheet.create({
 	footer: {
-		backgroundColor: "#555",
-		borderTopWidth: .5,
-		borderColor: "#FFF",
 		height: 50
 	},
 	footerTab: {
-		backgroundColor: "#000"
+		backgroundColor: "#000",
+		borderTopWidth: .05,
+		borderColor: "#FFF",
 	},
 	footerButton: {
 		backgroundColor: "#000",
