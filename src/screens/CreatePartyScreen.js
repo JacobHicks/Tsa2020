@@ -4,21 +4,13 @@ import {
     Container,
     Header,
     Content,
-    Form,
-    Item,
-    Input,
     Left,
     Right,
     Button,
-    Icon,
     Body,
-    Grid,
-    Col,
-    DatePicker,
-    Textarea,
-    Label,
 } from 'native-base';
 
+import Icon from "react-native-vector-icons/MaterialIcons";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import PartyForm from '../components/forms/PartyForm';
@@ -95,7 +87,7 @@ const CreatePartyScreen = function (props) {
                     <Button transparent onPress={() => {
                         navigation.goBack();
                     }}>
-                        <Text style={styles.headerButtonText}>Cancel</Text>
+                        <Icon name='arrow-back' size={ 30 } color='#FFF' />
                     </Button>
                 </Left>
                 <Body>
