@@ -326,10 +326,7 @@ export default class HomeScreen extends React.Component {
                                         onPress={() => this.showPartySheet(item)}>
                                         <View>
                                             <PartyCard
-                                                title={item.name}
-                                                time={item.time} shortLocation={item.shortLocation}
-                                                attendees={item.attendees}
-                                                school={this.state.institution}
+                                                partyInfo={item}
                                                 joinParty={() => this.enrollInParty(item.partyReference, item)}
                                                 leaveParty={() => this.leaveParty(item.partyReference, item)}
                                             />

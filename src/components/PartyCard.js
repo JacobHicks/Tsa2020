@@ -45,18 +45,18 @@ export default class PartyCard extends React.Component {
 
 	render() {
 		return (
-			<Card transparent style={ [styles.partyCard, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
-				<CardItem cardBody style={ [styles.cardBody, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
-					<Text style={ styles.title } numberOfLines={ 2 }>{ this.props.title }</Text>
-					<Text style={ styles.dateTime }>{ this.formatDate(this.props.time) }</Text>
+			<Card transparent style={ [styles.partyCard, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+				<CardItem cardBody style={ [styles.cardBody, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+					<Text style={ styles.title } numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
+					<Text style={ styles.dateTime }>{ this.formatDate(this.props.partyInfo.time) }</Text>
 				</CardItem>
 				<Text style={ styles.shortLocation } numberOfLines={ 1 }>
-					{ this.props.shortLocation }
+					{ this.props.partyInfo.generalLocation }
 				</Text>
 				<Grid style={ styles.buttonGrid }>
 					<Col>
 						<Button style={ styles.shareButton }
-						        onPress={ () => this.onShare(this.props.school, this.props.title) }>
+						        onPress={ () => this.onShare(this.props.partyInfo.institution, this.props.partyInfo.name) }>
 							<Text style={ styles.shareButtonText }>S</Text>
 						</Button>
 					</Col>
@@ -66,7 +66,7 @@ export default class PartyCard extends React.Component {
 							ReactNativeHaptic.generate("notification");
 							this.props.joinParty();
 						} }>
-							<Text style={ styles.joinButtonText }>{this.props.enrolled}</Text>
+							<Text style={ styles.joinButtonText }>{this.props.partyInfo.enrolled}</Text>
 						</Button>
 					</Col>
 				</Grid>
