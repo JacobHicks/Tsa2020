@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 	},
 	defaultStyle: {},
 	dateTime: {
-		color: "#ee5253",
+		color: "#DE3C4B",
 		position: "absolute",
 		top: 7,
 		left: 14,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 	joinButton: {
 		height: 30,
 		width: 75,
-		backgroundColor: "#ee5253"
+		backgroundColor: "#DE3C4B"
 	},
 	joinButtonText: {
 		textAlign: "center",
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 	shareButton: {
 		height: 30,
 		width: 30,
-		backgroundColor: "#ee5253"
+		backgroundColor: "#DE3C4B"
 	},
 	shareButtonText: {
 		textAlign: "center",

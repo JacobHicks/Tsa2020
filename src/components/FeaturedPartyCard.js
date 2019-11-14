@@ -17,11 +17,11 @@ export default class PartyCard extends React.Component {
 					<Text style={ styles.partyInfo }>OCT 8 @ 5:00 PM</Text>
 					<Text style={ styles.partyTitle } ellipsizeMode='tail'
 					      numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
-					<Text style={styles.partyGeneralLocation}>@ Main Street</Text>
+					<Text style={ styles.partyGeneralLocation }>Main Street</Text>
 				</CardItem>
 				<CardItem footer style={ styles.partyCardItem }>
 					<Grid style={ styles.buttonGrid }>
-						<Col style={{ flex: 1, flexDirection: "row", }}>
+						<Col style={ { flex: 1, flexDirection: "row" } }>
 							<TouchableIcon>X<Text style={ styles.partyAttendees }> 25+</Text></TouchableIcon>
 						</Col>
 						<Col>
@@ -45,11 +45,11 @@ const styles = StyleSheet.create({ // todo change border radius
 		width: 220,
 		borderRadius: 15,
 		height: 135,
-		backgroundColor: "#ee5253",
-		flex: 1,
+		backgroundColor: "#DE3C4B",
+		flex: 1
 	},
 	partyCardItem: {
-		backgroundColor: "#ee5253",
+		backgroundColor: "#DE3C4B",
 		borderRadius: 12,
 		paddingLeft: 15,
 		flexDirection: "column",
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({ // todo change border radius
 	partyTitle: {
 		color: "#fff",
 		fontWeight: "700",
-		fontSize: 22,
+		fontSize: 20,
 		maxWidth: 200
 	},
 	partyInfo: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({ // todo change border radius
 	},
 	partyGeneralLocation: {
 		color: "#FFF",
-		fontSize: 16,
+		fontSize: 16
 
 	},
 	partyAttendees: {
@@ -78,6 +78,6 @@ const styles = StyleSheet.create({ // todo change border radius
 	},
 	buttonGrid: {
 		alignContent: "space-between",
-		bottom: -10
+		bottom: 10
 	}
 });

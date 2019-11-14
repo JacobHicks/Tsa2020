@@ -25,7 +25,7 @@ export default class PartyWalletCard extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#ee5253",
+		backgroundColor: "#DE3C4B",
 		borderRadius: 13,
 		width: "100%",
 		height: Dimensions.get("window").height * .19,

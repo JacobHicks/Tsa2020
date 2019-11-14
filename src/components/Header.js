@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#000"
 	},
 	headerText: {
-		color: "#ee5253",
+		color: "#DE3C4B",
 		fontSize: 16,
 		textTransform: "uppercase",
 		fontWeight: "700",
