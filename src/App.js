@@ -5,8 +5,7 @@ import InitialSignup from './screens/InitialSignup';
 import TextConfirm from './screens/TextConfirm';
 import CreatePartyScreen from './screens/CreatePartyScreen';
 
-import TestScreen from './screens/TestScreen';
-import {fadeIn, fromBottom, fromLeft, fromRight} from 'react-navigation-transitions';
+import {fadeIn, fromLeft, fromRight} from 'react-navigation-transitions';
 import InstitutionList from './screens/InstitutionList';
 import MVPProfileScreen from './screens/MVPProfileScreen';
 import EntryScreen from './screens/EntryScreen';

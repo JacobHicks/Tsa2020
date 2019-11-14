@@ -1,12 +1,20 @@
 import React from "react";
-import DoubleTap from "../components/MultiTap";
 import PartyCard from "../components/PartyCard";
 import FeaturedPartyCard from "../components/FeaturedPartyCard";
 import SheetContent from "../components/SheetContent";
 import Footer from "../components/UIFooter";
 import Header from "../components/Header";
 import {Container, Button} from "native-base";
-import {Text, View, StyleSheet, FlatList, RefreshControl, Dimensions} from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    FlatList,
+    RefreshControl,
+    Dimensions,
+    TouchableWithoutFeedback,
+    TouchableOpacity
+} from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 import firestore from "@react-native-firebase/firestore";
@@ -90,7 +98,6 @@ export default class HomeScreen extends React.Component {
                             };
 
                             if (rawParty.endTime < new Date().getTime()) {
-                                docs[i].ref.delete();
                                 this.cancelParty(docs[i].ref, formattedParty);
                             } else {
                                 parties.push(formattedParty);
@@ -172,30 +179,36 @@ export default class HomeScreen extends React.Component {
 
     showPartySheet(party) {
         this.setState({
-            selectedPartyInfo: {
-                name: party.name,
-                host: party.host,
-                description: party.description,
-                time: party.time,
-                endTime: party.endTime,
-                location: party.location,
-                generalLocation: party.generalLocation,
-                partyReference: party.partyReference,
-                enrolled: party.enrolled,
-                partyInfo: party
-            }
+            selectedPartyInfo: this.getPartyInfo(party)
         });
         this.RBSheet.open();
     }
 
+    getPartyInfo(party) {
+        return {
+            name: party.name,
+            host: party.host,
+            description: party.description,
+            time: party.time,
+            endTime: party.endTime,
+            location: party.location,
+            generalLocation: party.generalLocation,
+            partyReference: party.partyReference,
+            enrolled: party.enrolled,
+            partyInfo: party
+        }
+    }
+
     enrollInParty(party, partyInfo) {
-        db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
-            party: party
-        });
+        if(!partyInfo.enrolled) {
+            db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
+                party: party
+            });
 
-        party.collection("attendees").add({uid: auth().currentUser.uid});
+            party.collection("attendees").add({uid: auth().currentUser.uid});
 
-        partyInfo.enrolled = true;
+            partyInfo.enrolled = true;
+        }
     }
 
     leaveParty(party, partyInfo) {
@@ -293,32 +306,37 @@ export default class HomeScreen extends React.Component {
                                         enableSnap={true}
                                         renderItem={(item) => {
                                             return (
-                                                <DoubleTap onDoublePress={() => this.enrollInParty(item.item)}
-                                                           onPress={() => this.showPartySheet(item.item)}>
+                                                <TouchableWithoutFeedback
+                                                    onLongPress={() => this.enrollInParty(item.item.partyReference, item.item)}
+                                                    onPress={() => this.showPartySheet(item.item)}>
                                                     <View>
                                                         <FeaturedPartyCard partyInfo={item.item}/>
                                                     </View>
-                                                </DoubleTap>
+                                                </TouchableWithoutFeedback>
                                             );
                                         }}
                                     />
                                     <Text style={styles.titleText}>Parties</Text>
                                 </View>}
                             data={this.state.parties}
-                            renderItem={({item}) =>
-                                <DoubleTap onDoublePress={() => this.enrollInParty(item.key)}
-                                           onPress={() => this.showPartySheet(item)}>
-                                    <View>
-                                        <PartyCard
-                                            title={item.name}
-                                            time={item.time} shortLocation={item.shortLocation}
-                                            attendees={item.attendees}
-                                            school={this.state.institution}
-                                            joinParty={() => this.enrollInParty(item.partyReference, item)}
-                                            leaveParty={() => this.leaveParty(item.partyReference, item)}
-                                        />
-                                    </View>
-                                </DoubleTap>}
+                            renderItem={({item}) => {
+                                return (
+                                    <TouchableWithoutFeedback
+                                        onLongPress={() => this.enrollInParty(item.partyReference, item)}
+                                        onPress={() => this.showPartySheet(item)}>
+                                        <View>
+                                            <PartyCard
+                                                title={item.name}
+                                                time={item.time} shortLocation={item.shortLocation}
+                                                attendees={item.attendees}
+                                                school={this.state.institution}
+                                                joinParty={() => this.enrollInParty(item.partyReference, item)}
+                                                leaveParty={() => this.leaveParty(item.partyReference, item)}
+                                            />
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                )
+                            }}
                         /> :
                         <View><Text style={styles.titleText}>No parties at your school</Text><Button>+</Button></View>
                     }
