@@ -8,8 +8,10 @@ import {
 	Grid,
 	Col
 } from "native-base";
+import TouchableIcon from "../components/TouchableIcon";
 import ReactNativeHaptic from "react-native-haptic";
 import { firebase } from "@react-native-firebase/dynamic-links";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 function formatAMPM(date) {
 	let hours = date.getHours();
@@ -25,6 +27,14 @@ const userIsGoing = false; // todo get from props
 // todo fill in share info
 
 export default class PartyCard extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			enrolled: this.props.partyInfo.enrolled
+		};
+
+	}
+
 	onShare = async (school, name) => {
 		const link = await firebase.dynamicLinks().buildLink({
 			link: "https://banger.page.link/joinParty/" + school + "/" + name,
@@ -41,7 +51,11 @@ export default class PartyCard extends React.Component {
 		const formattedTime = new Date(time);
 		const now = new Date();
 		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-		if (now > formattedTime) {
+		const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+		const daysToDate = Math.round((formattedTime - now) / (1000 * 60 * 60 * 24));
+		if (daysToDate < 7 && daysToDate !== 0) {
+			return days[formattedTime.getDay()]
+		} else if (now > formattedTime) {
 			return "NOW";
 		} else if ((formattedTime.getDate() === now.getDate()) && (formattedTime.getMonth() === now.getMonth()) && (formattedTime.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
 			return "TODAY";
@@ -50,35 +64,41 @@ export default class PartyCard extends React.Component {
 		}
 	}
 
-
 	render() {
-
 		return (
 			<Card transparent
-			      style={ [styles.partyCard, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+			      style={ [styles.partyCard, this.state.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
 				<CardItem cardBody
-				          style={ [styles.cardBody, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
+				          style={ [styles.cardBody, this.state.enrolled ? styles.userIsGoing : styles.defaultStyle] }>
 					<Text style={ styles.title } numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
 					<Text style={ styles.dateTime }>{ this.formatDate(this.props.partyInfo.time) }</Text>
 				</CardItem>
 				<Text style={ styles.shortLocation } numberOfLines={ 1 }>
 					{ this.props.partyInfo.generalLocation }
 				</Text>
-				<Grid style={ styles.buttonGrid }>
-					<Col>
-						<Button style={ styles.shareButton }
-						        onPress={ () => this.onShare(this.props.partyInfo.institution, this.props.partyInfo.name) }>
-							<Text style={ styles.shareButtonText }>S</Text>
-						</Button>
-					</Col>
 
+				<Grid style={ styles.buttonGrid }>
 					<Col>
 						<Button style={ styles.joinButton } onPress={ () => {
 							ReactNativeHaptic.generate("notification");
+							this.setState({
+								enrolled: !this.state.enrolled
+							})
+
 							this.props.joinParty();
 						} }>
 							<Text
-								style={ styles.joinButtonText }>{ this.props.partyInfo.enrolled ? "Joined" : "Join" }</Text>
+								style={ styles.joinButtonText }>{ this.state.enrolled ?
+								<Icon name='sign-out-alt' size={ 18 }
+								      color='#DE3C4B' /> : <Icon name='sign-in-alt' size={ 18 }
+								                                 color='#999' /> }</Text>
+						</Button>
+					</Col>
+					<Col>
+						<Button style={ styles.shareButton }
+						        onPress={ () => this.onShare(this.props.partyInfo.institution, this.props.partyInfo.name) }>
+							<Text style={ styles.shareButtonText }><Icon name='external-link-alt' size={ 18 }
+							                                             color='#999' /></Text>
 						</Button>
 					</Col>
 				</Grid>
@@ -117,7 +137,7 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		left: 14,
 		top: 24,
-		maxWidth: Dimensions.get("window").width * 0.70
+		maxWidth: Dimensions.get("window").width * 0.65
 	},
 	shortLocation: {
 		color: "#999",
@@ -136,31 +156,20 @@ const styles = StyleSheet.create({
 		fontWeight: "600"
 	},
 	buttonGrid: {
-		marginTop: -50,
-		width: 120,
-		left: Dimensions.get("window").width * .65
-
+		marginTop: -30,
+		left: Dimensions.get("window").width * .73,
+		marginBottom: -25
 	},
 	joinButton: {
-		textAlign: "center",
-		backgroundColor: "#DE3C4B",
-		marginLeft: -15,
-		height: 30
+		backgroundColor: "transparent",
+
 	},
 	joinButtonText: {
-
 		fontWeight: "700",
-		fontSize: 12,
-		// paddingHorizontal: 5
+		textAlign: "center"
 	},
 	shareButton: {
-		textAlign: "center",
-		backgroundColor: "#DE3C4B"
-	},
-	shareButtonText: {
-		textAlign: "center",
-		fontWeight: "700",
-		fontSize: 12,
-		// paddingHorizontal:
+		backgroundColor: "transparent",
+		marginLeft: -145
 	}
 });

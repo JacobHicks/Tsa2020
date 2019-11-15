@@ -5,23 +5,30 @@ import { Dimensions, Text, View } from "react-native";
 
 const isUserHostedParty = true;
 export default class PartyWalletCard extends React.Component {
-	render() {
-		const date = new Date(this.props.partyInfo.time);
+
+	formatDate(time) {
+		const date = new Date(time);
 		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; // todo optimize ples
 		const now = new Date();
-		const renderDate = function(date, months, now) {
-			if (now > date) {
-				return "NOW";
-			} else if ((date.getDate() === now.getDate()) && (date.getMonth() === now.getMonth()) && (date.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
-				return "TODAY";
-			} else {
-				return `${ months[date.getMonth()] } ${ date.getDate()  }`;
-			}
-		};
+		const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+		const daysToDate = Math.round((date - now) / (1000 * 60 * 60 * 24));
+		if (daysToDate < 7 && daysToDate !== 0) {
+			return days[date.getDay()]
+		} else if (now > date) {
+			return "NOW";
+		} else if ((date.getDate() === now.getDate()) && (date.getMonth() === now.getMonth()) && (date.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
+			return "TODAY";
+		} else {
+			return `${ months[date.getMonth()] } ${ date.getDate() }`;
+		}
+	}
+
+	render() {
+
 		return (
 			<View style={ styles.featuredPartyCard }>
 				<View style={ styles.dateContainer }>
-					<Text style={ styles.dateText }>{ renderDate(date, months, now) }</Text>
+					<Text style={ styles.dateText }>{ this.formatDate(this.props.partyInfo.time) }</Text>
 				</View>
 				<View style={ styles.container }>
 					<View style={ styles.textContainer }>
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: "#DE3C4B",
 		borderRadius: 13,
-		width: "100%",
+		width: "95%",
 		height: Dimensions.get("window").height * .12,
 		// marginTop: 10,
 		// marginBottom: 10,

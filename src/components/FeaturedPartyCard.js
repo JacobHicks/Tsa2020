@@ -5,10 +5,11 @@ import {
 	Text,
 	CardItem,
 	Grid,
-	Col
+	Col,
+	View
 } from "native-base";
 import TouchableIcon from "../components/TouchableIcon";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 function formatAMPM(date) {
 	let hours = date.getHours();
@@ -25,7 +26,11 @@ export default class PartyCard extends React.Component {
 		const formattedTime = new Date(time);
 		const now = new Date();
 		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-		if (now > formattedTime) {
+		const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+		const daysToDate = Math.round((formattedTime - now) / (1000 * 60 * 60 * 24));
+		if (daysToDate < 7 && daysToDate !== 0) {
+			return days[formattedTime.getDay()]
+		} else if (now > formattedTime) {
 			return "NOW";
 		} else if ((formattedTime.getDate() === now.getDate()) && (formattedTime.getMonth() === now.getMonth()) && (formattedTime.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
 			return "TODAY";
@@ -38,25 +43,19 @@ export default class PartyCard extends React.Component {
 		return (//All props you need will be in this.props.partyInfo
 			<Card transparent style={ styles.partyCard }>
 				<CardItem header style={ styles.partyCardItem }>
-					<Text style={ styles.partyInfo }>{ this.formatDate(this.props.partyInfo.time) }</Text>
-					<Text style={ styles.partyTitle } ellipsizeMode='tail'
-					      numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
-					<Text style={ styles.partyGeneralLocation }
-					      numberOfLines={ 1 }>{ this.props.partyInfo.generalLocation }</Text>
-				</CardItem>
-				<CardItem footer style={ styles.partyCardItem }>
+					<View style={ styles.textContainer }>
+						<Text style={ styles.partyInfo }>{ this.formatDate(this.props.partyInfo.time) }</Text>
+						<Text style={ styles.partyTitle } ellipsizeMode='tail'
+						      numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
+						<Text style={ styles.partyGeneralLocation }
+						      numberOfLines={ 1 }>{ this.props.partyInfo.generalLocation }</Text>
+					</View>
 					<Grid style={ styles.buttonGrid }>
 						<Col style={ { flex: 1, flexDirection: "row" } }>
-							<TouchableIcon><Icon name='add-circle' size={ 20 } color='#2B2D42' /><Text style={ styles.partyAttendees }> 25+</Text></TouchableIcon>
+							<TouchableIcon><Icon name='sign-in-alt' size={ 21 } color='#2B2D42' /></TouchableIcon>
 						</Col>
 						<Col>
-							<TouchableIcon><Icon name='caretup' size={ 20 } color='#2B2D42' /></TouchableIcon>
-						</Col>
-						<Col>
-							<TouchableIcon><Icon name='share' size={ 20 } color='#2B2D42' /></TouchableIcon>
-						</Col>
-						<Col>
-							<TouchableIcon><Icon name='info' size={ 20 } color='#2B2D42' /></TouchableIcon>
+							<TouchableIcon><Icon name='external-link-alt' size={ 21 } color='#2B2D42' /></TouchableIcon>
 						</Col>
 					</Grid>
 				</CardItem>
@@ -84,8 +83,9 @@ const styles = StyleSheet.create({ // todo change border radius
 		color: "#fff",
 		fontWeight: "700",
 		maxWidth: 200,
-		fontSize: Dimensions.get("window").width * .06,
-		top: -5
+		fontSize: Dimensions.get("window").width * .065,
+		top: -2,
+		lineHeight: 23
 	},
 	partyInfo: {
 		color: "#2B2D42",
@@ -97,7 +97,10 @@ const styles = StyleSheet.create({ // todo change border radius
 		color: "#f0f3fa",
 		fontSize: 14,
 		fontWeight: "600",
-
+		top: -3
+	},
+	textContainer: {
+		minHeight: 81
 	},
 	partyAttendees: {
 		color: "#2B2D42",
@@ -105,7 +108,8 @@ const styles = StyleSheet.create({ // todo change border radius
 		fontSize: 12
 	},
 	buttonGrid: {
-		alignContent: "space-between",
 		bottom: 10,
+		maxWidth: 95,
+		marginLeft: -15
 	}
 });

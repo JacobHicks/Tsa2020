@@ -5,7 +5,6 @@ import {
     Button,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-// fix icons on ios
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 
@@ -58,7 +57,7 @@ export default class SheetContent extends React.Component {
                     </View>
 
                     <View style={styles.sheetView}>
-                        <Icon name='compass' size={Dimensions.get('window').width * .06} color='#8b8b8b'
+                        <Icon name='map-marker-alt' size={Dimensions.get('window').width * .06} color='#8b8b8b'
                               style={{marginRight: 15, marginTop: Dimensions.get('window').height * .005}}/>
                         <View style={styles.detailContainer}>
                             <Text style={styles.sheetDetail}>

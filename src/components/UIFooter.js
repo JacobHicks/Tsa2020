@@ -1,7 +1,8 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Footer, FooterTab, Button, Text } from "native-base";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import MaIcon from "react-native-vector-icons/MaterialIcons";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const UIFooter = function(props) {
 	const navigation = props.navigation;
@@ -13,17 +14,21 @@ const UIFooter = function(props) {
 				<Button style={ styles.footerButton }
 				        onPress={ () => navigation.navigate("Home", { name: name, institution: institution }) }
 				>
-					<Icon name='home' style={ props.homeIsActive ? styles.active : styles.icon } size={ 30 } />
+					{ props.homeIsActive ? <Icon name='glass-cheers' style={ styles.active } size={ 26 } /> :
+						<Icon name='wine-glass-alt' style={ styles.icon } size={ 26 } /> }
+
 				</Button>
 				<Button style={ styles.footerButton }
 				        onPress={ () => navigation.navigate("CreateParty", { name: name, institution: institution }) }
 				>
-					<Icon name='control-point' size={ 30 } color='#FFF' />
+					<MaIcon name="add-circle-outline" size={ 30 } color='#FFF' />
 				</Button>
 				<Button style={ styles.footerButton }
 				        onPress={ () => navigation.navigate("Profile", { name: name, institution: institution }) }
 				>
-					<Icon name='person' size={ 30 } style={ props.profileIsActive ? styles.active : styles.icon } />
+					{ props.profileIsActive ? <MaIcon name='person' size={ 30 } style={ styles.active } /> :
+						<MaIcon name='perm-identity' size={ 30 } style={ styles.icon } /> }
+
 				</Button>
 			</FooterTab>
 		</Footer>

@@ -203,7 +203,7 @@ export default class MVPProfileScreen extends React.Component {
 						} }
 						height={ Dimensions.get("window").height * .70 }
 						duration={ 250 }
-						animationType={ "fade" }
+						animationType={ "slide" }
 						closeOnDragDown={ true }
 						customStyles={ {
 							container: {
@@ -215,6 +215,9 @@ export default class MVPProfileScreen extends React.Component {
 								backgroundColor: "#DE3C4B",
 								width: 75,
 								top: 5
+							},
+							wrapper: {
+								backgroundColor: "transparent"
 							}
 						} }
 					>
