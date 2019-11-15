@@ -197,7 +197,7 @@ class PartyForm extends React.Component {
 
 		return (
 			<Item stackedLabel style={ styles.formItem }>
-				<Label style={ { color: "#FFF", fontSize: 18, fontWeight: "600" } }>location*</Label>
+				<Label style={ { color: "#FFF", fontSize: 18, fontWeight: "600" } }>location</Label>
 				<Input placeholder="123 main street" style={ styles.formInput }
 				       selectionColor={ "#DE3C4B" } { ...input } />
 			</Item>

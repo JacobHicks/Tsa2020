@@ -8,13 +8,37 @@ import {
 	Col
 } from "native-base";
 import TouchableIcon from "../components/TouchableIcon";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
+function formatAMPM(date) {
+	let hours = date.getHours();
+	let minutes = date.getMinutes();
+	const ampm = hours >= 12 ? "PM" : "AM";
+	hours = hours % 12;
+	hours = hours ? hours : 12;
+	minutes = minutes < 10 ? "0" + minutes : minutes;
+	return `${ hours }:${ minutes } ${ ampm }`;
+}
 
 export default class PartyCard extends React.Component {
+	formatDate(time) {
+		const formattedTime = new Date(time);
+		const now = new Date();
+		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+		if (now > formattedTime) {
+			return "NOW";
+		} else if ((formattedTime.getDate() === now.getDate()) && (formattedTime.getMonth() === now.getMonth()) && (formattedTime.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
+			return "TODAY";
+		} else {
+			return `${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`;
+		}
+	}
+
 	render() {
 		return (//All props you need will be in this.props.partyInfo
 			<Card transparent style={ styles.partyCard }>
 				<CardItem header style={ styles.partyCardItem }>
-					<Text style={ styles.partyInfo }>OCT 8 @ 5:00 PM</Text>
+					<Text style={ styles.partyInfo }>{ this.formatDate(this.props.partyInfo.time) }</Text>
 					<Text style={ styles.partyTitle } ellipsizeMode='tail'
 					      numberOfLines={ 2 }>{ this.props.partyInfo.name }</Text>
 					<Text style={ styles.partyGeneralLocation }
@@ -23,16 +47,16 @@ export default class PartyCard extends React.Component {
 				<CardItem footer style={ styles.partyCardItem }>
 					<Grid style={ styles.buttonGrid }>
 						<Col style={ { flex: 1, flexDirection: "row" } }>
-							<TouchableIcon>X<Text style={ styles.partyAttendees }> 25+</Text></TouchableIcon>
+							<TouchableIcon><Icon name='add-circle' size={ 20 } color='#2B2D42' /><Text style={ styles.partyAttendees }> 25+</Text></TouchableIcon>
 						</Col>
 						<Col>
-							<TouchableIcon>X</TouchableIcon>
+							<TouchableIcon><Icon name='caretup' size={ 20 } color='#2B2D42' /></TouchableIcon>
 						</Col>
 						<Col>
-							<TouchableIcon>X</TouchableIcon>
+							<TouchableIcon><Icon name='share' size={ 20 } color='#2B2D42' /></TouchableIcon>
 						</Col>
 						<Col>
-							<TouchableIcon>X</TouchableIcon>
+							<TouchableIcon><Icon name='info' size={ 20 } color='#2B2D42' /></TouchableIcon>
 						</Col>
 					</Grid>
 				</CardItem>
@@ -82,6 +106,6 @@ const styles = StyleSheet.create({ // todo change border radius
 	},
 	buttonGrid: {
 		alignContent: "space-between",
-		bottom: 10
+		bottom: 10,
 	}
 });

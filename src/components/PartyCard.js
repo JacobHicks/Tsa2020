@@ -39,11 +39,20 @@ export default class PartyCard extends React.Component {
 
 	formatDate(time) {
 		const formattedTime = new Date(time);
+		const now = new Date();
 		const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-		return `${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`;
+		if (now > formattedTime) {
+			return "NOW";
+		} else if ((formattedTime.getDate() === now.getDate()) && (formattedTime.getMonth() === now.getMonth()) && (formattedTime.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
+			return "TODAY";
+		} else {
+			return `${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`;
+		}
 	}
 
+
 	render() {
+
 		return (
 			<Card transparent
 			      style={ [styles.partyCard, this.props.partyInfo.enrolled ? styles.userIsGoing : styles.defaultStyle] }>

@@ -15,11 +15,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		borderColor: "transparent"
 	},
-	text: {
-		color: "#2B2D42",
-		fontWeight: "700",
-		fontSize: 16
-	}
 
 });
 

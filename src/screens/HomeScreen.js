@@ -362,7 +362,7 @@ export default class HomeScreen extends React.Component {
                                       cancelParty={this.cancelParty}
                                       partyInfo={this.state.selectedPartyInfo} userIsGoing={false}/>
                     </RBSheet>
-                    <Footer style={styles.bodyFooter} navigation={this.props.navigation}/>
+                    <Footer style={styles.bodyFooter} navigation={this.props.navigation} homeIsActive={true}/>
                 </Container>
             );
         }

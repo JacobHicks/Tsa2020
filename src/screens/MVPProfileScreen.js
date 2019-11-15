@@ -71,6 +71,7 @@ export default class MVPProfileScreen extends React.Component {
 				for (let i = 0; i < parties.length; i++) {
 					parties[i].key = i.toString();
 				}
+
 				callback(parties);
 			})
 		});
@@ -222,7 +223,7 @@ export default class MVPProfileScreen extends React.Component {
 						              partyInfo={ this.state.selectedPartyInfo } />
 					</RBSheet>
 					<UIFooter name={ this.props.name } institution={ this.props.institution }
-					          navigation={ navigation } />
+					          navigation={ navigation } profileIsActive={ true } />
 				</Container>
 			);
 		}

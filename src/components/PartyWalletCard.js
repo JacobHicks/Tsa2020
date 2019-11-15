@@ -15,7 +15,7 @@ export default class PartyWalletCard extends React.Component {
 			} else if ((date.getDate() === now.getDate()) && (date.getMonth() === now.getMonth()) && (date.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
 				return "TODAY";
 			} else {
-				return `${ date.getDate() } ${ months[date.getMonth()] }`;
+				return `${ months[date.getMonth()] } ${ date.getDate()  }`;
 			}
 		};
 		return (
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 		marginBottom: -65
 	},
 	dateContainer: {
-		backgroundColor: "#111",
+		backgroundColor: "#191919",
 		height: "20%",
 		borderRadius: 7,
 		left: -17.5,
