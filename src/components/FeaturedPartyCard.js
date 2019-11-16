@@ -35,7 +35,7 @@ export default class PartyCard extends React.Component {
 		} else if ((formattedTime.getDate() === now.getDate()) && (formattedTime.getMonth() === now.getMonth()) && (formattedTime.getFullYear() === now.getFullYear())) { // im sorry it has to be like this
 			return "TODAY";
 		} else {
-			return `${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`;
+			return `${ days[formattedTime.getDay()].substr(0, 3) }, ${ months[formattedTime.getMonth()] } ${ formattedTime.getDate() } @ ${ formatAMPM(formattedTime) }`;
 		}
 	}
 
