@@ -1,72 +1,92 @@
 import React from "react";
-import { StyleSheet, ImageBackground, View, Dimensions, StatusBar } from "react-native";
-import { Input, Item, Form, Button, Text } from "native-base";
+import {StyleSheet, ImageBackground, View, Dimensions, StatusBar, Image} from "react-native";
+import {Input, Item, Form, Button, Text} from "native-base";
 
-import background from "../../assets/images/party1.jpg";
+import logo from "../../assets/images/logo.png";
 import RegistrationForm from "../components/forms/RegistrationForm";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
+import {Provider} from "react-redux";
+import {createStore} from "redux";
 import allReducers from "../reducers";
+import auth from '@react-native-firebase/auth';
 
 const store = createStore(allReducers);
 export default class InitialSignup extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleRegistration = this.handleRegistration.bind(this);
-	}
+    constructor(props) {
+        super(props);
+        this.handleRegistration = this.handleRegistration.bind(this);
+        this.handleLogIn = this.handleLogIn.bind(this);
+        this.unsubscribeAuthListener = auth().onAuthStateChanged(this.handleLogIn)
+    }
 
-	render() {
-		return (
-			<View>
-				<ImageBackground source={ background } style={ Styles.background } />
-				<StatusBar barStyle="light-content" />
-				<Text style={ Styles.welcomeText }>
-					Welcome. Let's get partying.
-				</Text>
-				<View style={ Styles.formBounding }>
-					<Provider store={ store }>
-						<RegistrationForm onSubmit={ this.handleRegistration } navigation={ this.props.navigation } />
-					</Provider>
-				</View>
-			</View>
-		);
-	}
+    render() {
+        return (
+            <View style={{backgroundColor: '#425c5a', height: '100%'}}>
+                <StatusBar barStyle="light-content"/>
+                <View style={{alignItems: 'center', marginTop: 48}}>
+                    <Image source={logo}/>
+                    <Text style={Styles.logoText}>
+                        TSA 2020
+                    </Text>
+                </View>
+                <View style={Styles.formBounding}>
+                    <Provider store={store}>
+                        <RegistrationForm onSubmit={this.handleRegistration} navigation={this.props.navigation}/>
+                    </Provider>
+                </View>
+            </View>
+        );
+    }
 
-	handleRegistration(values) {
-		const { navigation } = this.props;
+    async handleRegistration(values) {
+        const {navigation} = this.props;
 
-		values.phoneNumber = values.phoneNumber.replace(/-|\s/g, "");   //remove all spaces and hyphens so we can guarantee our desired format
-		values.phoneNumber = "+1 " + values.phoneNumber.substring(0, 3) + "-" + values.phoneNumber.substring(3, 6) + "-" + values.phoneNumber.substring(6, 10);
+        if (values.confirmPassword !== undefined) {
+            try {
+                await auth().createUserWithEmailAndPassword(values.email, values.password);
+            } catch (e) {
+                console.error(e.message) //TODO handle this error properly
+            }
+        } else {
+            try {
+                await auth().signInWithEmailAndPassword(values.email, values.password);
+            } catch (e) {
+                console.error(e.message) //TODO handle this error properly
+            }
+        }
+        // navigation.navigate("TextConfirm", {
+        //     name: values.name,
+        //     phoneNumber: values.phoneNumber,
+        //     institution: values.institution
+        // });
+    }
 
-		navigation.navigate("TextConfirm", {
-			name: values.name,
-			phoneNumber: values.phoneNumber,
-			institution: values.institution
-		});
-	}
+    handleLogIn(user) {
+        const {navigation} = this.props;
+        if (user) {
+            navigation.navigate('Home', {user: user, name: 'JACOB', institution: 'Khan Academy'}).then(this.unsubscribeAuthListener)
+        }
+    }
 }
 
 const Styles = StyleSheet.create({
-	background: {
-		position: "absolute",
-		width: Dimensions.get("window").width,
-		height: Dimensions.get("window").height
-	},
+    background: {
+        position: "absolute",
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height
+    },
 
-	welcomeText: {
-		marginTop: "15%",
-		marginLeft: "11%",
-		width: "65%",
-		color: "#FFF",
-		fontSize: 36.67,
-		lineHeight: 43,
-		fontWeight: "700"   //React Native wants this in quotes
-	},
+    logoText: {
+        color: "#cb9e78",
+        marginTop: -4,
+        fontSize: 28,
+        lineHeight: 43,
+        fontWeight: "600"   //React Native wants this in quotes
+    },
 
-	formBounding: {
-		marginLeft: "10%",
-		marginTop: "8%",
-		width: "80%"
-	}
+    formBounding: {
+        marginLeft: 32,
+        marginTop: 48,
+        width: "80%"
+    }
 
 });

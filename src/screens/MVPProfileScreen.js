@@ -13,7 +13,7 @@ import { Spinner, Text } from "native-base";
 // import Icon from "react-native-vector-icons/MaterialIcons";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
-import PartyWalletCard from "../components/PartyWalletCard";
+import StreamWalletCard from "../components/StreamWalletCard";
 import { Container } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import SheetContent from "../components/SheetContent";
@@ -28,13 +28,13 @@ export default class MVPProfileScreen extends React.Component {
 			user: null,
 			parties: []
 		};
-		this.showPartySheet = this.showPartySheet.bind(this);
-		this.leaveParty = this.leaveParty.bind(this);
-		this.cancelParty = this.cancelParty.bind(this);
+		this.showStreamSheet = this.showStreamSheet.bind(this);
+		this.leaveStream = this.leaveStream.bind(this);
+		this.cancelStream = this.cancelStream.bind(this);
 	}
 
-	async checkEnrollment(party) {
-		await party.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
+	async checkEnrollment(stream) {
+		await stream.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
 			.then(QuerySnapshot => {
 				return QuerySnapshot.docs.length > 0;
 			});
@@ -44,10 +44,10 @@ export default class MVPProfileScreen extends React.Component {
 		let parties = [];
 		db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").get().then(QuerySnapshot => {
 			let promises = [];
-			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().party.get().then(PartyDocument => {
-				parties.push(PartyDocument.data());
-				parties[parties.length - 1].partyReference = PartyDocument.ref;
-				parties[parties.length - 1].enrolled = this.checkEnrollment(PartyDocument.ref);
+			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().stream.get().then(StreamDocument => {
+				parties.push(StreamDocument.data());
+				parties[parties.length - 1].streamReference = StreamDocument.ref;
+				parties[parties.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
 			}))); // WatchMojo top 10 react native firebase moments;
 			Promise.all(promises).then(() => {
 				for (let i = 0; i < parties.length; i++) {
@@ -62,10 +62,10 @@ export default class MVPProfileScreen extends React.Component {
 		let parties = [];
 		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties").get().then(QuerySnapshot => {
 			let promises = [];
-			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().party.get().then(PartyDocument => {
-				parties.push(PartyDocument.data());
-				parties[parties.length - 1].partyReference = PartyDocument.ref;
-				parties[parties.length - 1].enrolled = this.checkEnrollment(PartyDocument.ref);
+			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().stream.get().then(StreamDocument => {
+				parties.push(StreamDocument.data());
+				parties[parties.length - 1].streamReference = StreamDocument.ref;
+				parties[parties.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
 			}))); // WatchMojo top 10 react native firebase moments;
 			Promise.all(promises).then(() => {
 				for (let i = 0; i < parties.length; i++) {
@@ -77,46 +77,46 @@ export default class MVPProfileScreen extends React.Component {
 		});
 	}
 
-	leaveParty(party, partyInfo) {
+	leaveStream(stream, streamInfo) {
 		db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties")
-			.where("party", "==", party).get().then(QuerySnapshot => {
+			.where("stream", "==", stream).get().then(QuerySnapshot => {
 			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
 		});
 
-		party.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
+		stream.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
 			.then(QuerySnapshot => {
 				QuerySnapshot.docs.forEach(doc => doc.ref.delete());
 			});
 
-		partyInfo.enrolled = false;
+		streamInfo.enrolled = false;
 
 		let newParties = this.state.parties;
-		newParties.splice(partyInfo.key, 1);
+		newParties.splice(streamInfo.key, 1);
 		this.setState({ parties: newParties });
 		this.RBSheet.close();
 	}
 
-	cancelParty(party, partyInfo) {
+	cancelStream(stream, streamInfo) {
 
 		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties")
-			.where("party", "==", party).get().then(QuerySnapshot => {
+			.where("stream", "==", stream).get().then(QuerySnapshot => {
 			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
 		});
 
-		party.collection("attendees").get().then(QuerySnapshot => {
+		stream.collection("attendees").get().then(QuerySnapshot => {
 			const attendees = QuerySnapshot.docs;
 			attendees.forEach(attendeeSnapshot => {
 				const uid = attendeeSnapshot.uid;
-				db.collection("users").doc(uid).collection("enrolledParties").where("party", "==", party).get().then(QuerySnapshot => {
+				db.collection("users").doc(uid).collection("enrolledParties").where("stream", "==", stream).get().then(QuerySnapshot => {
 					QuerySnapshot.docs.forEach(rsvpSnapshot => {
 						rsvpSnapshot.ref.delete();
 					});
 				});
 				attendeeSnapshot.ref.delete();
 			});
-			party.delete();
+			stream.delete();
 			let newParties = this.state.hostedParties;
-			newParties.splice(partyInfo.key, 1);
+			newParties.splice(streamInfo.key, 1);
 			this.setState({ parties: newParties });
 			this.RBSheet.close();
 		});
@@ -172,9 +172,9 @@ export default class MVPProfileScreen extends React.Component {
 										data={ this.state.hostedParties }
 										renderItem={ ({ item }) =>
 											<TouchableHighlight onPress={ () => {
-												this.showPartySheet(item, true);
+												this.showStreamSheet(item, true);
 											} }>
-												<PartyWalletCard partyInfo={ item } />
+												<StreamWalletCard streamInfo={ item } />
 											</TouchableHighlight>
 										}
 									/>
@@ -191,9 +191,9 @@ export default class MVPProfileScreen extends React.Component {
 						}
 						renderItem={ ({ item }) =>
 							<TouchableHighlight onPress={ () => {
-								this.showPartySheet(item);
+								this.showStreamSheet(item);
 							} }>
-								<PartyWalletCard partyInfo={ item } />
+								<StreamWalletCard streamInfo={ item } />
 							</TouchableHighlight>
 						}
 					/>
@@ -221,9 +221,9 @@ export default class MVPProfileScreen extends React.Component {
 							}
 						} }
 					>
-						<SheetContent leaveParty={ this.leaveParty }
-						              cancelParty={ this.cancelParty }
-						              partyInfo={ this.state.selectedPartyInfo } />
+						<SheetContent leaveStream={ this.leaveStream }
+						              cancelStream={ this.cancelStream }
+						              streamInfo={ this.state.selectedStreamInfo } />
 					</RBSheet>
 					<UIFooter name={ this.props.name } institution={ this.props.institution }
 					          navigation={ navigation } profileIsActive={ true } />
@@ -232,19 +232,19 @@ export default class MVPProfileScreen extends React.Component {
 		}
 	}
 
-	showPartySheet = ((party) => {
+	showStreamSheet = ((stream) => {
 		this.setState({
-			selectedPartyInfo: {
-				name: party.name,
-				host: party.host,
-				description: party.description,
-				time: party.time,
-				endTime: party.endTime,
-				location: party.location,
-				generalLocation: party.generalLocation,
-				partyReference: party.partyReference,
-				enrolled: party.enrolled,
-				partyInfo: party
+			selectedStreamInfo: {
+				name: stream.name,
+				host: stream.host,
+				description: stream.description,
+				time: stream.time,
+				endTime: stream.endTime,
+				location: stream.location,
+				generalLocation: stream.generalLocation,
+				streamReference: stream.streamReference,
+				enrolled: stream.enrolled,
+				streamInfo: stream
 			}
 		});
 		this.RBSheet.open();

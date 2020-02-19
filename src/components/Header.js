@@ -6,7 +6,7 @@ const Header = function(props) {
 	return (
 		<View style={ styles.header }>
 			<StatusBar barStyle="light-content" />
-			<Text style={ styles.headerText }>Banger</Text>
+			<Text style={ styles.headerText }>Tsa2020</Text>
 			<Text style={ styles.collegeText }>{ props.collegeName }</Text>
 		</View>
 	)

@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.banger",
+    package = "com.tsa2020",
 )
 
 android_resource(
     name = "res",
-    package = "com.banger",
+    package = "com.tsa2020",
     res = "src/main/res",
 )
 

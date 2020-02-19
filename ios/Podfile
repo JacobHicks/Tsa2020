@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'Banger' do
-  # Pods for Banger
+target 'Tsa2020' do
+  # Pods for Tsa2020
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core', :path => '../node_modules/react-native/React'
   pod 'React-DevSupport', :path => '../node_modules/react-native/React'
@@ -27,7 +27,7 @@ target 'Banger' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-  target 'BangerTests' do
+  target 'Tsa2020Tests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -35,10 +35,10 @@ target 'Banger' do
   use_native_modules!
 end
 
-target 'Banger-tvOS' do
-  # Pods for Banger-tvOS
+target 'Tsa2020-tvOS' do
+  # Pods for Tsa2020-tvOS
 
-  target 'Banger-tvOSTests' do
+  target 'Tsa2020-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

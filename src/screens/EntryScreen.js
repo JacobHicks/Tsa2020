@@ -13,13 +13,13 @@ export default class EntryScreen extends React.Component {
 
         const user = auth().currentUser;
         if(user) {
-            db.collection('users').doc(user.uid).get().then(documentSnapshot => {
-                const userInfo = documentSnapshot.data();
+            // db.collection('users').doc(user.uid).get().then(documentSnapshot => {
+            //     const userInfo = documentSnapshot.data();
                 navigation.navigate('Home', {
-                    name: userInfo.name,
-                    institution: userInfo.institution.id
+                    name: "JACOB", //userInfo.name,
+                    institution: "Khan Academy"//userInfo.institution.id
                 });
-            });
+            // });
         }
         else {
             navigation.navigate('InitialSignup')

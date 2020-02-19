@@ -13,12 +13,12 @@ import {
 
 const userIsGoing = false; // todo get from props
 // todo add ... if is too long
-export default class PartyCard extends React.Component {
+export default class StreamCard extends React.Component {
 	onShare = async () => {
 		try {
 			const result = await Share.share({
 				message:
-					"Share [name] party with friends",
+					"Share [name] stream with friends",
 				url: "https://google.com"
 			});
 
@@ -42,7 +42,7 @@ export default class PartyCard extends React.Component {
 		const title = this.props.title;
 		const shortLocation = "WWWWWWWWWWWWWWWWWWWW";
 		return (
-			<Card transparent style={ [styles.partyCard, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
+			<Card transparent style={ [styles.streamCard, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
 				<CardItem cardBody style={ [styles.cardBody, userIsGoing ? styles.userIsGoing : styles.defaultStyle] }>
 					<Text
 						style={ styles.title } ellipsizeMode='tail' numberOfLines={ 2 }>{ title }</Text>
@@ -71,7 +71,7 @@ export default class PartyCard extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	partyCard: {
+	streamCard: {
 		padding: 0,
 		// minHeight: 120,
 		backgroundColor: "#000",

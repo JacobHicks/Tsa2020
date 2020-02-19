@@ -33,7 +33,7 @@ export default class SheetContent extends React.Component {
 
     componentDidMount() {
         this.setState({
-            enrolled: this.props.partyInfo.enrolled
+            enrolled: this.props.streamInfo.enrolled
         })
     }
 
@@ -41,33 +41,33 @@ export default class SheetContent extends React.Component {
         const uid = auth().currentUser.uid;
         return (
             <View style={styles.sheetContainer}>
-                <Text style={styles.sheetTitle}>{this.props.partyInfo.name}</Text>
+                <Text style={styles.sheetTitle}>{this.props.streamInfo.name}</Text>
                 <ScrollView style={styles.sheetContainer}>
-                    <View style={styles.sheetView}>
-                        <Icon name='calendar-check' size={Dimensions.get('window').width * .06} color='#8b8b8b'
-                              style={{marginRight: 16, marginTop: Dimensions.get('window').height * .005}}/>
-                        <View style={styles.detailContainer}>
-                            <Text style={styles.sheetDetail}>
-                                {this.getDate(this.props.partyInfo.time)}
-                            </Text>
-                            <Text style={styles.sheetSubDetail}>
-                                {this.getTime(this.props.partyInfo.time)} - {this.getTime(this.props.partyInfo.endTime)}
-                            </Text>
-                        </View>
-                    </View>
+                    {/*<View style={styles.sheetView}>*/}
+                    {/*    <Icon name='calendar-check' size={Dimensions.get('window').width * .06} color='#8b8b8b'*/}
+                    {/*          style={{marginRight: 16, marginTop: Dimensions.get('window').height * .005}}/>*/}
+                    {/*    <View style={styles.detailContainer}>*/}
+                    {/*        <Text style={styles.sheetDetail}>*/}
+                    {/*            {this.getDate(this.props.streamInfo.time)}*/}
+                    {/*        </Text>*/}
+                    {/*        <Text style={styles.sheetSubDetail}>*/}
+                    {/*            {this.getTime(this.props.streamInfo.time)} - {this.getTime(this.props.streamInfo.endTime)}*/}
+                    {/*        </Text>*/}
+                    {/*    </View>*/}
+                    {/*</View>*/}
 
-                    <View style={styles.sheetView}>
-                        <Icon name='map-marker-alt' size={Dimensions.get('window').width * .06} color='#8b8b8b'
-                              style={{marginRight: 15, marginTop: Dimensions.get('window').height * .005}}/>
-                        <View style={styles.detailContainer}>
-                            <Text style={styles.sheetDetail}>
-                                {this.props.partyInfo.location}
-                            </Text>
-                            <Text style={styles.sheetSubDetail}>
-                                {this.props.partyInfo.generalLocation}
-                            </Text>
-                        </View>
-                    </View>
+                    {/*<View style={styles.sheetView}>*/}
+                    {/*    <Icon name='map-marker-alt' size={Dimensions.get('window').width * .06} color='#8b8b8b'*/}
+                    {/*          style={{marginRight: 15, marginTop: Dimensions.get('window').height * .005}}/>*/}
+                    {/*    <View style={styles.detailContainer}>*/}
+                    {/*        <Text style={styles.sheetDetail}>*/}
+                    {/*            {this.props.streamInfo.location}*/}
+                    {/*        </Text>*/}
+                    {/*        <Text style={styles.sheetSubDetail}>*/}
+                    {/*            {this.props.streamInfo.generalLocation}*/}
+                    {/*        </Text>*/}
+                    {/*    </View>*/}
+                    {/*</View>*/}
 
                     {/*<View style={ styles.sheetView }>*/}
                     {/*	<Icon name='credit-card' size={Dimensions.get('window').width * .06} color='#8b8b8b' */}
@@ -88,31 +88,31 @@ export default class SheetContent extends React.Component {
                                 About
                             </Text>
                             <Text style={styles.sheetSubDetail}>
-                                {this.props.partyInfo.description}
+                                {this.props.streamInfo.description}
                             </Text>
                         </View>
                     </View>
-                    {this.props.userIsGoing ?
-                        <View style={styles.sheetView}>
-                            <View style={styles.detailContainer}>
-                                <Text style={styles.sheetDetail}>
-                                    Location
-                                </Text>
-                                <Text style={styles.sheetSubDetail}>
-                                    {this.props.partyInfo.location}
-                                </Text>
-                            </View>
-                        </View> : <View style={{alignItems: 'center'}}>
-                        </View>}
+                    {/*{this.props.userIsGoing ?*/}
+                    {/*    <View style={styles.sheetView}>*/}
+                    {/*        <View style={styles.detailContainer}>*/}
+                    {/*            <Text style={styles.sheetDetail}>*/}
+                    {/*                Location*/}
+                    {/*            </Text>*/}
+                    {/*            <Text style={styles.sheetSubDetail}>*/}
+                    {/*                {this.props.streamInfo.location}*/}
+                    {/*            </Text>*/}
+                    {/*        </View>*/}
+                    {/*    </View> : <View style={{alignItems: 'center'}}>*/}
+                    {/*    </View>}*/}
 
                 </ScrollView>
                 <View style={{alignItems: 'center', width: '100%', paddingBottom: '15%'}}>
                     {
-                        this.props.partyInfo.host === uid ?
+                        this.props.streamInfo.host === uid ?
                             <Button style={styles.joinButton} onPress={() => {
-                                this.props.cancelParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                this.props.cancelStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
                             }}>
-                                <Text style={styles.joinButtonText}>Cancel Party</Text>
+                                <Text style={styles.joinButtonText}>Stop Stream</Text>
                             </Button>
                             :
                             this.state.enrolled ?
@@ -120,18 +120,18 @@ export default class SheetContent extends React.Component {
                                     this.setState({
                                         enrolled: false
                                     });
-                                    this.props.leaveParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                    this.props.leaveStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
                                 }}>
-                                    <Text style={styles.joinButtonText}>Bail out</Text>
+                                    <Text style={styles.joinButtonText}>Drop out</Text>
                                 </Button>
                                 :
                                 <Button style={styles.joinButton} onPress={() => {
                                     this.setState({
                                         enrolled: true
                                     });
-                                    this.props.joinParty(this.props.partyInfo.partyReference, this.props.partyInfo.partyInfo)
+                                    this.props.joinStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
                                 }}>
-                                    <Text style={styles.joinButtonText}>I'm in</Text>
+                                    <Text style={styles.joinButtonText}>Watch Now</Text>
                                 </Button>
                     }
                 </View>

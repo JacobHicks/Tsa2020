@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 import { Dimensions, Text, View } from "react-native";
 
 
-const isUserHostedParty = true;
-export default class PartyWalletCard extends React.Component {
+const isUserHostedStream = true;
+export default class StreamWalletCard extends React.Component {
 
 	formatDate(time) {
 		const date = new Date(time);
@@ -26,17 +26,17 @@ export default class PartyWalletCard extends React.Component {
 	render() {
 
 		return (
-			<View style={ styles.featuredPartyCard }>
+			<View style={ styles.featuredStreamCard }>
 				<View style={ styles.dateContainer }>
-					<Text style={ styles.dateText }>{ this.formatDate(this.props.partyInfo.time) }</Text>
+					<Text style={ styles.dateText }>{ this.formatDate(this.props.streamInfo.time) }</Text>
 				</View>
 				<View style={ styles.container }>
 					<View style={ styles.textContainer }>
 						<Text style={ styles.dateTimeText }>11:00 PM - 12:00 PM</Text>
 						<Text style={ styles.titleText } numberOfLines={ 2 }>
-							{ this.props.partyInfo.name }
+							{ this.props.streamInfo.name }
 						</Text>
-						<Text style={ styles.addressText } numberOfLines={ 1 }>{ this.props.partyInfo.location }</Text>
+						<Text style={ styles.addressText } numberOfLines={ 1 }>{ this.props.streamInfo.location }</Text>
 					</View>
 				</View>
 			</View>
@@ -45,7 +45,7 @@ export default class PartyWalletCard extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	featuredPartyCard: {
+	featuredStreamCard: {
 		marginLeft: "9.66%",
 		flex: 1,
 		flexDirection: "row",

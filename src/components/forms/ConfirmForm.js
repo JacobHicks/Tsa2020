@@ -10,7 +10,7 @@ class ConfirmForm extends React.Component {
                 <Field name='confirmationCode' component={this.renderConfirmationCodeInput}/>
                 <Button style={Styles.continueButton} onPress={this.props.handleSubmit}>
                     <Text style={Styles.continueText}>
-                        Start Partying
+                        Start Streaming
                     </Text>
                 </Button>
             </View>

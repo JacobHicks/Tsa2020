@@ -15,11 +15,11 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.banger</string>
+	<string>com.tsa2020</string>
 	<key>PROJECT_ID</key>
-	<string>banger-a0b8c</string>
+	<string>tsa2020-a0b8c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>banger-a0b8c.appspot.com</string>
+	<string>tsa2020-a0b8c.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,6 +33,6 @@
 	<key>GOOGLE_APP_ID</key>
 	<string>1:64967151724:ios:f376000a59658e15738849</string>
 	<key>DATABASE_URL</key>
-	<string>https://banger-a0b8c.firebaseio.com</string>
+	<string>https://tsa2020-a0b8c.firebaseio.com</string>
 </dict>
 </plist>

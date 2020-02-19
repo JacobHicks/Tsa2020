@@ -1,25 +1,25 @@
 import React from "react";
-import PartyCard from "../components/PartyCard";
-import FeaturedPartyCard from "../components/FeaturedPartyCard";
+import StreamCard from "../components/StreamCard";
+import FeaturedStreamCard from "../components/FeaturedStreamCard";
 import SheetContent from "../components/SheetContent";
 import Footer from "../components/UIFooter";
 import Header from "../components/Header";
-import { Container, Button } from "native-base";
+import {Container, Button} from "native-base";
 import {
-	Text,
-	View,
-	StyleSheet,
-	FlatList,
-	RefreshControl,
-	Dimensions,
-	TouchableWithoutFeedback,
-	TouchableOpacity
+    Text,
+    View,
+    StyleSheet,
+    FlatList,
+    RefreshControl,
+    Dimensions,
+    TouchableWithoutFeedback,
+    TouchableOpacity, ScrollView
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 // todo import Toasts from native base
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
-import { firebase } from "@react-native-firebase/dynamic-links";
+import {firebase} from "@react-native-firebase/dynamic-links";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-spinkit";
 
@@ -27,376 +27,339 @@ const db = firestore();
 
 
 export default class HomeScreen extends React.Component {
-	static navigationOptions = {
-		title: "Home"
-	};
+    static navigationOptions = {
+        title: "Home"
+    };
 
 
-	constructor(props) {
-		super(props);
-		this.enrollInParty = this.enrollInParty.bind(this);
-		this.state = {
-			isLoading: true,
-			showSpinner: false,
-			isRefreshingList: false,
-			refreshing: false,
-			dbg: "tst"
-		};
+    constructor(props) {
+        super(props);
+        this.purchaseStream = this.purchaseStream.bind(this);
+        this.state = {
+            isLoading: true,
+            showSpinner: false,
+            isRefreshingList: false,
+            refreshing: false,
+            dbg: "tst"
+        };
 
-		this.onRefresh = this.onRefresh.bind(this);
-		this.cancelParty = this.cancelParty.bind(this);
-	}
+        this.onRefresh = this.onRefresh.bind(this);
+        this.renderTrending = this.renderTrending.bind(this);
+    }
 
-	async checkEnrollment(party, callback) {
-		await party.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
-			.then(QuerySnapshot => {
-				callback(QuerySnapshot.docs.length > 0);
-			});
-	}
+    async checkOwnership(stream, callback) {
+        await stream.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
+            .then(QuerySnapshot => {
+                callback(QuerySnapshot.docs.length > 0);
+            });
+    }
 
-	getPartyList(callback) {
-		// javascript promises be like:
-		db.collection("schoolData/" + this.state.institution + "/parties")
-			.get()
-			.then(QuerySnapshot => {
-				let parties = [];
-				let docs = [];
-				let enrollmentPromises = [];
-				let attendeePromises = [];
-				let enrollments = [];
+    getStreamList(callback) {
+        // javascript promises be like:
+        db.collection("streams")
+            .get()
+            .then(QuerySnapshot => {
+                let parties = [];
+                let docs = [];
+                let enrollmentPromises = [];
+                let attendeePromises = [];
+                let enrollments = [];
 
-				QuerySnapshot.docs
-					.forEach(doc => {
-						docs.push(doc);
-						enrollmentPromises.push(this.checkEnrollment(doc.ref, enrolled => {
-							enrollments.push(enrolled);
-							attendeePromises.push(doc.ref.collection("attendees").get());
-						}));
-					});
+                QuerySnapshot.docs
+                    .forEach(doc => {
+                        docs.push(doc);
+                        enrollmentPromises.push(this.checkOwnership(doc.ref, enrolled => {
+                            enrollments.push(enrolled);
+                            attendeePromises.push(doc.ref.collection("attendees").get());
+                        }));
+                    });
 
-				Promise.all(enrollmentPromises).then(() => {
-					for (let i = 0; i < attendeePromises.length; i++) {
-						attendeePromises[i].then(QuerySnapshot => {
-							let attendees = [];
-							QuerySnapshot.docs.forEach(DocumentSnapshot => {
-								attendees.push(DocumentSnapshot.data());
-							});
+                Promise.all(enrollmentPromises).then(() => {
+                    for (let i = 0; i < attendeePromises.length; i++) {
+                        attendeePromises[i].then(QuerySnapshot => {
+                            let attendees = [];
+                            QuerySnapshot.docs.forEach(DocumentSnapshot => {
+                                attendees.push(DocumentSnapshot.data());
+                            });
 
-							const rawParty = docs[i].data();
-							const formattedParty = {
-								key: i.toString(),
-								name: rawParty.name,
-								host: rawParty.host,
-								description: rawParty.description,
-								time: rawParty.time,
-								endTime: rawParty.endTime,
-								generalLocation: rawParty.generalLocation,
-								location: rawParty.location,
-								attendees: attendees,
-								partyReference: docs[i].ref,
-								enrolled: enrollments[i]
-							};
+                            const rawStream = docs[i].data();
+                            const formattedStream = {
+                                key: i.toString(),
+                                name: rawStream.name,
+                                host: rawStream.host,
+                                description: rawStream.description,
+                                attendees: attendees,
+                                streamReference: docs[i].ref,
+                                enrolled: enrollments[i]
+                            };
 
-							if (rawParty.endTime < new Date().getTime()) {
-								this.cancelParty(docs[i].ref, formattedParty);
-							} else {
-								parties.push(formattedParty);
-							}
-						});
-					}
+                            if (rawStream.endTime < new Date().getTime()) {
+                                this.cancelStream(docs[i].ref, formattedStream);
+                            } else {
+                                parties.push(formattedStream);
+                            }
+                        });
+                    }
 
-					Promise.all(attendeePromises).then(() => {
-						parties.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
-						|| b.attendees === undefined ? -1 : 1));
+                    Promise.all(attendeePromises).then(() => {
+                        parties.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
+                        || b.attendees === undefined ? -1 : 1));
 
-						let featuredParties = [];
-						for (let i = 0; i < parties.length && i < 3; i++) {
-							featuredParties.push(parties[i]);
-						}
-						this.setState({
-							parties: parties,
-							featuredParties: featuredParties
-						});
+                        let featuredParties = [];
+                        for (let i = 0; i < parties.length && i < 3; i++) {
+                            featuredParties.push(parties[i]);
+                        }
+                        this.setState({
+                            parties: parties,
+                            featuredParties: featuredParties
+                        });
 
-						parties.sort((a, b) => a.time > b.time ? 1 : -1);
+                        parties.sort((a, b) => a.time > b.time ? 1 : -1);
 
-						callback();
-					});
-				});
-			});
-	}
+                        callback();
+                    });
+                });
+            });
+    }
 
-	componentDidMount() {
-		const { navigation } = this.props;
-		this.setState({
-			institution: navigation.getParam("institution")
-		}, () => {
-			this.getPartyList(() => {
-				this.setState({
-					isLoading: false
-				});
-			});
-		});
-		firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
-		this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
-	}
+    componentDidMount() {
+        const {navigation} = this.props;
+        this.getStreamList(() => {
+            this.setState({
+                isLoading: false
+            });
+        });
+        firebase.dynamicLinks().getInitialLink().then(link => this.linkHandler(link));
+        this.unsubscribeLinkListener = firebase.dynamicLinks().onLink(this.linkHandler);
+    }
 
-	componentDidUpdate(prevProps) {
-		if (!prevProps.navigation.getParam("refresh") && this.props.navigation.getParam("refresh")) {
-			this.setState({
-				loading: true
-			});
+    componentDidUpdate(prevProps) {
+        if (!prevProps.navigation.getParam("refresh") && this.props.navigation.getParam("refresh")) {
+            this.setState({
+                loading: true
+            });
 
-			this.getPartyList(() => {
-				this.setState({
-					isLoading: false
-				});
-			});
-		}
-	}
+            this.getStreamList(() => {
+                this.setState({
+                    isLoading: false
+                });
+            });
+        }
+    }
 
-	componentWillUnmount() {
-		this.unsubscribeLinkListener();
-	}
+    componentWillUnmount() {
+        this.unsubscribeLinkListener();
+    }
 
-	linkHandler(link) {
-		if (link) {
-			this.setState({
-				dbg: link.url
-			});
-		}
-	}
+    linkHandler(link) {
+        if (link) {
+            this.setState({
+                dbg: link.url
+            });
+        }
+    }
 
-	reachedEndOfList() {
-		//this.setState({ dbg: "endOfList" });
-		//this.setState({showSpinner: true, isRefreshingList: true});
-		// this.getPartyList(
-		// 	// 	() => {
-		// 	// 	this.setState({ showSpinner: false, isRefreshingList: false });
-		// 	// }
-		// );
-	}
+    reachedEndOfList() {
+        //this.setState({ dbg: "endOfList" });
+        //this.setState({showSpinner: true, isRefreshingList: true});
+        // this.getStreamList(
+        // 	// 	() => {
+        // 	// 	this.setState({ showSpinner: false, isRefreshingList: false });
+        // 	// }
+        // );
+    }
 
-	showPartySheet(party) {
-		this.setState({
-			selectedPartyInfo: this.getPartyInfo(party)
-		});
-		this.RBSheet.open();
-	}
+    showStreamSheet(stream) {
+        this.setState({
+            selectedStreamInfo: this.getStreamInfo(stream)
+        });
+        this.RBSheet.open();
+    }
 
-	getPartyInfo(party) {
-		return {
-			name: party.name,
-			host: party.host,
-			description: party.description,
-			time: party.time,
-			endTime: party.endTime,
-			location: party.location,
-			generalLocation: party.generalLocation,
-			partyReference: party.partyReference,
-			enrolled: party.enrolled,
-			partyInfo: party
-		}
-	}
+    getStreamInfo(stream) {
+        return {
+            name: stream.name,
+            host: stream.host,
+            description: stream.description,
+            streamReference: stream.streamReference,
+            enrolled: stream.enrolled,
+            streamInfo: stream
+        }
+    }
 
-	enrollInParty(party, partyInfo) {
-		if (!partyInfo.enrolled) {
-			db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
-				party: party
-			});
+    purchaseStream(stream, streamInfo) {
+        if (!streamInfo.enrolled) {
+            db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
+                stream: stream
+            });
 
-			party.collection("attendees").add({ uid: auth().currentUser.uid });
+            stream.collection("attendees").add({uid: auth().currentUser.uid});
 
-			partyInfo.enrolled = true;
-		}
-	}
+            streamInfo.enrolled = true;
+        }
+    }
 
-	leaveParty(party, partyInfo) {
-		db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties")
-			.where("party", "==", party).get().then(QuerySnapshot => {
-			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-		});  //looks cursed, but actually fast
+    onRefresh() {
+        this.setState({refreshing: true});
+        this.getStreamList(() => {
+            this.setState({
+                refreshing: false
+            });
+        });
+    }
 
-		party.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
-			.then(QuerySnapshot => {
-				QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-			});
+    render() {
+        if (this.state.isLoading) {
+            return (
+                <Container style={styles.body}>
+                    <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                        <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={"ThreeBounce"}
+                                 color={"#DE3C4B"}/>
+                        <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
+                    </View>
+                </Container>
+            );
+        } else {
+            return (
+                <Container style={styles.body}>
+                    <ScrollView>
+                        {this.renderTrending()}
+                        {this.renderRecent()}
+                        <RBSheet
+                            ref={ref => {
+                                this.RBSheet = ref;
+                            }}
+                            height={Dimensions.get("window").height * .70}
+                            duration={250}
+                            animationType={"slide"}
+                            closeOnDragDown={true}
+                            customStyles={{
+                                container: {
+                                    borderTopLeftRadius: 16,
+                                    borderTopRightRadius: 16,
+                                    backgroundColor: "#111"
+                                },
+                                draggableIcon: {
+                                    backgroundColor: "#DE3C4B",
+                                    width: 75,
+                                    top: 5
+                                },
+                                wrapper: {
+                                    backgroundColor: "transparent"
+                                }
+                            }}
+                        >
+                            <SheetContent joinStream={this.purchaseStream} leaveStream={this.leaveStream}
+                                          cancelStream={this.cancelStream}
+                                          streamInfo={this.state.selectedStreamInfo} userIsGoing={false}/>
+                        </RBSheet>
+                    </ScrollView>
+                    <Footer style={styles.bodyFooter} navigation={this.props.navigation} homeIsActive={true}/>
+                </Container>
+            );
+        }
+    }
 
-		partyInfo.enrolled = false;
-	}
+    renderRecent() {
+        return (
+            this.state.parties.length > 0 ?
+                <FlatList
+                    style={{marginTop: 42}}
 
-	cancelParty(party, partyInfo) {
+                    onEndReachedThreshold={10}
+                    onEndReached={() => {
+                        this.reachedEndOfList();
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
 
-		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties")
-			.where("party", "==", party).get().then(QuerySnapshot => {
-			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-		});
+                    listHeaderComponent={<Text style={styles.titleText}>Recent</Text>}
 
-		party.collection("attendees").get().then(QuerySnapshot => {
-			const attendees = QuerySnapshot.docs;
-			attendees.forEach(attendeeSnapshot => {
-				const uid = attendeeSnapshot.uid;
-				db.collection("users").doc(uid).collection("enrolledParties").where("party", "==", party).get().then(QuerySnapshot => {
-					QuerySnapshot.docs.forEach(rsvpSnapshot => {
-						rsvpSnapshot.ref.delete();
-					});
-				});
-				attendeeSnapshot.ref.delete();
-			});
-			party.delete();
-			let newParties = this.state.parties;
-			newParties.splice(partyInfo.key, 1);
-			this.setState({ parties: newParties });
-			this.RBSheet.close();
-		});
-	}
+                    listEmptyContent={<Spinner color={"white"}/>}
 
-	onRefresh() {
-		this.setState({ refreshing: true });
-		this.getPartyList(() => {
-			this.setState({
-				refreshing: false
-			});
-		});
-	}
+                    data={this.state.parties}
+                    renderItem={({item}) => {
+                        return (
+                            <TouchableWithoutFeedback
+                                onLongPress={() => this.purchaseStream(item.streamReference, item)}
+                                onPress={() => this.showStreamSheet(item)}>
+                                <View>
+                                    <StreamCard
+                                        streamInfo={item}
+                                        joinStream={() => this.purchaseStream(item.streamReference, item)}
+                                        leaveStream={() => this.leaveStream(item.streamReference, item)}
+                                    />
+                                </View>
+                            </TouchableWithoutFeedback>
+                        )
+                    }}
+                /> :
+                <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 32}}>
+                    <Text style={styles.titleText}>No content available :(</Text>
+                </View>
+        )
+    }
 
-	render() {
-		if (this.state.isLoading) {
-			return (
-				<Container style={ styles.body }>
-					<View style={ { flex: 1, alignItems: "center", justifyContent: "center" } }>
-						<Spinner isVisible={ true } size={ Dimensions.get("window").width * .25 } type={ "ThreeBounce" }
-						         color={ "#DE3C4B" } />
-						<Text style={ [styles.titleText, { marginLeft: 0, marginTop: 16 }] }>Good times await</Text>
-					</View>
-				</Container>
-			);
-		} else {
-			return (
-				<Container style={ styles.body }>
-					<Header collegeName={ this.state.institution } />
-					{ this.state.parties ?
-						<FlatList
-							onEndReachedThreshold={ 10 }
-							onEndReached={ () => {
-								this.reachedEndOfList();
-							} }
-							showsVerticalScrollIndicator={ false }
-							refreshControl={
-								<RefreshControl
-									refreshing={ this.state.refreshing }
-									onRefresh={ this.onRefresh }
-								/>
-							}
-
-							listEmptyContent={ <Spinner color={ "white" } /> }
-							ListHeaderComponent={
-								<View>
-									<Text style={ styles.titleText }>Trending</Text>
-									<Carousel
-										ref={ (c) => {
-											this._carousel = c;
-										} }
-										data={ this.state.featuredParties }
-										sliderWidth={ Dimensions.get("window").width + (Dimensions.get("window").width * 0.34) }
-										itemWidth={ 220 }
-										containerCustomStyle={ { left: -Dimensions.get("window").width * 0.34 } }
-										loop={ true }
-										enableMomentum={ true }
-										enableSnap={ true }
-										renderItem={ (item) => {
-											return (
-												<TouchableWithoutFeedback
-													onLongPress={ () => this.enrollInParty(item.item.partyReference, item.item) }
-													onPress={ () => this.showPartySheet(item.item) }>
-													<View>
-														<FeaturedPartyCard partyInfo={ item.item } />
-													</View>
-												</TouchableWithoutFeedback>
-											);
-										} }
-									/>
-									<Text style={ styles.titleText }>Parties</Text>
-								</View> }
-							data={ this.state.parties }
-							renderItem={ ({ item }) => {
-								return (
-									<TouchableWithoutFeedback
-										onLongPress={ () => this.enrollInParty(item.partyReference, item) }
-										onPress={ () => this.showPartySheet(item) }>
-										<View>
-											<PartyCard
-												partyInfo={ item }
-												joinParty={ () => this.enrollInParty(item.partyReference, item) }
-												leaveParty={ () => this.leaveParty(item.partyReference, item) }
-											/>
-										</View>
-									</TouchableWithoutFeedback>
-								)
-							} }
-						/> :
-						<View><Text style={ styles.titleText }>No parties at your school</Text><Button>+</Button></View>
-					}
-					<RBSheet
-						ref={ ref => {
-							this.RBSheet = ref;
-						} }
-						height={ Dimensions.get("window").height * .70 }
-						duration={ 250 }
-						animationType={ "slide" }
-						closeOnDragDown={ true }
-						customStyles={ {
-							container: {
-								borderTopLeftRadius: 16,
-								borderTopRightRadius: 16,
-								backgroundColor: "#111"
-							},
-							draggableIcon: {
-								backgroundColor: "#DE3C4B",
-								width: 75,
-								top: 5
-							},
-							wrapper: {
-								backgroundColor: "transparent"
-							}
-						} }
-					>
-						<SheetContent joinParty={ this.enrollInParty } leaveParty={ this.leaveParty }
-						              cancelParty={ this.cancelParty }
-						              partyInfo={ this.state.selectedPartyInfo } userIsGoing={ false } />
-					</RBSheet>
-					<Footer style={ styles.bodyFooter } navigation={ this.props.navigation } homeIsActive={ true } />
-				</Container>
-			);
-		}
-	}
+    renderTrending() {
+        return (
+            this.state.featuredParties.length > 0 ?
+                <View>
+                    <Text style={styles.titleText}>Trending</Text>
+                    <Carousel
+                        ref={(c) => {
+                            this._carousel = c;
+                        }}
+                        data={this.state.featuredParties}
+                        sliderWidth={Dimensions.get("window").width + (Dimensions.get("window").width * 0.34)}
+                        itemWidth={220}
+                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34}}
+                        loop={true}
+                        enableMomentum={true}
+                        enableSnap={true}
+                        renderItem={(item) => {
+                            return (
+                                <TouchableWithoutFeedback
+                                    onLongPress={() => this.purchaseStream(item.item.streamReference, item.item)}
+                                    onPress={() => this.showStreamSheet(item.item)}>
+                                    <View>
+                                        <FeaturedStreamCard streamInfo={item.item}/>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            );
+                        }}
+                    />
+                </View> : null
+        )
+    }
 }
 
-const styles = StyleSheet.create({ // todo fix spacing between titles and content
-	body: {
-		backgroundColor: "#000",
-		height: "100%",
-		width: "100%"
-	},
-	trendingContainer: {
-		maxHeight: 175
-	},
-	titleText: {
-		fontSize: 25,
-		color: "#FFFFFF",
-		marginLeft: 15,
-		fontWeight: "700",
-		marginTop: 20
-		// marginBottom: -7
-	},
-	bodyFooter: {
-		position: "relative",
-		bottom: 0,
-		top: "auto"
-	},
+const styles = StyleSheet.create({
+    body: {
+        backgroundColor: "#425c5a",
+        height: "100%",
+        width: "100%",
+        flex: 1
+    },
+    trendingContainer: {
+        maxHeight: 175
+    },
+    titleText: {
+        fontSize: 25,
+        color: "#8ea7a6",
+        marginLeft: 15,
+        fontWeight: "700",
+        marginTop: 20,
+        marginBottom: 24
+        // marginBottom: -7
+    },
 
-	// debug
-	testing: {
-		minHeight: 100
-	}
+    // debug
+    testing: {
+        minHeight: 100
+    }
 });

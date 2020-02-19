@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Banger.app"
-               BlueprintName = "Banger"
-               ReferencedContainer = "container:Banger.xcodeproj">
+               BuildableName = "Tsa2020.app"
+               BlueprintName = "Tsa2020"
+               ReferencedContainer = "container:Tsa2020.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BangerTests.xctest"
-               BlueprintName = "BangerTests"
-               ReferencedContainer = "container:Banger.xcodeproj">
+               BuildableName = "Tsa2020Tests.xctest"
+               BlueprintName = "Tsa2020Tests"
+               ReferencedContainer = "container:Tsa2020.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BangerTests.xctest"
-               BlueprintName = "BangerTests"
-               ReferencedContainer = "container:Banger.xcodeproj">
+               BuildableName = "Tsa2020Tests.xctest"
+               BlueprintName = "Tsa2020Tests"
+               ReferencedContainer = "container:Tsa2020.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Banger.app"
-            BlueprintName = "Banger"
-            ReferencedContainer = "container:Banger.xcodeproj">
+            BuildableName = "Tsa2020.app"
+            BlueprintName = "Tsa2020"
+            ReferencedContainer = "container:Tsa2020.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Banger.app"
-            BlueprintName = "Banger"
-            ReferencedContainer = "container:Banger.xcodeproj">
+            BuildableName = "Tsa2020.app"
+            BlueprintName = "Tsa2020"
+            ReferencedContainer = "container:Tsa2020.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Banger.app"
-            BlueprintName = "Banger"
-            ReferencedContainer = "container:Banger.xcodeproj">
+            BuildableName = "Tsa2020.app"
+            BlueprintName = "Tsa2020"
+            ReferencedContainer = "container:Tsa2020.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

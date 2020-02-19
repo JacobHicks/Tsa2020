@@ -33,7 +33,7 @@ export default class TextConfirm extends React.Component {
     render() {
         const {navigation} = this.props;
         return (
-            <ImageBackground source={require('../../assets/images/party2.jpg')} style={Styles.background}>
+            {/*<ImageBackground source={require('../../assets/images/logo.png')} style={Styles.background}>
                 <StatusBar barStyle="light-content" />
                 <Text style={Styles.welcomeText}>
                     {'Hey ' + navigation.getParam('name', 'User') + '.\nText code OTW.'}
@@ -44,6 +44,7 @@ export default class TextConfirm extends React.Component {
                     </Provider>
                 </View>
             </ImageBackground>
+            */}
         );
     }
 

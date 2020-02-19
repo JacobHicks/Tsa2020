@@ -1,4 +1,4 @@
-package com.banger;
+package com.tsa2020;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Banger";
+        return "Tsa2020";
     }
 }

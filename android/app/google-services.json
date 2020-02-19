@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "64967151724",
-    "firebase_url": "https://banger-a0b8c.firebaseio.com",
-    "project_id": "banger-a0b8c",
-    "storage_bucket": "banger-a0b8c.appspot.com"
+    "project_number": "820435601323",
+    "firebase_url": "https://tsa2020-d4385.firebaseio.com",
+    "project_id": "tsa2020-d4385",
+    "storage_bucket": "tsa2020-d4385.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:64967151724:android:21c196b6843e9b1f738849",
+        "mobilesdk_app_id": "1:820435601323:android:35e5ed67b0a97297b3f4ee",
         "android_client_info": {
-          "package_name": "com.banger"
+          "package_name": "com.tsa2020"
         }
       },
       "oauth_client": [
         {
-          "client_id": "64967151724-efpnvvv5n4lnmaq0umrsr003vathd6k9.apps.googleusercontent.com",
+          "client_id": "820435601323-ph107h0716nrim04u1t51a79id0003kk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tsa2020",
+            "certificate_hash": "74d34a74adadcacb8cef9f04dfd27d82c361dc8a"
+          }
+        },
+        {
+          "client_id": "820435601323-7fji1kvc6e2fcg08v6l9lnnlqcs6lo8j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAnnA1IZ5WaPaPgRF5miMcJbFLphAiff1Q"
+          "current_key": "AIzaSyCLknoaCOp76OYUtOqRlmHQY5oUONLuxC8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "64967151724-efpnvvv5n4lnmaq0umrsr003vathd6k9.apps.googleusercontent.com",
+              "client_id": "820435601323-7fji1kvc6e2fcg08v6l9lnnlqcs6lo8j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

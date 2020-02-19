@@ -3,15 +3,16 @@ import {createStackNavigator} from 'react-navigation-stack';
 import HomeScreen from './screens/HomeScreen';
 import InitialSignup from './screens/InitialSignup';
 import TextConfirm from './screens/TextConfirm';
-import CreatePartyScreen from './screens/CreatePartyScreen';
+import CreateStream from './screens/CreateStream';
 
 import {fadeIn, fromLeft, fromRight} from 'react-navigation-transitions';
 import InstitutionList from './screens/InstitutionList';
 import MVPProfileScreen from './screens/MVPProfileScreen';
 import EntryScreen from './screens/EntryScreen';
+import StreamCamera from "./screens/StreamCamera";
 
 function handleTransition({scenes}) {
-    const navScreens = ['Home', 'CreateParty', 'Profile'];
+    const navScreens = ['Home', 'CreateStream', 'Profile'];
 
     const previousScene = scenes[scenes.length - 2];
     const nextScene = scenes[scenes.length - 1];
@@ -34,7 +35,8 @@ const MainNavigator = createStackNavigator({
         InstitutionList: {screen: InstitutionList},
         Home: {screen: HomeScreen},
         TextConfirm: {screen: TextConfirm},
-        CreateParty: {screen: CreatePartyScreen},
+        CreateStream: {screen: CreateStream},
+        StreamCamera: {screen: StreamCamera}
     },
     {
         headerMode: 'none',
