@@ -38,6 +38,8 @@ const UIFooter = function (props) {
 const styles = StyleSheet.create({
     footer: {
         height: 50,
+        position: 'absolute',
+        bottom: 0
     },
     footerTab: {
         backgroundColor: "#425c5a",

@@ -59,7 +59,7 @@ export default class HomeScreen extends React.Component {
         db.collection("streams")
             .get()
             .then(QuerySnapshot => {
-                let parties = [];
+                let streams = [];
                 let docs = [];
                 let enrollmentPromises = [];
                 let attendeePromises = [];
@@ -97,25 +97,25 @@ export default class HomeScreen extends React.Component {
                             if (rawStream.endTime < new Date().getTime()) {
                                 this.cancelStream(docs[i].ref, formattedStream);
                             } else {
-                                parties.push(formattedStream);
+                                streams.push(formattedStream);
                             }
                         });
                     }
 
                     Promise.all(attendeePromises).then(() => {
-                        parties.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
+                        streams.sort((a, b) => (a.attendees !== undefined && b.attendees !== undefined && (a.attendees.length > b.attendees.length)
                         || b.attendees === undefined ? -1 : 1));
 
-                        let featuredParties = [];
-                        for (let i = 0; i < parties.length && i < 3; i++) {
-                            featuredParties.push(parties[i]);
+                        let featuredStreams = [];
+                        for (let i = 0; i < streams.length && i < 3; i++) {
+                            featuredStreams.push(streams[i]);
                         }
                         this.setState({
-                            parties: parties,
-                            featuredParties: featuredParties
+                            streams: streams,
+                            featuredStreams: featuredStreams
                         });
 
-                        parties.sort((a, b) => a.time > b.time ? 1 : -1);
+                        streams.sort((a, b) => a.time > b.time ? 1 : -1);
 
                         callback();
                     });
@@ -190,7 +190,7 @@ export default class HomeScreen extends React.Component {
 
     purchaseStream(stream, streamInfo) {
         // if (!streamInfo.enrolled) {
-            // db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
+            // db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams").add({
             //     stream: stream
             // });
 
@@ -253,7 +253,7 @@ export default class HomeScreen extends React.Component {
                                       cancelStream={this.cancelStream}
                                       streamInfo={this.state.selectedStreamInfo} userIsGoing={false}/>
                     </RBSheet>
-                    <Footer style={styles.bodyFooter} navigation={this.props.navigation} homeIsActive={true}/>
+                    <Footer navigation={this.props.navigation} homeIsActive={true}/>
                 </Container>
             );
         }
@@ -261,7 +261,7 @@ export default class HomeScreen extends React.Component {
 
     renderRecent() {
         return (
-            this.state.parties.length > 0 ?
+            this.state.streams.length > 0 ?
                 <FlatList
                     style={{marginTop: 42}}
 
@@ -281,7 +281,7 @@ export default class HomeScreen extends React.Component {
 
                     listEmptyContent={<Spinner color={"white"}/>}
 
-                    data={this.state.parties}
+                    data={this.state.streams}
                     renderItem={({item}) => {
                         return (
                             <TouchableWithoutFeedback
@@ -299,24 +299,24 @@ export default class HomeScreen extends React.Component {
                     }}
                 /> :
                 <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 32}}>
-                    <Text style={styles.titleText}>No content available :(</Text>
+                    <Text style={[styles.titleText, {marginTop: 64}]}>No content available :(</Text>
                 </View>
         )
     }
 
     renderTrending() {
         return (
-            this.state.featuredParties.length > 0 ?
-                <View>
+            this.state.featuredStreams.length > 0 ?
+                <View style={{marginTop: 32}}>
                     <Text style={styles.titleText}>Trending</Text>
                     <Carousel
                         ref={(c) => {
                             this._carousel = c;
                         }}
-                        data={this.state.featuredParties}
+                        data={this.state.featuredStreams}
                         sliderWidth={Dimensions.get("window").width + (Dimensions.get("window").width * 0.34)}
                         itemWidth={220}
-                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34, height: 100}}
+                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34, height: 135}}
                         loop={true}
                         enableMomentum={true}
                         enableSnap={true}
@@ -360,5 +360,9 @@ const styles = StyleSheet.create({
     // debug
     testing: {
         minHeight: 100
+    },
+
+    bodyFooter: {
+        marginTop: 'auto'
     }
 });

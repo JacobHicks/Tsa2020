@@ -24,9 +24,9 @@ export default class StreamCard extends React.Component {
 
     }
 
-    onShare = async (school, name) => {
+    onShare = async (name) => { //todo fix spaces in url name
         const link = await firebase.dynamicLinks().buildLink({
-            link: "https://tsa2020.page.link/joinStream/" + school + "/" + name,
+            link: "https://tsa2020.page.link/joinStream/" + name,
             domainUriPrefix: "https://tsa2020.page.link/joinStream"
         });
 
@@ -44,17 +44,20 @@ export default class StreamCard extends React.Component {
                     <Text style={styles.title} numberOfLines={2}>{this.props.streamInfo.name}</Text>
                 </CardItem>
 
-                <Button style={styles.shareButton}
-                        onPress={() => this.onShare(this.props.streamInfo.institution, this.props.streamInfo.name)}>
-                    <Text style={styles.shareButtonText}><Icon name='external-link-alt' size={18}
-                                                               color='#999'/></Text>
-                </Button>
+                <View style={{flexDirection: 'row', marginTop: 24, marginLeft: 'auto'}}>
+                    <Button style={styles.shareButton}
+                            onPress={() => this.onShare(this.props.streamInfo.name)}>
+                        <Text style={styles.shareButtonText}><Icon name='external-link-alt' size={18}
+                                                                   color='#999'/></Text>
+                    </Button>
 
-				<Button style={styles.reportButton}
-						onPress={() => {}}>
-					<Text style={styles.shareButtonText}><MaIcon name='report' style={{fontSize: 24}} size={24}
-															   color='#999'/></Text>
-				</Button>
+                    <Button style={styles.reportButton}
+                            onPress={() => {
+                            }}>
+                        <Text style={styles.shareButtonText}><MaIcon name='report' style={{fontSize: 24}} size={24}
+                                                                     color='#999'/></Text>
+                    </Button>
+                </View>
             </View>
         );
     }
@@ -65,11 +68,12 @@ const styles = StyleSheet.create({
         padding: 0,
         backgroundColor: "#000",
         paddingBottom: 25,
-		flexDirection: 'row',
-		marginLeft: '3%',
+        flexDirection: 'row',
+        marginLeft: '3%',
         width: "94%",
         marginBottom: 16,
-		borderRadius: 15
+        borderRadius: 15,
+        flex: 1
     },
     cardBody: {
         backgroundColor: "#000",
@@ -104,12 +108,9 @@ const styles = StyleSheet.create({
     },
     shareButton: {
         backgroundColor: "transparent",
-        marginLeft: 96,
-		marginTop: 24,
     },
-	reportButton: {
-    	backgroundColor: "transparent",
-		marginTop: 24,
+    reportButton: {
+        backgroundColor: "transparent",
         marginLeft: -12
-	}
+    }
 });

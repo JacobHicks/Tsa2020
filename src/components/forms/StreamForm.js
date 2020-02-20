@@ -75,8 +75,9 @@ class StreamForm extends React.Component {
 
 		return (
 			<Item regular style={ { borderColor: "#425c5a", marginLeft: 20 } }>
-				<Input placeholder="what's the plan?" style={ styles.titleInput }
-				       selectionColor={ "#DE3C4B" } { ...input }
+				<Input placeholder="Stream Name" placeholderTextColor={'#596d6c'}
+					   style={ styles.titleInput }
+				       selectionColor={ "#b18466" } { ...input }
 				       onChangeText={ text => {
 					       input.onChange(text);
 					       this.props.onTitleChange(text);
@@ -91,8 +92,9 @@ class StreamForm extends React.Component {
 		return (
 			<Item style={ styles.formItem }>
 				<Textarea bordered={ false } underline={ false } rowSpan={ 10 }
-				          style={ [styles.formInput, { left: -9, top: 12, width: 300 }] }
-				          placeholder={ "description" } selectionColor={ "#DE3C4B" }
+				          style={ [styles.formInput, {width: 300 }] }
+				          placeholder={ "description" } placeholderTextColor={'#596d6c'}
+						  selectionColor={ "#b18466" }
 				          { ...input } />
 			</Item>
 		);
@@ -101,17 +103,17 @@ class StreamForm extends React.Component {
 
 const styles = StyleSheet.create({
 	formInput: {
-		color: "#fff",
+		color: "#8ea7a6",
 		fontSize: 18
 	},
 	formItem: {
 		borderColor: "#425c5a",
-		marginLeft: 42
+		marginLeft: 40
 	},
 	titleInput: {
 		height: 80,
 		fontSize: 35,
-		color: "#FFF",
+		color: "#8ea7a6",
 		fontWeight: "700",
 		maxWidth: 387
 	}

@@ -10,6 +10,7 @@ import {
 } from "native-base";
 import TouchableIcon from "../components/TouchableIcon";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import MaIcon from "react-native-vector-icons/MaterialIcons";
 
 export default class StreamCard extends React.Component {
 
@@ -22,11 +23,11 @@ export default class StreamCard extends React.Component {
 						      numberOfLines={ 2 }>{ this.props.streamInfo.name }</Text>
 					</View>
 					<Grid style={ styles.buttonGrid }>
-						<Col style={ { flex: 1, flexDirection: "row" } }>
-							<TouchableIcon><Icon name='sign-in-alt' size={ 21 } color='#2B2D42' /></TouchableIcon>
-						</Col>
 						<Col>
 							<TouchableIcon><Icon name='external-link-alt' size={ 21 } color='#2B2D42' /></TouchableIcon>
+						</Col>
+						<Col style={ { flex: 1, flexDirection: "row" } }>
+							<TouchableIcon><MaIcon name='report' style={{fontSize: 28}} color='#2B2D42'/></TouchableIcon>
 						</Col>
 					</Grid>
 				</CardItem>
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({ // todo change border radius
 	},
 	streamCardItem: {
 		backgroundColor: "#DE3C4B",
+		height: 135,
 		borderRadius: 12,
 		paddingLeft: 15,
 		flexDirection: "column",
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({ // todo change border radius
 		maxWidth: 200,
 		fontSize: Dimensions.get("window").width * .065,
 		top: -2,
-		lineHeight: 23
+		lineHeight: 30
 	},
 	streamInfo: {
 		color: "#2B2D42",
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({ // todo change border radius
 		top: -5
 	},
 	textContainer: {
-		minHeight: 81
+		minHeight: 81,
 	},
 	streamAttendees: {
 		color: "#2B2D42",

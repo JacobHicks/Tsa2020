@@ -35,7 +35,7 @@ export default class StreamWalletCard extends React.Component {
 						<Text style={ styles.titleText } numberOfLines={ 2 }>
 							{ this.props.streamInfo.name }
 						</Text>
-						<Text style={ styles.addressText } numberOfLines={ 1 }>{ this.props.streamInfo.location }</Text>
+						<Text style={ styles.addressText } numberOfLines={ 1 }>{ this.props.streamInfo.description }</Text>
 					</View>
 				</View>
 			</View>
@@ -96,5 +96,4 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		marginTop: 2
 	}
-
 });

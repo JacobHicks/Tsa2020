@@ -25,7 +25,7 @@ export default class MVPProfileScreen extends React.Component {
 		this.state = {
 			isLoading: true,
 			user: null,
-			parties: []
+			streams: []
 		};
 		this.showStreamSheet = this.showStreamSheet.bind(this);
 		this.leaveStream = this.leaveStream.bind(this);
@@ -39,45 +39,45 @@ export default class MVPProfileScreen extends React.Component {
 			});
 	}
 
-	getParties(callback) {
-		let parties = [];
-		db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").get().then(QuerySnapshot => {
+	getStreams(callback) {
+		let streams = [];
+		db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams").get().then(QuerySnapshot => {
 			let promises = [];
 			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().stream.get().then(StreamDocument => {
-				parties.push(StreamDocument.data());
-				parties[parties.length - 1].streamReference = StreamDocument.ref;
-				parties[parties.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
+				streams.push(StreamDocument.data());
+				streams[streams.length - 1].streamReference = StreamDocument.ref;
+				streams[streams.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
 			}))); // WatchMojo top 10 react native firebase moments;
 			Promise.all(promises).then(() => {
-				for (let i = 0; i < parties.length; i++) {
-					parties[i].key = i.toString();
+				for (let i = 0; i < streams.length; i++) {
+					streams[i].key = i.toString();
 				}
-				callback(parties);
+				callback(streams);
 			})
 		});
 	}
 
-	getHostedParties(callback) {
-		let parties = [];
-		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties").get().then(QuerySnapshot => {
+	getHostedStreams(callback) {
+		let streams = [];
+		db.collection("users").doc(auth().currentUser.uid).collection("hostedStreams").get().then(QuerySnapshot => {
 			let promises = [];
 			QuerySnapshot.docs.forEach(doc => promises.push(doc.data().stream.get().then(StreamDocument => {
-				parties.push(StreamDocument.data());
-				parties[parties.length - 1].streamReference = StreamDocument.ref;
-				parties[parties.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
+				streams.push(StreamDocument.data());
+				streams[streams.length - 1].streamReference = StreamDocument.ref;
+				streams[streams.length - 1].enrolled = this.checkEnrollment(StreamDocument.ref);
 			}))); // WatchMojo top 10 react native firebase moments;
 			Promise.all(promises).then(() => {
-				for (let i = 0; i < parties.length; i++) {
-					parties[i].key = i.toString();
+				for (let i = 0; i < streams.length; i++) {
+					streams[i].key = i.toString();
 				}
 
-				callback(parties);
+				callback(streams);
 			})
 		});
 	}
 
 	leaveStream(stream, streamInfo) {
-		db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties")
+		db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams")
 			.where("stream", "==", stream).get().then(QuerySnapshot => {
 			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
 		});
@@ -89,15 +89,15 @@ export default class MVPProfileScreen extends React.Component {
 
 		streamInfo.enrolled = false;
 
-		let newParties = this.state.parties;
-		newParties.splice(streamInfo.key, 1);
-		this.setState({ parties: newParties });
+		let newStreams = this.state.streams;
+		newStreams.splice(streamInfo.key, 1);
+		this.setState({ streams: newStreams });
 		this.RBSheet.close();
 	}
 
 	cancelStream(stream, streamInfo) {
 
-		db.collection("users").doc(auth().currentUser.uid).collection("hostedParties")
+		db.collection("users").doc(auth().currentUser.uid).collection("hostedStreams")
 			.where("stream", "==", stream).get().then(QuerySnapshot => {
 			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
 		});
@@ -106,7 +106,7 @@ export default class MVPProfileScreen extends React.Component {
 			const attendees = QuerySnapshot.docs;
 			attendees.forEach(attendeeSnapshot => {
 				const uid = attendeeSnapshot.uid;
-				db.collection("users").doc(uid).collection("enrolledParties").where("stream", "==", stream).get().then(QuerySnapshot => {
+				db.collection("users").doc(uid).collection("enrolledStreams").where("stream", "==", stream).get().then(QuerySnapshot => {
 					QuerySnapshot.docs.forEach(rsvpSnapshot => {
 						rsvpSnapshot.ref.delete();
 					});
@@ -114,21 +114,21 @@ export default class MVPProfileScreen extends React.Component {
 				attendeeSnapshot.ref.delete();
 			});
 			stream.delete();
-			let newParties = this.state.hostedParties;
-			newParties.splice(streamInfo.key, 1);
-			this.setState({ parties: newParties });
+			let newStreams = this.state.hostedStreams;
+			newStreams.splice(streamInfo.key, 1);
+			this.setState({ streams: newStreams });
 			this.RBSheet.close();
 		});
 	}
 
 	componentDidMount() {
-		this.getParties(parties =>
+		this.getStreams(streams =>
 				this.setState({
-					parties: parties
+					streams: streams
 				}),
-			this.getHostedParties(parties =>
+			this.getHostedStreams(streams =>
 				this.setState({
-					hostedParties: parties,
+					hostedStreams: streams,
 					isLoading: false
 				})
 			)
@@ -152,22 +152,22 @@ export default class MVPProfileScreen extends React.Component {
 				<Container style={ { backgroundColor: "#425c5a" } }>
 					<FlatList
 						showsVerticalScrollIndicator={ false }
-						data={ this.state.parties }
+						data={ this.state.streams }
 						style={ {
 							marginRight: "6%",
-							paddingTop: 25
+							marginTop: 25
 						} }
 						ListHeaderComponent={
-							<View>
-								{ this.state.hostedParties.length > 0 &&
+							<View style={{marginTop: 32}}>
+								{ this.state.hostedStreams.length > 0 &&
 								<View>
 									<Text style={ styles.walletText }>
-										My Parties
+										My Content
 									</Text>
 
 									<FlatList
 										showsVerticalScrollIndicator={ false }
-										data={ this.state.hostedParties }
+										data={ this.state.hostedStreams }
 										renderItem={ ({ item }) =>
 											<TouchableHighlight onPress={ () => {
 												this.showStreamSheet(item, true);
@@ -179,11 +179,11 @@ export default class MVPProfileScreen extends React.Component {
 								</View>
 								}
 
-								{ this.state.parties.length > 0 ?
+								{ this.state.streams.length > 0 ?
 									<Text style={ styles.walletText }>
 										Recently Watched
 									</Text> :
-									<Text style={ styles.walletText }>Ongoing Parties</Text>
+									<Text style={ [styles.titleText, {textAlign: 'center', width: '100%', marginTop: 64}]}>You have not watched any content</Text>
 								}
 							</View>
 						}
@@ -258,8 +258,11 @@ const styles = StyleSheet.create({
 
 	titleText: {
 		fontSize: 25,
-		color: "#FFFFFF",
-		fontWeight: "700"
+		color: "#8ea7a6",
+		marginLeft: 15,
+		fontWeight: "700",
+		marginTop: 20,
+		marginBottom: 24
 	},
 
 	header: {

@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#425c5a',
     },
     headerText: {
-        color: '#8ea7a6',
+        color: '#FFF',
         fontWeight: '700',
         fontSize: 20,
     },
