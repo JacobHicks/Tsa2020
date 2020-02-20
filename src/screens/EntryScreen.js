@@ -31,8 +31,8 @@ export default class EntryScreen extends React.Component {
             <Container style={styles.body}>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={'ThreeBounce'}
-                             color={"#DE3C4B"}/>
-                    <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
+                             color={"#b18466"}/>
+                    <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Loading</Text>
                 </View>
             </Container>
         )

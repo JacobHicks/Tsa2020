@@ -215,8 +215,8 @@ export default class HomeScreen extends React.Component {
                 <Container style={styles.body}>
                     <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
                         <Spinner isVisible={true} size={Dimensions.get("window").width * .25} type={"ThreeBounce"}
-                                 color={"#DE3C4B"}/>
-                        <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Good times await</Text>
+                                 color={"#b18466"}/>
+                        <Text style={[styles.titleText, {marginLeft: 0, marginTop: 16}]}>Loading</Text>
                     </View>
                 </Container>
             );
@@ -300,6 +300,11 @@ export default class HomeScreen extends React.Component {
                 /> :
                 <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 32}}>
                     <Text style={[styles.titleText, {marginTop: 64}]}>No content available :(</Text>
+                    <Button onPress={this.onRefresh} transparent style={{backgroundColor: '#425c5a'}}>
+                        <Text style={{fontSize: 20, color: "#b18466", fontWeight: '700', paddingLeft: 16, paddingRight: 16}}>
+                            Refresh
+                        </Text>
+                    </Button>
                 </View>
         )
     }

@@ -3,6 +3,7 @@ import {StyleSheet, View} from "react-native";
 import {Button} from "native-base";
 import MaIcon from "react-native-vector-icons/MaterialIcons";
 import Video from "react-native-video";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default class Stream extends React.Component {
     constructor(props) {
@@ -24,6 +25,12 @@ export default class Stream extends React.Component {
                     }}
                     // onBuffer={this.onBuffer}
                  />
+
+                <Button transparent style={{position: 'absolute', left: 0, top: 0}} onPress={() => {
+                    navigation.navigate('Home');
+                }}>
+                    <Icon name='arrow-back' size={30} color='#8ea7a6'/>
+                </Button>
             </View>
         )
     }
