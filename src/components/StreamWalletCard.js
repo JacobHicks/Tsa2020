@@ -28,11 +28,10 @@ export default class StreamWalletCard extends React.Component {
 		return (
 			<View style={ styles.featuredStreamCard }>
 				<View style={ styles.dateContainer }>
-					<Text style={ styles.dateText }>{ this.formatDate(this.props.streamInfo.time) }</Text>
+					<Text style={ styles.dateText }>Live Stream</Text>
 				</View>
 				<View style={ styles.container }>
 					<View style={ styles.textContainer }>
-						<Text style={ styles.dateTimeText }>11:00 PM - 12:00 PM</Text>
 						<Text style={ styles.titleText } numberOfLines={ 2 }>
 							{ this.props.streamInfo.name }
 						</Text>
@@ -59,10 +58,10 @@ const styles = StyleSheet.create({
 		marginTop: 11
 	},
 	dateText: {
-		color: "#DE3C4B",
+		color: "#999",
 		padding: 10,
 		fontWeight: "800",
-		paddingBottom: "45%" // ?????
+		paddingBottom: "45%"
 	},
 	container: {
 		backgroundColor: "#DE3C4B",
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
 
 	},
 	dateTimeText: {
-		color: "#2B2D42",
+		color: "#7c80bd",
 		fontWeight: "800",
 		fontSize: 12
 	},

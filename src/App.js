@@ -10,6 +10,7 @@ import InstitutionList from './screens/InstitutionList';
 import MVPProfileScreen from './screens/MVPProfileScreen';
 import EntryScreen from './screens/EntryScreen';
 import StreamCamera from "./screens/StreamCamera";
+import Stream from "./screens/Stream";
 
 function handleTransition({scenes}) {
     const navScreens = ['Home', 'CreateStream', 'Profile'];
@@ -36,7 +37,8 @@ const MainNavigator = createStackNavigator({
         Home: {screen: HomeScreen},
         TextConfirm: {screen: TextConfirm},
         CreateStream: {screen: CreateStream},
-        StreamCamera: {screen: StreamCamera}
+        StreamCamera: {screen: StreamCamera},
+        Stream: {screen: Stream}
     },
     {
         headerMode: 'none',

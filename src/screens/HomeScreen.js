@@ -90,6 +90,7 @@ export default class HomeScreen extends React.Component {
                                 description: rawStream.description,
                                 attendees: attendees,
                                 streamReference: docs[i].ref,
+                                playbackId: rawStream.playbackId,
                                 enrolled: enrollments[i]
                             };
 
@@ -188,15 +189,15 @@ export default class HomeScreen extends React.Component {
     }
 
     purchaseStream(stream, streamInfo) {
-        if (!streamInfo.enrolled) {
-            db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
-                stream: stream
-            });
+        // if (!streamInfo.enrolled) {
+            // db.collection("users").doc(auth().currentUser.uid).collection("enrolledParties").add({
+            //     stream: stream
+            // });
 
-            stream.collection("attendees").add({uid: auth().currentUser.uid});
+            // stream.collection("attendees").add({uid: auth().currentUser.uid});
 
-            streamInfo.enrolled = true;
-        }
+            this.props.navigation.navigate('Stream', {playbackId: streamInfo.playbackId})
+        // }
     }
 
     onRefresh() {
@@ -222,38 +223,36 @@ export default class HomeScreen extends React.Component {
         } else {
             return (
                 <Container style={styles.body}>
-                    <ScrollView>
-                        {this.renderTrending()}
-                        {this.renderRecent()}
-                        <RBSheet
-                            ref={ref => {
-                                this.RBSheet = ref;
-                            }}
-                            height={Dimensions.get("window").height * .70}
-                            duration={250}
-                            animationType={"slide"}
-                            closeOnDragDown={true}
-                            customStyles={{
-                                container: {
-                                    borderTopLeftRadius: 16,
-                                    borderTopRightRadius: 16,
-                                    backgroundColor: "#111"
-                                },
-                                draggableIcon: {
-                                    backgroundColor: "#DE3C4B",
-                                    width: 75,
-                                    top: 5
-                                },
-                                wrapper: {
-                                    backgroundColor: "transparent"
-                                }
-                            }}
-                        >
-                            <SheetContent joinStream={this.purchaseStream} leaveStream={this.leaveStream}
-                                          cancelStream={this.cancelStream}
-                                          streamInfo={this.state.selectedStreamInfo} userIsGoing={false}/>
-                        </RBSheet>
-                    </ScrollView>
+                    {this.renderTrending()}
+                    {this.renderRecent()}
+                    <RBSheet
+                        ref={ref => {
+                            this.RBSheet = ref;
+                        }}
+                        height={Dimensions.get("window").height * .70}
+                        duration={250}
+                        animationType={"slide"}
+                        closeOnDragDown={true}
+                        customStyles={{
+                            container: {
+                                borderTopLeftRadius: 16,
+                                borderTopRightRadius: 16,
+                                backgroundColor: "#111"
+                            },
+                            draggableIcon: {
+                                backgroundColor: "#DE3C4B",
+                                width: 75,
+                                top: 5
+                            },
+                            wrapper: {
+                                backgroundColor: "transparent"
+                            }
+                        }}
+                    >
+                        <SheetContent joinStream={this.purchaseStream} leaveStream={this.leaveStream}
+                                      cancelStream={this.cancelStream}
+                                      streamInfo={this.state.selectedStreamInfo} userIsGoing={false}/>
+                    </RBSheet>
                     <Footer style={styles.bodyFooter} navigation={this.props.navigation} homeIsActive={true}/>
                 </Container>
             );
@@ -317,7 +316,7 @@ export default class HomeScreen extends React.Component {
                         data={this.state.featuredParties}
                         sliderWidth={Dimensions.get("window").width + (Dimensions.get("window").width * 0.34)}
                         itemWidth={220}
-                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34}}
+                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34, height: 100}}
                         loop={true}
                         enableMomentum={true}
                         enableSnap={true}

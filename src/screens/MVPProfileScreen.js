@@ -6,7 +6,6 @@ import {
 	FlatList,
 	TouchableHighlight
 } from "react-native";
-import Footer from "native-base";
 import Header from "../components/Header";
 import UIFooter from "../components/UIFooter";
 import { Spinner, Text } from "native-base";
@@ -150,8 +149,7 @@ export default class MVPProfileScreen extends React.Component {
 		} else {
 			const { navigation } = this.props;
 			return (
-				<Container style={ { backgroundColor: "#000" } }>
-					<Header collegeName={ navigation.getParam("institution") } />
+				<Container style={ { backgroundColor: "#425c5a" } }>
 					<FlatList
 						showsVerticalScrollIndicator={ false }
 						data={ this.state.parties }
@@ -183,7 +181,7 @@ export default class MVPProfileScreen extends React.Component {
 
 								{ this.state.parties.length > 0 ?
 									<Text style={ styles.walletText }>
-										RSVPs
+										Recently Watched
 									</Text> :
 									<Text style={ styles.walletText }>Ongoing Parties</Text>
 								}
@@ -209,7 +207,7 @@ export default class MVPProfileScreen extends React.Component {
 							container: {
 								borderTopLeftRadius: 16,
 								borderTopRightRadius: 16,
-								backgroundColor: "#111"
+								backgroundColor: "#425c5a"
 							},
 							draggableIcon: {
 								backgroundColor: "#DE3C4B",
@@ -253,7 +251,7 @@ export default class MVPProfileScreen extends React.Component {
 
 const styles = StyleSheet.create({
 	body: {
-		backgroundColor: "#000",
+		backgroundColor: "#425c5a",
 		height: "100%",
 		width: "100%"
 	},
@@ -265,7 +263,7 @@ const styles = StyleSheet.create({
 	},
 
 	header: {
-		backgroundColor: "#000"
+		backgroundColor: "#425c5a"
 	},
 
 	walletText: {

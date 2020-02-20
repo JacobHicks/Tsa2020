@@ -107,33 +107,11 @@ export default class SheetContent extends React.Component {
 
                 </ScrollView>
                 <View style={{alignItems: 'center', width: '100%', paddingBottom: '15%'}}>
-                    {
-                        this.props.streamInfo.host === uid ?
-                            <Button style={styles.joinButton} onPress={() => {
-                                this.props.cancelStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
-                            }}>
-                                <Text style={styles.joinButtonText}>Stop Stream</Text>
-                            </Button>
-                            :
-                            this.state.enrolled ?
-                                <Button style={styles.joinButton} onPress={() => {
-                                    this.setState({
-                                        enrolled: false
-                                    });
-                                    this.props.leaveStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
-                                }}>
-                                    <Text style={styles.joinButtonText}>Drop out</Text>
-                                </Button>
-                                :
-                                <Button style={styles.joinButton} onPress={() => {
-                                    this.setState({
-                                        enrolled: true
-                                    });
-                                    this.props.joinStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
-                                }}>
-                                    <Text style={styles.joinButtonText}>Watch Now</Text>
-                                </Button>
-                    }
+                    <Button style={styles.joinButton} onPress={() => {
+                        this.props.joinStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
+                    }}>
+                        <Text style={styles.joinButtonText}>Watch Now</Text>
+                    </Button>
                 </View>
             </View>
         );
