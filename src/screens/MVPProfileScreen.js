@@ -27,9 +27,6 @@ export default class MVPProfileScreen extends React.Component {
 			user: null,
 			streams: []
 		};
-		this.showStreamSheet = this.showStreamSheet.bind(this);
-		this.leaveStream = this.leaveStream.bind(this);
-		this.cancelStream = this.cancelStream.bind(this);
 	}
 
 	async checkEnrollment(stream) {
@@ -73,51 +70,6 @@ export default class MVPProfileScreen extends React.Component {
 
 				callback(streams);
 			})
-		});
-	}
-
-	leaveStream(stream, streamInfo) {
-		db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams")
-			.where("stream", "==", stream).get().then(QuerySnapshot => {
-			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-		});
-
-		stream.collection("attendees").where("uid", "==", auth().currentUser.uid).get()
-			.then(QuerySnapshot => {
-				QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-			});
-
-		streamInfo.enrolled = false;
-
-		let newStreams = this.state.streams;
-		newStreams.splice(streamInfo.key, 1);
-		this.setState({ streams: newStreams });
-		this.RBSheet.close();
-	}
-
-	cancelStream(stream, streamInfo) {
-
-		db.collection("users").doc(auth().currentUser.uid).collection("hostedStreams")
-			.where("stream", "==", stream).get().then(QuerySnapshot => {
-			QuerySnapshot.docs.forEach(doc => doc.ref.delete());
-		});
-
-		stream.collection("attendees").get().then(QuerySnapshot => {
-			const attendees = QuerySnapshot.docs;
-			attendees.forEach(attendeeSnapshot => {
-				const uid = attendeeSnapshot.uid;
-				db.collection("users").doc(uid).collection("enrolledStreams").where("stream", "==", stream).get().then(QuerySnapshot => {
-					QuerySnapshot.docs.forEach(rsvpSnapshot => {
-						rsvpSnapshot.ref.delete();
-					});
-				});
-				attendeeSnapshot.ref.delete();
-			});
-			stream.delete();
-			let newStreams = this.state.hostedStreams;
-			newStreams.splice(streamInfo.key, 1);
-			this.setState({ streams: newStreams });
-			this.RBSheet.close();
 		});
 	}
 
@@ -169,11 +121,8 @@ export default class MVPProfileScreen extends React.Component {
 										showsVerticalScrollIndicator={ false }
 										data={ this.state.hostedStreams }
 										renderItem={ ({ item }) =>
-											<TouchableHighlight onPress={ () => {
-												this.showStreamSheet(item, true);
-											} }>
+
 												<StreamWalletCard streamInfo={ item } />
-											</TouchableHighlight>
 										}
 									/>
 								</View>
@@ -188,65 +137,16 @@ export default class MVPProfileScreen extends React.Component {
 							</View>
 						}
 						renderItem={ ({ item }) =>
-							<TouchableHighlight onPress={ () => {
-								this.showStreamSheet(item);
-							} }>
+
 								<StreamWalletCard streamInfo={ item } />
-							</TouchableHighlight>
 						}
 					/>
-					<RBSheet
-						ref={ ref => {
-							this.RBSheet = ref;
-						} }
-						height={ Dimensions.get("window").height * .70 }
-						duration={ 250 }
-						animationType={ "slide" }
-						closeOnDragDown={ true }
-						customStyles={ {
-							container: {
-								borderTopLeftRadius: 16,
-								borderTopRightRadius: 16,
-								backgroundColor: "#425c5a"
-							},
-							draggableIcon: {
-								backgroundColor: "#DE3C4B",
-								width: 75,
-								top: 5
-							},
-							wrapper: {
-								backgroundColor: "transparent"
-							}
-						} }
-					>
-						<SheetContent leaveStream={ this.leaveStream }
-						              cancelStream={ this.cancelStream }
-						              streamInfo={ this.state.selectedStreamInfo } />
-					</RBSheet>
 					<UIFooter name={ this.props.name } institution={ this.props.institution }
 					          navigation={ navigation } profileIsActive={ true } />
 				</Container>
 			);
 		}
 	}
-
-	showStreamSheet = ((stream) => {
-		this.setState({
-			selectedStreamInfo: {
-				name: stream.name,
-				host: stream.host,
-				description: stream.description,
-				time: stream.time,
-				endTime: stream.endTime,
-				location: stream.location,
-				generalLocation: stream.generalLocation,
-				streamReference: stream.streamReference,
-				enrolled: stream.enrolled,
-				streamInfo: stream
-			}
-		});
-		this.RBSheet.open();
-	});
 }
 
 const styles = StyleSheet.create({

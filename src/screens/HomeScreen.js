@@ -189,15 +189,15 @@ export default class HomeScreen extends React.Component {
     }
 
     purchaseStream(stream, streamInfo) {
-        // if (!streamInfo.enrolled) {
-            // db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams").add({
-            //     stream: stream
-            // });
+        if (!streamInfo.enrolled) {
+            db.collection("oldStreams").add(streamInfo).then(DocumentReference => {
+                db.collection("users").doc(auth().currentUser.uid).collection("enrolledStreams").add({
+                    stream: DocumentReference
+                });
 
-            // stream.collection("attendees").add({uid: auth().currentUser.uid});
-
-            this.props.navigation.navigate('Stream', {playbackId: streamInfo.playbackId})
-        // }
+                this.props.navigation.navigate('Stream', {playbackId: streamInfo.playbackId})
+            });
+        }
     }
 
     onRefresh() {
@@ -321,7 +321,7 @@ export default class HomeScreen extends React.Component {
                         data={this.state.featuredStreams}
                         sliderWidth={Dimensions.get("window").width + (Dimensions.get("window").width * 0.34)}
                         itemWidth={220}
-                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.34, height: 135}}
+                        containerCustomStyle={{left: -Dimensions.get("window").width * 0.37, height: 135}}
                         loop={true}
                         enableMomentum={true}
                         enableSnap={true}

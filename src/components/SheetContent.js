@@ -42,7 +42,7 @@ export default class SheetContent extends React.Component {
         return (
             <View style={styles.sheetContainer}>
                 <Text style={styles.sheetTitle}>{this.props.streamInfo.name}</Text>
-                <ScrollView style={styles.sheetContainer}>
+                <View style={{backgroundColor: '#111'}}>
                     {/*<View style={styles.sheetView}>*/}
                     {/*    <Icon name='calendar-check' size={Dimensions.get('window').width * .06} color='#8b8b8b'*/}
                     {/*          style={{marginRight: 16, marginTop: Dimensions.get('window').height * .005}}/>*/}
@@ -105,8 +105,8 @@ export default class SheetContent extends React.Component {
                     {/*    </View> : <View style={{alignItems: 'center'}}>*/}
                     {/*    </View>}*/}
 
-                </ScrollView>
-                <View style={{alignItems: 'center', width: '100%', paddingBottom: '15%'}}>
+                </View>
+                <View style={{alignItems: 'center', width: '100%', marginBottom: '15%', marginTop: '100%'}}>
                     <Button style={styles.joinButton} onPress={() => {
                         this.props.joinStream(this.props.streamInfo.streamReference, this.props.streamInfo.streamInfo)
                     }}>
@@ -121,8 +121,8 @@ export default class SheetContent extends React.Component {
 const styles = StyleSheet.create({
     sheetContainer: {
         backgroundColor: '#111',
-        height: '100%',
         width: '100%',
+        flex: 1
     },
 
     sheetTitle: {

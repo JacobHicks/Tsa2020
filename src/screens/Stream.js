@@ -26,7 +26,7 @@ export default class Stream extends React.Component {
                     // onBuffer={this.onBuffer}
                  />
 
-                <Button transparent style={{position: 'absolute', left: 0, top: 0}} onPress={() => {
+                <Button transparent style={{position: 'absolute', left: 32, top: 32}} onPress={() => {
                     navigation.navigate('Home');
                 }}>
                     <Icon name='arrow-back' size={30} color='#8ea7a6'/>
@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+        height: '100%',
+        width: '100%'
     },
 
     button: {},
